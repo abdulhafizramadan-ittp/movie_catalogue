@@ -1,0 +1,33 @@
+package com.example.moviecatalogue.api
+
+import com.example.moviecatalogue.data.response.MovieDetailResponse
+import com.example.moviecatalogue.data.response.MovieResponse
+import com.example.moviecatalogue.data.response.TvShowDetailResponse
+import com.example.moviecatalogue.data.response.TvShowResponse
+import retrofit2.Call
+import retrofit2.http.GET
+import retrofit2.http.Path
+import retrofit2.http.Query
+
+interface ApiService {
+
+    @GET("discover/movie")
+    fun getDiscoverMovie(
+        @Query("api_key") apiKey: String
+    ) : Call<MovieResponse>
+
+    @GET("discover/tv")
+    fun getDiscoverTvShow(
+        @Query("api_key") apiKey: String
+    ) : Call<TvShowResponse>
+
+    @GET("movie/{movie_id}")
+    fun getMovieDetail(
+        @Path("movie_id") movieId: Int
+    ) : Call<MovieDetailResponse>
+
+    @GET("movie/{tv_show_id}")
+    fun getTvShowDetail(
+        @Path("tv_show_id") tvShowId: Int
+    ) : Call<TvShowDetailResponse>
+}
