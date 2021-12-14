@@ -20,6 +20,9 @@ ext {
     materialVersion = '1.4.0'
     constraintLayoutVersion = '2.1.2'
 
+    // Retrofit
+    retrofitVersion = '2.9.0'
+
     // Glide
     glideVersion = '4.12.0'
 
