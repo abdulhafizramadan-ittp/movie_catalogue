@@ -3,7 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Abdul Hafiz Ramadan/AndroidStudioProjects/DiCoding/JetpackPro/MovieCatalogue/app/src/main/res/drawable/ic_logo.xml" value="0.3046875" />
         <entry key="..\:/Users/Abdul Hafiz Ramadan/AndroidStudioProjects/DiCoding/JetpackPro/MovieCatalogue/app/src/main/res/layout/activity_main.xml" value="0.284375" />
+        <entry key="..\:/Users/Abdul Hafiz Ramadan/AndroidStudioProjects/DiCoding/JetpackPro/MovieCatalogue/app/src/main/res/layout/activity_splash_screen.xml" value="0.284375" />
+        <entry key="..\:/Users/Abdul Hafiz Ramadan/AndroidStudioProjects/DiCoding/JetpackPro/MovieCatalogue/app/src/main/res/layout/fragment_movie.xml" value="0.2671875" />
+        <entry key="..\:/Users/Abdul Hafiz Ramadan/AndroidStudioProjects/DiCoding/JetpackPro/MovieCatalogue/app/src/main/res/layout/fragment_movie_detail.xml" value="0.284375" />
+        <entry key="..\:/Users/Abdul Hafiz Ramadan/AndroidStudioProjects/DiCoding/JetpackPro/MovieCatalogue/app/src/main/res/layout/fragment_tv_show.xml" value="0.284375" />
+        <entry key="..\:/Users/Abdul Hafiz Ramadan/AndroidStudioProjects/DiCoding/JetpackPro/MovieCatalogue/app/src/main/res/layout/fragment_tv_show_detail.xml" value="0.284375" />
       </map>
     </option>
   </component>
