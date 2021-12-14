@@ -13,6 +13,22 @@ buildscript {
     }
 }
 
+ext {
+    // UI
+    coreVersion = '1.7.0'
+    appCompatVersion = '1.4.0'
+    materialVersion = '1.4.0'
+    constraintLayoutVersion = '2.1.2'
+
+    // Glide
+    glideVersion = '4.12.0'
+
+    // TEST
+    jUnitVersion = '4.13.2'
+    extJUnitVersion = '1.1.3'
+    espressoVersion = '3.4.0'
+}
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
