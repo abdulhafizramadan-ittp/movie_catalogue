@@ -1,5 +1,6 @@
 package com.example.moviecatalogue.data.response
 
+import com.example.moviecatalogue.api.ApiConfig
 import com.example.moviecatalogue.data.domain.TvShow
 import com.google.gson.annotations.SerializedName
 
@@ -44,11 +45,11 @@ data class TvShowItem(
 
 fun TvShowItem.toDomain(): TvShow =
     TvShow(
-        firstAirDate = firstAirDate ?: "",
-        overview = overview ?: "",
-        originalLanguage = originalLanguage ?: "",
-        name = name ?: "",
+        firstAirDate = firstAirDate ?: "-",
+        overview = overview ?: "-",
+        originalLanguage = originalLanguage ?: "-",
+        name = name ?: "-",
         voteAverage = voteAverage ?: 0.0,
         id = id ?: 0,
-        posterPath = posterPath ?: ""
+        posterPath = ApiConfig.POSTER_MD + posterPath
     )

@@ -1,12 +1,10 @@
 package com.example.moviecatalogue.data.response
 
+import com.example.moviecatalogue.api.ApiConfig
 import com.example.moviecatalogue.data.domain.MovieDetail
 import com.google.gson.annotations.SerializedName
 
 data class MovieDetailResponse(
-
-	@field:SerializedName("backdrop_path")
-	val backdropPath: String? = null,
 
 	@field:SerializedName("overview")
 	val overview: String? = null,
@@ -35,25 +33,20 @@ data class MovieDetailResponse(
 	@field:SerializedName("poster_path")
 	val posterPath: String? = null,
 
-	@field:SerializedName("homepage")
-	val homepage: String? = null,
-
 	@field:SerializedName("status")
 	val status: String? = null
 )
 
 fun MovieDetailResponse.toDomain(): MovieDetail =
 	MovieDetail(
-		backdropPath = backdropPath ?: "",
-		overview = overview ?: "",
-		originalLanguage = originalLanguage ?: "",
-		releaseDate = releaseDate ?: "",
+		overview = overview ?: "-",
+		originalLanguage = originalLanguage ?: "-",
+		releaseDate = releaseDate ?: "-",
 		voteAverage = voteAverage ?: 0.0,
 		runtime = runtime ?: 0,
 		id = id ?: 0,
-		title = title ?: "",
-		tagline = tagline ?: "",
-		posterPath = posterPath ?: "",
-		homepage = homepage ?: "",
-		status = status ?: ""
+		title = title ?: "-",
+		tagline = tagline ?: "-",
+		posterPath = ApiConfig.POSTER_MD + posterPath,
+		status = status ?: "-"
 	)

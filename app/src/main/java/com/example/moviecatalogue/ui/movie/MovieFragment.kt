@@ -1,6 +1,8 @@
 package com.example.moviecatalogue.ui.movie
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,10 +11,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moviecatalogue.R
+import com.example.moviecatalogue.data.domain.Movie
 import com.example.moviecatalogue.databinding.FragmentMovieBinding
+import com.example.moviecatalogue.ui.detail.DetailActivity
 import com.google.android.material.snackbar.Snackbar
 
-class MovieFragment : Fragment() {
+class MovieFragment : Fragment(), OnMovieClickListener {
 
     private var _binding: FragmentMovieBinding? = null
     private val binding: FragmentMovieBinding get() =  _binding as FragmentMovieBinding
@@ -32,10 +36,18 @@ class MovieFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         movieViewModel = ViewModelProvider(this)[MovieViewModel::class.java]
-        movieAdapter = MovieAdapter()
+        movieAdapter = MovieAdapter(this)
 
         setupViewModel()
         setupRecyclerView()
+    }
+
+    override fun onItemClick(movie: Movie) {
+        val intent = Intent(requireContext(), DetailActivity::class.java).apply {
+            putExtra(DetailActivity.DETAIL_TYPE, DetailActivity.TYPE_MOVIE)
+            putExtra(DetailActivity.ID, movie.id)
+        }
+        startActivity(intent)
     }
 
     private fun setupViewModel() {

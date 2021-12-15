@@ -1,5 +1,6 @@
 package com.example.moviecatalogue.data.response
 
+import com.example.moviecatalogue.api.ApiConfig
 import com.example.moviecatalogue.data.domain.Movie
 import com.google.gson.annotations.SerializedName
 
@@ -44,11 +45,11 @@ data class MovieItem(
 
 fun MovieItem.toDomain(): Movie =
     Movie(
-        overview = overview ?: "",
-        originalLanguage = originalLanguage ?: "",
-        releaseDate = releaseDate ?: "",
+        overview = overview ?: "-",
+        originalLanguage = originalLanguage ?: "-",
+        releaseDate = releaseDate ?: "-",
         voteAverage = voteAverage ?: 0.0,
         id = id ?: 0,
-        title = title ?: "",
-        posterPath = posterPath ?: ""
+        title = title ?: "-",
+        posterPath = ApiConfig.POSTER_MD + posterPath
     )

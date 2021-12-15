@@ -8,7 +8,7 @@ import com.example.moviecatalogue.api.ApiConfig.Companion.POSTER_MD
 import com.example.moviecatalogue.data.domain.Movie
 import com.example.moviecatalogue.databinding.ItemsMovieBinding
 
-class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
+class MovieAdapter(private val movieClickListener: OnMovieClickListener) : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
     private val listMovies = ArrayList<Movie>()
 
@@ -42,11 +42,11 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
                 tvMovieOverview.text = movie.overview
                 tvMovieFooter.text = movieFooter
 
-                val posterUrl = POSTER_MD + movie.posterPath
-
                 Glide.with(itemView.context)
-                    .load(posterUrl)
+                    .load(movie.posterPath)
                     .into(ivMoviePoster)
+
+                itemView.setOnClickListener { movieClickListener.onItemClick(movie) }
             }
         }
     }

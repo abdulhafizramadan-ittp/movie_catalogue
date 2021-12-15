@@ -8,7 +8,7 @@ import com.example.moviecatalogue.api.ApiConfig.Companion.POSTER_MD
 import com.example.moviecatalogue.data.domain.TvShow
 import com.example.moviecatalogue.databinding.ItemsTvShowBinding
 
-class TvShowAdapter : RecyclerView.Adapter<TvShowAdapter.MovieViewHolder>() {
+class TvShowAdapter(private val tvShowClickListener: OnTvShowClickListener) : RecyclerView.Adapter<TvShowAdapter.MovieViewHolder>() {
 
     private val listTvShows = ArrayList<TvShow>()
 
@@ -34,19 +34,19 @@ class TvShowAdapter : RecyclerView.Adapter<TvShowAdapter.MovieViewHolder>() {
     override fun getItemCount(): Int = listTvShows.size
 
     inner class MovieViewHolder(private val binding: ItemsTvShowBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(movie: TvShow) {
+        fun bind(tvShow: TvShow) {
             binding.apply {
-                val movieFooter = "${movie.firstAirDate} . ${movie.voteAverage} . ${movie.originalLanguage}"
+                val movieFooter = "${tvShow.firstAirDate} . ${tvShow.voteAverage} . ${tvShow.originalLanguage}"
 
-                tvTvShowTitle.text = movie.name
-                tvTvShowOverview.text = movie.overview
+                tvTvShowTitle.text = tvShow.name
+                tvTvShowOverview.text = tvShow.overview
                 tvTvShowFooter.text = movieFooter
 
-                val posterUrl = POSTER_MD + movie.posterPath
-
                 Glide.with(itemView.context)
-                    .load(posterUrl)
+                    .load(tvShow.posterPath)
                     .into(ivTvShowPoster)
+
+                itemView.setOnClickListener { tvShowClickListener.onItemClick(tvShow) }
             }
         }
     }

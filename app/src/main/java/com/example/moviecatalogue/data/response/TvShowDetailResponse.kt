@@ -1,5 +1,6 @@
 package com.example.moviecatalogue.data.response
 
+import com.example.moviecatalogue.api.ApiConfig
 import com.example.moviecatalogue.data.domain.TvShowDetail
 import com.google.gson.annotations.SerializedName
 
@@ -13,9 +14,6 @@ data class TvShowDetailResponse(
 
 	@field:SerializedName("original_language")
 	val originalLanguage: String? = null,
-
-	@field:SerializedName("number_of_episodes")
-	val numberOfEpisodes: Int? = null,
 
 	@field:SerializedName("type")
 	val type: String? = null,
@@ -53,19 +51,16 @@ data class TvShowDetailResponse(
 
 fun TvShowDetailResponse.toDomain(): TvShowDetail =
 	TvShowDetail(
-		firstAirDate = firstAirDate ?: "",
-		overview = overview ?: "",
-		originalLanguage = originalLanguage ?: "",
-		numberOfEpisodes = numberOfEpisodes ?: 0,
-		type = type ?: "",
-		posterPath = posterPath ?: "",
-		backdropPath = backdropPath ?: "",
+		firstAirDate = firstAirDate ?: "-",
+		overview = overview ?: "-",
+		originalLanguage = originalLanguage ?: "-",
+		type = type ?: "-",
+		posterPath = ApiConfig.POSTER_MD + posterPath,
 		voteAverage = voteAverage ?: 0.0,
-		name = name ?: "",
-		tagline = tagline ?: "",
+		name = name ?: "-",
+		tagline = tagline ?: "-",
 		id = id ?: 0,
 		numberOfSeasons = numberOfSeasons ?: 0,
-		lastAirDate = lastAirDate ?: "",
-		homepage = homepage ?: "",
-		status = status ?: ""
+		lastAirDate = lastAirDate ?: "-",
+		status = status ?: "-"
 	)

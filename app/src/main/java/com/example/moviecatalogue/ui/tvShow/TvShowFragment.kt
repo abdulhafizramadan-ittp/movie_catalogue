@@ -1,5 +1,6 @@
 package com.example.moviecatalogue.ui.tvShow
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,10 +10,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moviecatalogue.R
+import com.example.moviecatalogue.data.domain.TvShow
 import com.example.moviecatalogue.databinding.FragmentTvShowBinding
+import com.example.moviecatalogue.ui.detail.DetailActivity
 import com.google.android.material.snackbar.Snackbar
 
-class TvShowFragment : Fragment() {
+class TvShowFragment : Fragment(), OnTvShowClickListener {
 
     private var _binding: FragmentTvShowBinding? = null
     private val binding: FragmentTvShowBinding get() = _binding as FragmentTvShowBinding
@@ -32,10 +35,18 @@ class TvShowFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         tvShowViewModel = ViewModelProvider(this)[TvShowViewModel::class.java]
-        tvShowAdapter = TvShowAdapter()
+        tvShowAdapter = TvShowAdapter(this)
 
         setupViewModel()
         setupRecyclerView()
+    }
+
+    override fun onItemClick(tvShow: TvShow) {
+        val intent = Intent(requireContext(), DetailActivity::class.java).apply {
+            putExtra(DetailActivity.DETAIL_TYPE, DetailActivity.TYPE_TV_SHOW)
+            putExtra(DetailActivity.ID, tvShow.id)
+        }
+        startActivity(intent)
     }
 
     private fun setupViewModel() {
