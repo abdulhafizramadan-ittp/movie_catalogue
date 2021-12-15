@@ -87,7 +87,7 @@
                             <ImageView
                                 android:layout_width="50dp"
                                 android:layout_height="30dp"
-                                android:background="@color/gray_700"
+                                android:src="@drawable/ic_status"
                                 android:contentDescription="@string/icon_runtime" />
 
                             <TextView
@@ -132,7 +132,7 @@
                             <ImageView
                                 android:layout_width="50dp"
                                 android:layout_height="30dp"
-                                android:background="@color/gray_700"
+                                android:src="@drawable/ic_runtime"
                                 android:contentDescription="@string/icon_runtime" />
 
                             <TextView
@@ -176,7 +176,7 @@
                             <ImageView
                                 android:layout_width="50dp"
                                 android:layout_height="30dp"
-                                android:background="@color/gray_700"
+                                android:src="@drawable/ic_rating"
                                 android:contentDescription="@string/icon_runtime" />
 
                             <TextView
