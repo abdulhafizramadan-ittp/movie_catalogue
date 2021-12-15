@@ -28,6 +28,7 @@ class MovieViewModel : ViewModel() {
                     response: Response<MovieResponse?>
                 ) {
                     if (response.body()?.results != null) {
+                        _errorDiscoverMovies.value = false
                         _listMovies.value = response.body()?.results?.map {
                             it.toDomain()
                         }
@@ -38,5 +39,9 @@ class MovieViewModel : ViewModel() {
                     _errorDiscoverMovies.value = true
                 }
             })
+    }
+
+    fun setErrorDiscoverMovies(state: Boolean) {
+        _errorDiscoverMovies.value = state
     }
 }

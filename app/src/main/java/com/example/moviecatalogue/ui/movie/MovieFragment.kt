@@ -60,7 +60,11 @@ class MovieFragment : Fragment(), OnMovieClickListener {
 
             listMovies.observe(viewLifecycleOwner) { listMovies ->
                 if (listMovies != null) {
-                    binding.progressCircular.visibility = View.INVISIBLE
+                    binding.apply {
+                        progressCircular.visibility = View.INVISIBLE
+                        lottieError.visibility = View.INVISIBLE
+                        rvMovie.visibility = View.VISIBLE
+                    }
                     movieAdapter.setMovies(listMovies)
                 }
             }
@@ -68,11 +72,13 @@ class MovieFragment : Fragment(), OnMovieClickListener {
             errorDiscoverMovies.observe(viewLifecycleOwner) { error ->
                 if (error) {
                     showErrorNetwork()
-                    Snackbar.make(requireContext(), requireView(), getString(R.string.error_network), Snackbar.LENGTH_LONG)
-                        .setAction(R.string.try_again) {
-                            refreshNetwork()
-                        }
-                        .show()
+                    activity?.apply {
+                        Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_network), Snackbar.LENGTH_LONG)
+                            .setAction(R.string.try_again) {
+                                refreshNetwork()
+                            }
+                            .show()
+                    }
                 }
             }
         }
@@ -109,6 +115,7 @@ class MovieFragment : Fragment(), OnMovieClickListener {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        movieViewModel.setErrorDiscoverMovies(false)
         _binding = null
     }
 

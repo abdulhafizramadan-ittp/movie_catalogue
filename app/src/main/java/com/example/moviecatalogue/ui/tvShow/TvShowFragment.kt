@@ -59,7 +59,11 @@ class TvShowFragment : Fragment(), OnTvShowClickListener {
 
             listTvShows.observe(viewLifecycleOwner) { listTvShows ->
                 if (listTvShows != null) {
-                    binding.progressCircular.visibility = View.INVISIBLE
+                    binding.apply {
+                        progressCircular.visibility = View.INVISIBLE
+                        lottieError.visibility = View.INVISIBLE
+                        rvTvShow.visibility = View.VISIBLE
+                    }
                     tvShowAdapter.setMovies(listTvShows)
                 }
             }
@@ -67,11 +71,13 @@ class TvShowFragment : Fragment(), OnTvShowClickListener {
             errorDiscoverTvShows.observe(viewLifecycleOwner) { error ->
                 if (error) {
                     showErrorNetwork()
-                    Snackbar.make(requireContext(), requireView(), getString(R.string.error_network), Snackbar.LENGTH_LONG)
-                        .setAction(R.string.try_again) {
-                            refreshNetwork()
-                        }
-                        .show()
+                    activity?.apply {
+                        Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_network), Snackbar.LENGTH_LONG)
+                            .setAction(R.string.try_again) {
+                                refreshNetwork()
+                            }
+                            .show()
+                    }
                 }
             }
         }
@@ -109,6 +115,7 @@ class TvShowFragment : Fragment(), OnTvShowClickListener {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        tvShowViewModel.setErrorDiscoverTvShows(false)
         _binding = null
     }
 

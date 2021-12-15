@@ -20,6 +20,7 @@ class MovieDetailFragment : Fragment() {
     private val binding: FragmentMovieDetailBinding get() = _binding as FragmentMovieDetailBinding
 
     private lateinit var movieDetailViewModel: MovieDetailViewModel
+    private var movieId: Int? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,11 +35,9 @@ class MovieDetailFragment : Fragment() {
 
         movieDetailViewModel = ViewModelProvider(requireActivity())[MovieDetailViewModel::class.java]
 
-        val movieId = arguments?.getInt(MOVIE_ID)
+        movieId = arguments?.getInt(MOVIE_ID)
 
-        if (movieId != null) {
-            setupViewModel(movieId)
-        }
+        movieId?.let { setupViewModel(it) }
 
         setupToolbar()
         setupDetailMovie()
@@ -67,8 +66,13 @@ class MovieDetailFragment : Fragment() {
 
             movieDetailError.observe(viewLifecycleOwner) { error ->
                 if (error) {
-                    Snackbar.make(requireContext(), requireView(), getString(R.string.error_network), Snackbar.LENGTH_LONG)
-                        .show()
+                    activity?.apply {
+                        Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_network), Snackbar.LENGTH_LONG)
+                            .setAction(R.string.try_again) {
+                                refreshNetwork()
+                            }
+                            .show()
+                    }
                 }
             }
         }
@@ -76,28 +80,36 @@ class MovieDetailFragment : Fragment() {
 
     private fun setupDetailMovie() {
         movieDetailViewModel.movieDetail.observe(viewLifecycleOwner) { movieDetail ->
-            if (movieDetail != null)
-            binding.apply {
-                toolbar.title = movieDetail.title
+            if (movieDetail != null) {
+                binding.apply {
+                    toolbar.title = movieDetail.title
 
-                tvMovieTitle.text = movieDetail.title
-                tvMovieTagline.text = movieDetail.tagline
-                tvMovieStatus.text = movieDetail.status
-                tvMovieRuntime.text = movieDetail.runtime.toString()
-                tvMovieRating.text = movieDetail.voteAverage.toString()
-                tvMovieRelease.text = movieDetail.releaseDate
-                tvMovieLanguage.text = movieDetail.originalLanguage
-                tvMovieSynopsis.text = movieDetail.overview
+                    tvMovieTitle.text = movieDetail.title
+                    tvMovieTagline.text = movieDetail.tagline
+                    tvMovieStatus.text = movieDetail.status
+                    tvMovieRuntime.text = movieDetail.runtime.toString()
+                    tvMovieRating.text = movieDetail.voteAverage.toString()
+                    tvMovieRelease.text = movieDetail.releaseDate
+                    tvMovieLanguage.text = movieDetail.originalLanguage
+                    tvMovieSynopsis.text = movieDetail.overview
 
-                Glide.with(this@MovieDetailFragment)
-                    .load(movieDetail.posterPath)
-                    .into(ivMoviePoster)
+                    Glide.with(this@MovieDetailFragment)
+                        .load(movieDetail.posterPath)
+                        .into(ivMoviePoster)
+                }
             }
+        }
+    }
+
+    private fun refreshNetwork() {
+        movieId?.let {
+            movieDetailViewModel.getMovieDetail(it)
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        movieDetailViewModel.setMovieDetailError(false)
         _binding = null
     }
 

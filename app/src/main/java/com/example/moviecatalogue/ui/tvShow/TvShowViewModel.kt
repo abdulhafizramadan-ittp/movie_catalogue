@@ -27,6 +27,7 @@ class TvShowViewModel : ViewModel() {
                     response: Response<TvShowResponse?>
                 ) {
                     if (response.body()?.results != null) {
+                        _errorDiscoverTvShows.value = false
                         _listTvShows.value = response.body()?.results?.map {
                             it.toDomain()
                         }
@@ -37,5 +38,9 @@ class TvShowViewModel : ViewModel() {
                     _errorDiscoverTvShows.value = true
                 }
             })
+    }
+
+    fun setErrorDiscoverTvShows(state: Boolean) {
+        _errorDiscoverTvShows.value = false
     }
 }

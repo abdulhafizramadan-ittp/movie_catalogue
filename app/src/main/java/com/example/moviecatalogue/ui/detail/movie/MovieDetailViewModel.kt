@@ -25,6 +25,7 @@ class MovieDetailViewModel : ViewModel() {
                 response: Response<MovieDetailResponse?>
             ) {
                 if (response.body() != null) {
+                    _movieDetailError.value = false
                     _movieDetail.value = response.body()?.toDomain()
                 }
             }
@@ -33,5 +34,9 @@ class MovieDetailViewModel : ViewModel() {
                 _movieDetailError.value = true
             }
         })
+    }
+
+    fun setMovieDetailError(state: Boolean) {
+        _movieDetailError.value = state
     }
 }

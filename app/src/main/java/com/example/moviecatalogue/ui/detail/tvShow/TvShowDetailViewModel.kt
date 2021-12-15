@@ -25,6 +25,7 @@ class TvShowDetailViewModel : ViewModel() {
                 response: Response<TvShowDetailResponse?>
             ) {
                 if (response.body() != null) {
+                    _tvShowDetailError.value = false
                     _tvShowDetail.value = response.body()?.toDomain()
                 }
             }
@@ -33,5 +34,9 @@ class TvShowDetailViewModel : ViewModel() {
                 _tvShowDetailError.value = true
             }
         })
+    }
+
+    fun setTvShowDetailError(state: Boolean) {
+        _tvShowDetailError.value = state
     }
 }

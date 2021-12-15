@@ -20,6 +20,7 @@ class TvShowDetailFragment : Fragment() {
     private val binding: FragmentTvShowDetailBinding get() = _binding as FragmentTvShowDetailBinding
 
     private lateinit var tvShowDetailViewModel: TvShowDetailViewModel
+    private var tvShowId: Int? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,11 +35,9 @@ class TvShowDetailFragment : Fragment() {
 
         tvShowDetailViewModel = ViewModelProvider(requireActivity())[TvShowDetailViewModel::class.java]
 
-        val tvShowId = arguments?.getInt(TV_SHOW_ID)
+        tvShowId = arguments?.getInt(TV_SHOW_ID)
 
-        if (tvShowId != null) {
-            setupViewModel(tvShowId)
-        }
+        tvShowId?.let { setupViewModel(it) }
 
         setupToolbar()
         setupDetailTvShow()
@@ -67,8 +66,13 @@ class TvShowDetailFragment : Fragment() {
 
             tvShowDetailError.observe(viewLifecycleOwner) { error ->
                 if (error) {
-                    Snackbar.make(requireContext(), requireView(), getString(R.string.error_network), Snackbar.LENGTH_LONG)
-                        .show()
+                    activity?.apply {
+                        Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_network), Snackbar.LENGTH_LONG)
+                            .setAction(R.string.try_again) {
+                                refreshNetwork()
+                            }
+                            .show()
+                    }
                 }
             }
         }
@@ -95,8 +99,15 @@ class TvShowDetailFragment : Fragment() {
         }
     }
 
+    private fun refreshNetwork() {
+        tvShowId?.let {
+            tvShowDetailViewModel.getTvShowDetail(it)
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
+        tvShowDetailViewModel.setTvShowDetailError(false)
         _binding = null
     }
 
