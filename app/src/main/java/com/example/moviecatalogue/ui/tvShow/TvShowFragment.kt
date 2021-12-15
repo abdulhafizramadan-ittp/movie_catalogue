@@ -11,13 +11,14 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.moviecatalogue.R
 import com.example.moviecatalogue.data.domain.TvShow
 import com.example.moviecatalogue.databinding.FragmentTvShowBinding
 import com.example.moviecatalogue.ui.detail.DetailActivity
 import com.google.android.material.snackbar.Snackbar
 
-class TvShowFragment : Fragment(), OnTvShowClickListener {
+class TvShowFragment : Fragment(), OnTvShowClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private var _binding: FragmentTvShowBinding? = null
     private val binding: FragmentTvShowBinding get() = _binding as FragmentTvShowBinding
@@ -39,8 +40,14 @@ class TvShowFragment : Fragment(), OnTvShowClickListener {
         tvShowViewModel = ViewModelProvider(this)[TvShowViewModel::class.java]
         tvShowAdapter = TvShowAdapter(this)
 
+        binding.swipeToRefresh.setOnRefreshListener(this)
+
         setupViewModel()
         setupRecyclerView()
+    }
+
+    override fun onRefresh() {
+        tvShowViewModel.discoverTvShows()
     }
 
     override fun onItemClick(tvShow: TvShow) {
@@ -60,9 +67,9 @@ class TvShowFragment : Fragment(), OnTvShowClickListener {
             listTvShows.observe(viewLifecycleOwner) { listTvShows ->
                 if (listTvShows != null) {
                     binding.apply {
+                        swipeToRefresh.isRefreshing = false
                         progressCircular.visibility = View.INVISIBLE
                         lottieError.visibility = View.INVISIBLE
-                        rvTvShow.visibility = View.VISIBLE
                     }
                     tvShowAdapter.setMovies(listTvShows)
                 }
@@ -71,6 +78,7 @@ class TvShowFragment : Fragment(), OnTvShowClickListener {
             errorDiscoverTvShows.observe(viewLifecycleOwner) { error ->
                 if (error) {
                     showErrorNetwork()
+                    binding.swipeToRefresh.isRefreshing = false
                     activity?.apply {
                         Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_network), Snackbar.LENGTH_LONG)
                             .setAction(R.string.try_again) {
@@ -107,8 +115,8 @@ class TvShowFragment : Fragment(), OnTvShowClickListener {
     private fun showErrorNetwork() {
         binding.apply {
             progressCircular.visibility = View.INVISIBLE
-            rvTvShow.visibility = View.INVISIBLE
-            lottieError.visibility = View.VISIBLE
+            lottieError.visibility =
+                if (tvShowViewModel.listTvShows.value == null) View.VISIBLE else View.INVISIBLE
         }
     }
 

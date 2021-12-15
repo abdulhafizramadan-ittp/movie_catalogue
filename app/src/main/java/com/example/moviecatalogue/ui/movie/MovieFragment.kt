@@ -12,13 +12,14 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.moviecatalogue.R
 import com.example.moviecatalogue.data.domain.Movie
 import com.example.moviecatalogue.databinding.FragmentMovieBinding
 import com.example.moviecatalogue.ui.detail.DetailActivity
 import com.google.android.material.snackbar.Snackbar
 
-class MovieFragment : Fragment(), OnMovieClickListener {
+class MovieFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, OnMovieClickListener {
 
     private var _binding: FragmentMovieBinding? = null
     private val binding: FragmentMovieBinding get() =  _binding as FragmentMovieBinding
@@ -40,8 +41,14 @@ class MovieFragment : Fragment(), OnMovieClickListener {
         movieViewModel = ViewModelProvider(this)[MovieViewModel::class.java]
         movieAdapter = MovieAdapter(this)
 
+        binding.swipeToRefresh.setOnRefreshListener(this)
+
         setupViewModel()
         setupRecyclerView()
+    }
+
+    override fun onRefresh() {
+        movieViewModel.discoverMovies()
     }
 
     override fun onItemClick(movie: Movie) {
@@ -61,9 +68,9 @@ class MovieFragment : Fragment(), OnMovieClickListener {
             listMovies.observe(viewLifecycleOwner) { listMovies ->
                 if (listMovies != null) {
                     binding.apply {
+                        swipeToRefresh.isRefreshing = false
                         progressCircular.visibility = View.INVISIBLE
                         lottieError.visibility = View.INVISIBLE
-                        rvMovie.visibility = View.VISIBLE
                     }
                     movieAdapter.setMovies(listMovies)
                 }
@@ -72,6 +79,7 @@ class MovieFragment : Fragment(), OnMovieClickListener {
             errorDiscoverMovies.observe(viewLifecycleOwner) { error ->
                 if (error) {
                     showErrorNetwork()
+                    binding.swipeToRefresh.isRefreshing = false
                     activity?.apply {
                         Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_network), Snackbar.LENGTH_LONG)
                             .setAction(R.string.try_again) {
@@ -108,8 +116,8 @@ class MovieFragment : Fragment(), OnMovieClickListener {
     private fun showErrorNetwork() {
         binding.apply {
             progressCircular.visibility = View.INVISIBLE
-            rvMovie.visibility = View.INVISIBLE
-            lottieError.visibility = View.VISIBLE
+            lottieError.visibility =
+                if (movieViewModel.listMovies.value == null) View.VISIBLE else View.INVISIBLE
         }
     }
 

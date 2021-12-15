@@ -8,13 +8,14 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.example.moviecatalogue.R
 import com.example.moviecatalogue.databinding.FragmentMovieDetailBinding
 import com.example.moviecatalogue.ui.detail.DetailActivity
 import com.google.android.material.snackbar.Snackbar
 
-class MovieDetailFragment : Fragment() {
+class MovieDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private var _binding: FragmentMovieDetailBinding? = null
     private val binding: FragmentMovieDetailBinding get() = _binding as FragmentMovieDetailBinding
@@ -39,6 +40,8 @@ class MovieDetailFragment : Fragment() {
 
         movieId?.let { setupViewModel(it) }
 
+        binding.swipeToRefresh.setOnRefreshListener(this)
+
         setupToolbar()
         setupDetailMovie()
     }
@@ -48,6 +51,10 @@ class MovieDetailFragment : Fragment() {
             activity?.onBackPressed()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onRefresh() {
+        movieId?.let { movieDetailViewModel.getMovieDetail(it) }
     }
 
     private fun setupToolbar() {
@@ -66,6 +73,7 @@ class MovieDetailFragment : Fragment() {
 
             movieDetailError.observe(viewLifecycleOwner) { error ->
                 if (error) {
+                    binding.swipeToRefresh.isRefreshing = false
                     activity?.apply {
                         Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_network), Snackbar.LENGTH_LONG)
                             .setAction(R.string.try_again) {
@@ -82,6 +90,8 @@ class MovieDetailFragment : Fragment() {
         movieDetailViewModel.movieDetail.observe(viewLifecycleOwner) { movieDetail ->
             if (movieDetail != null) {
                 binding.apply {
+                    swipeToRefresh.isRefreshing = false
+
                     toolbar.title = movieDetail.title
 
                     tvMovieTitle.text = movieDetail.title

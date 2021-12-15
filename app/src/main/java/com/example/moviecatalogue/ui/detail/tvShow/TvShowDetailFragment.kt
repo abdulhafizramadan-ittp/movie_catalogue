@@ -8,13 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.example.moviecatalogue.R
 import com.example.moviecatalogue.databinding.FragmentTvShowDetailBinding
 import com.example.moviecatalogue.ui.detail.DetailActivity
 import com.google.android.material.snackbar.Snackbar
 
-class TvShowDetailFragment : Fragment() {
+class TvShowDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private var _binding: FragmentTvShowDetailBinding? = null
     private val binding: FragmentTvShowDetailBinding get() = _binding as FragmentTvShowDetailBinding
@@ -39,6 +40,8 @@ class TvShowDetailFragment : Fragment() {
 
         tvShowId?.let { setupViewModel(it) }
 
+        binding.swipeToRefresh.setOnRefreshListener(this)
+
         setupToolbar()
         setupDetailTvShow()
     }
@@ -48,6 +51,10 @@ class TvShowDetailFragment : Fragment() {
             activity?.onBackPressed()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onRefresh() {
+        tvShowId?.let { tvShowDetailViewModel.getTvShowDetail(it) }
     }
 
     private fun setupToolbar() {
@@ -66,6 +73,7 @@ class TvShowDetailFragment : Fragment() {
 
             tvShowDetailError.observe(viewLifecycleOwner) { error ->
                 if (error) {
+                    binding.swipeToRefresh.isRefreshing = false
                     activity?.apply {
                         Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_network), Snackbar.LENGTH_LONG)
                             .setAction(R.string.try_again) {
@@ -81,6 +89,8 @@ class TvShowDetailFragment : Fragment() {
     private fun setupDetailTvShow() {
         tvShowDetailViewModel.tvShowDetail.observe(viewLifecycleOwner) { tvShowDetail ->
             binding.apply {
+                binding.swipeToRefresh.isRefreshing = false
+
                 toolbar.title = tvShowDetail.name
 
                 tvShowTitle.text = tvShowDetail.name
