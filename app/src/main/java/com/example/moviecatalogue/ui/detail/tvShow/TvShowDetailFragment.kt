@@ -9,8 +9,10 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.example.moviecatalogue.R
 import com.example.moviecatalogue.databinding.FragmentTvShowDetailBinding
 import com.example.moviecatalogue.ui.detail.DetailActivity
+import com.google.android.material.snackbar.Snackbar
 
 class TvShowDetailFragment : Fragment() {
 
@@ -61,6 +63,13 @@ class TvShowDetailFragment : Fragment() {
         tvShowDetailViewModel.apply {
             if (tvShowDetail.value == null) {
                 getTvShowDetail(tvShowId)
+            }
+
+            tvShowDetailError.observe(viewLifecycleOwner) { error ->
+                if (error) {
+                    Snackbar.make(requireContext(), requireView(), getString(R.string.error_network), Snackbar.LENGTH_LONG)
+                        .show()
+                }
             }
         }
     }

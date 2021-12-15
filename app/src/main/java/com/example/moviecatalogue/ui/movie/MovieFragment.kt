@@ -2,6 +2,8 @@ package com.example.moviecatalogue.ui.movie
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -64,9 +66,12 @@ class MovieFragment : Fragment(), OnMovieClickListener {
             }
 
             errorDiscoverMovies.observe(viewLifecycleOwner) { error ->
-                if (error != null && error) {
+                if (error) {
                     showErrorNetwork()
                     Snackbar.make(requireContext(), requireView(), getString(R.string.error_network), Snackbar.LENGTH_LONG)
+                        .setAction(R.string.try_again) {
+                            refreshNetwork()
+                        }
                         .show()
                 }
             }
@@ -82,6 +87,16 @@ class MovieFragment : Fragment(), OnMovieClickListener {
             adapter = movieAdapter
             addItemDecoration(dividerItemDecoration)
         }
+    }
+
+    private fun refreshNetwork() {
+        binding.apply {
+            lottieError.visibility = View.INVISIBLE
+            progressCircular.visibility = View.VISIBLE
+        }
+        Handler(Looper.getMainLooper()).postDelayed({
+            movieViewModel.discoverMovies()
+        }, 500)
     }
 
     private fun showErrorNetwork() {

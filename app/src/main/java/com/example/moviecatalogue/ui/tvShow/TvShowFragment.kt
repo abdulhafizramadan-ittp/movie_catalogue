@@ -2,6 +2,8 @@ package com.example.moviecatalogue.ui.tvShow
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -63,9 +65,12 @@ class TvShowFragment : Fragment(), OnTvShowClickListener {
             }
 
             errorDiscoverTvShows.observe(viewLifecycleOwner) { error ->
-                if (error != null && error) {
+                if (error) {
                     showErrorNetwork()
                     Snackbar.make(requireContext(), requireView(), getString(R.string.error_network), Snackbar.LENGTH_LONG)
+                        .setAction(R.string.try_again) {
+                            refreshNetwork()
+                        }
                         .show()
                 }
             }
@@ -81,6 +86,16 @@ class TvShowFragment : Fragment(), OnTvShowClickListener {
             adapter = tvShowAdapter
             addItemDecoration(dividerItemDecoration)
         }
+    }
+
+    private fun refreshNetwork() {
+        binding.apply {
+            lottieError.visibility = View.INVISIBLE
+            progressCircular.visibility = View.VISIBLE
+        }
+        Handler(Looper.getMainLooper()).postDelayed({
+            tvShowViewModel.discoverTvShows()
+        }, 500)
     }
 
     private fun showErrorNetwork() {
