@@ -1,7 +1,5 @@
 package com.example.moviecatalogue.data.domain
 
-import com.google.gson.annotations.SerializedName
-
 data class TvShow(
     val firstAirDate: String,
     val overview: String,

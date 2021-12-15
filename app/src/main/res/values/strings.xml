@@ -16,4 +16,6 @@
     <string name="language">Language</string>
     <string name="release">Release</string>
     <string name="season">Season</string>
+
+    <string name="error_network">Kamu sedang offline!</string>
 </resources>

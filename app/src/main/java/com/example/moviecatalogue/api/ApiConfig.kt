@@ -6,8 +6,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class ApiConfig {
     companion object {
-        private const val BASE_URL = "https://api.themoviedb.org/3"
         val TMDB_TOKEN = BuildConfig.TMDB_TOKEN
+        val POSTER_MD = "http://image.tmdb.org/t/p/w500"
+        val POSTER_OR = "http://image.tmdb.org/t/p/original"
+
+        private const val BASE_URL = "https://api.themoviedb.org/3/"
 
         @Volatile
         private var INSTANCE: ApiService? = null

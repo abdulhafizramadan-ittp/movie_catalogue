@@ -26,6 +26,9 @@ ext {
     // Glide
     glideVersion = '4.12.0'
 
+    // Lottie
+    lottieVersion = '4.2.1'
+
     // TEST
     jUnitVersion = '4.13.2'
     extJUnitVersion = '1.1.3'
