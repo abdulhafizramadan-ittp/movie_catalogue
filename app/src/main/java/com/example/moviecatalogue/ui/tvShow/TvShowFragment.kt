@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.moviecatalogue.R
 import com.example.moviecatalogue.data.domain.TvShow
+import com.example.moviecatalogue.data.repository.TvShowRepository
+import com.example.moviecatalogue.data.viewModelFactory.TvShowViewModelFactory
 import com.example.moviecatalogue.databinding.FragmentTvShowBinding
 import com.example.moviecatalogue.ui.detail.DetailActivity
 import com.google.android.material.snackbar.Snackbar
@@ -37,7 +39,8 @@ class TvShowFragment : Fragment(), OnTvShowClickListener, SwipeRefreshLayout.OnR
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        tvShowViewModel = ViewModelProvider(this)[TvShowViewModel::class.java]
+        val tvShowViewModelFactory = TvShowViewModelFactory(TvShowRepository())
+        tvShowViewModel = ViewModelProvider(this, tvShowViewModelFactory)[TvShowViewModel::class.java]
         tvShowAdapter = TvShowAdapter(this)
 
         binding.swipeToRefresh.setOnRefreshListener(this)

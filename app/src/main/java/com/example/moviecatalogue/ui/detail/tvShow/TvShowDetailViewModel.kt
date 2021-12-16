@@ -7,6 +7,7 @@ import com.example.moviecatalogue.api.ApiConfig
 import com.example.moviecatalogue.data.domain.TvShowDetail
 import com.example.moviecatalogue.data.response.TvShowDetailResponse
 import com.example.moviecatalogue.data.response.toDomain
+import com.example.moviecatalogue.helper.EspressoIdlingResource
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,10 +29,16 @@ class TvShowDetailViewModel : ViewModel() {
                     _tvShowDetailError.value = false
                     _tvShowDetail.value = response.body()?.toDomain()
                 }
+                if (!EspressoIdlingResource.getEspressoIdlingResource().isIdleNow) {
+                    EspressoIdlingResource.decrement()
+                }
             }
 
             override fun onFailure(call: Call<TvShowDetailResponse?>, t: Throwable) {
                 _tvShowDetailError.value = true
+                if (!EspressoIdlingResource.getEspressoIdlingResource().isIdleNow) {
+                    EspressoIdlingResource.decrement()
+                }
             }
         })
     }
