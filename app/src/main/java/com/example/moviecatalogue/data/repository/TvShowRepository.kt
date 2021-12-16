@@ -47,6 +47,6 @@ class TvShowRepository {
     }
 
     fun setErrorDiscoverTvShows(state: Boolean) {
-        _errorDiscoverTvShows.value = false
+        _errorDiscoverTvShows.value = state
     }
 }

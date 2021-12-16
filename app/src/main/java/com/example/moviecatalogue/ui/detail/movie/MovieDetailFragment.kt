@@ -11,6 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.example.moviecatalogue.R
+import com.example.moviecatalogue.data.repository.MovieDetailRepository
+import com.example.moviecatalogue.data.viewModelFactory.MovieDetailViewModelFactory
 import com.example.moviecatalogue.databinding.FragmentMovieDetailBinding
 import com.example.moviecatalogue.ui.detail.DetailActivity
 import com.google.android.material.snackbar.Snackbar
@@ -34,7 +36,8 @@ class MovieDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        movieDetailViewModel = ViewModelProvider(requireActivity())[MovieDetailViewModel::class.java]
+        val movieDetailViewModelFactory = MovieDetailViewModelFactory(MovieDetailRepository())
+        movieDetailViewModel = ViewModelProvider(requireActivity(), movieDetailViewModelFactory)[MovieDetailViewModel::class.java]
 
         movieId = arguments?.getInt(MOVIE_ID)
 
