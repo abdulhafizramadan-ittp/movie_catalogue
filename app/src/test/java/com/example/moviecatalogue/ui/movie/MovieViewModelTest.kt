@@ -74,7 +74,7 @@ class MovieViewModelTest {
 
         assertNull(listMovies)
         assertNotNull(errorDiscoverMovies)
-        assertEquals(dummyErrorDiscoverMovies.value, errorDiscoverMovies)
+        assertTrue(errorDiscoverMovies == true)
 
         verify {
             movieRepository.discoverMovies()

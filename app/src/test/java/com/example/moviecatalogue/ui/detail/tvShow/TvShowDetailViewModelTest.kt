@@ -28,29 +28,30 @@ class TvShowDetailViewModelTest {
     }
 
     @Test
-    fun getMovieDetail() {
+    fun getTvShowDetail() {
         every { tvShowDetailRepository.getTvShowDetail(dummyTvShowId) } answers { }
         every { tvShowDetailRepository.tvShowDetail } returns dummyTvShowDetail
 
         tvShowDetailViewModel.getTvShowDetail(dummyTvShowId)
-        val movieDetail = tvShowDetailViewModel.tvShowDetail.value
-        val movieDetailDummy = dummyTvShowDetail.value
+        val tvShowDetail = tvShowDetailViewModel.tvShowDetail.value
 
-        assertNotNull(movieDetail)
-        assertEquals(dummyTvShowDetail.value, movieDetail)
+        assertNotNull(tvShowDetail)
+        assertEquals(dummyTvShowDetail.value, tvShowDetail)
 
-        assertEquals(movieDetailDummy?.firstAirDate, movieDetail?.firstAirDate)
-        assertEquals(movieDetailDummy?.overview, movieDetail?.overview)
-        assertEquals(movieDetailDummy?.originalLanguage, movieDetail?.originalLanguage)
-        assertEquals(movieDetailDummy?.type, movieDetail?.type)
-        assertEquals(movieDetailDummy?.posterPath, movieDetail?.posterPath)
-        assertEquals(movieDetailDummy?.voteAverage, movieDetail?.voteAverage)
-        assertEquals(movieDetailDummy?.name, movieDetail?.name)
-        assertEquals(movieDetailDummy?.tagline, movieDetail?.tagline)
-        assertEquals(movieDetailDummy?.id, movieDetail?.id)
-        assertEquals(movieDetailDummy?.numberOfSeasons, movieDetail?.numberOfSeasons)
-        assertEquals(movieDetailDummy?.lastAirDate, movieDetail?.lastAirDate)
-        assertEquals(movieDetailDummy?.status, movieDetail?.status)
+        tvShowDetail?.apply {
+            assertTrue(firstAirDate.isNotEmpty())
+            assertTrue(overview.isNotEmpty())
+            assertTrue(originalLanguage.isNotEmpty())
+            assertTrue(type.isNotEmpty())
+            assertTrue(posterPath.isNotEmpty())
+            assertTrue(voteAverage != 0.0)
+            assertTrue(name.isNotEmpty())
+            assertTrue(tagline.isNotEmpty())
+            assertTrue(id != 0)
+            assertTrue(numberOfSeasons != 0)
+            assertTrue(lastAirDate.isNotEmpty())
+            assertTrue(status.isNotEmpty())
+        }
 
         verifyAll {
             tvShowDetailRepository.getTvShowDetail(dummyTvShowId)
@@ -59,17 +60,17 @@ class TvShowDetailViewModelTest {
     }
 
     @Test
-    fun emptyMovieDetail() {
+    fun emptyTvShowDetail() {
         every { tvShowDetailRepository.getTvShowDetail(dummyTvShowId) } answers { }
         every { tvShowDetailRepository.tvShowDetail } returns dummyEmptyTvShowDetail
 
         tvShowDetailViewModel.getTvShowDetail(dummyTvShowId)
-        val emptyMovieDetail = tvShowDetailViewModel.tvShowDetail.value
+        val emptyTvShowDetail = tvShowDetailViewModel.tvShowDetail.value
 
-        assertNotNull(emptyMovieDetail)
-        assertEquals(dummyEmptyTvShowDetail.value, emptyMovieDetail)
+        assertNotNull(emptyTvShowDetail)
+        assertEquals(dummyEmptyTvShowDetail.value, emptyTvShowDetail)
 
-        emptyMovieDetail?.apply {
+        emptyTvShowDetail?.apply {
             assertTrue(firstAirDate.isEmpty())
             assertTrue(overview.isEmpty())
             assertTrue(originalLanguage.isEmpty())
@@ -91,17 +92,18 @@ class TvShowDetailViewModelTest {
     }
 
     @Test
-    fun errorMovieDetail() {
+    fun errorTvShowDetail() {
         every { tvShowDetailRepository.getTvShowDetail(dummyTvShowId) } answers { }
         every { tvShowDetailRepository.tvShowDetail } returns dummyNullTvShowDetail
         every { tvShowDetailRepository.tvShowDetailError } returns dummyTvShowMovieDetail
 
         tvShowDetailViewModel.getTvShowDetail(dummyTvShowId)
-        val nullMovieDetail = tvShowDetailViewModel.tvShowDetail.value
-        val errorMovieDetail = tvShowDetailViewModel.tvShowDetailError.value as Boolean
+        val nullTvShowDetail = tvShowDetailViewModel.tvShowDetail.value
+        val errorTvShowDetail = tvShowDetailViewModel.tvShowDetailError.value as Boolean
 
-        assertNull(nullMovieDetail)
-        assertTrue(errorMovieDetail)
+        assertNull(nullTvShowDetail)
+        assertNotNull(errorTvShowDetail)
+        assertTrue(errorTvShowDetail)
 
         verifyAll {
             tvShowDetailRepository.getTvShowDetail(dummyTvShowId)

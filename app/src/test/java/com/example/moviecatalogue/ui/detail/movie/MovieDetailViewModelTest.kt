@@ -35,21 +35,22 @@ class MovieDetailViewModelTest {
 
         movieDetailViewModel.getMovieDetail(dummyMovieId)
         val movieDetail = movieDetailViewModel.movieDetail.value
-        val movieDetailDummy = dummyMovieDetail.value
 
         assertNotNull(movieDetail)
         assertEquals(dummyMovieDetail.value, movieDetail)
-
-        assertEquals(movieDetailDummy?.overview, movieDetail?.overview)
-        assertEquals(movieDetailDummy?.originalLanguage, movieDetail?.originalLanguage)
-        assertEquals(movieDetailDummy?.releaseDate, movieDetail?.releaseDate)
-        assertEquals(movieDetailDummy?.voteAverage, movieDetail?.voteAverage)
-        assertEquals(movieDetailDummy?.runtime, movieDetail?.runtime)
-        assertEquals(movieDetailDummy?.id, movieDetail?.id)
-        assertEquals(movieDetailDummy?.title, movieDetail?.title)
-        assertEquals(movieDetailDummy?.tagline, movieDetail?.tagline)
-        assertEquals(movieDetailDummy?.posterPath, movieDetail?.posterPath)
-        assertEquals(movieDetailDummy?.status, movieDetail?.status)
+        
+        movieDetail?.apply {
+            assertTrue(overview.isNotEmpty())
+            assertTrue(originalLanguage.isNotEmpty())
+            assertTrue(releaseDate.isNotEmpty())
+            assertTrue(voteAverage != 0.0)
+            assertTrue(runtime != 0)
+            assertTrue(id != 0)
+            assertTrue(title.isNotEmpty())
+            assertTrue(tagline.isNotEmpty())
+            assertTrue(posterPath.isNotEmpty())
+            assertTrue(status.isNotEmpty())
+        }
 
         verifyAll {
             movieDetailRepository.getMovieDetail(dummyMovieId)
@@ -98,6 +99,7 @@ class MovieDetailViewModelTest {
         val errorMovieDetail = movieDetailViewModel.movieDetailError.value as Boolean
 
         assertNull(nullMovieDetail)
+        assertNotNull(errorMovieDetail)
         assertTrue(errorMovieDetail)
 
         verifyAll {

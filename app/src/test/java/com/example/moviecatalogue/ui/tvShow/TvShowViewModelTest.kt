@@ -75,7 +75,7 @@ class TvShowViewModelTest {
 
         assertNull(listTvShows)
         assertNotNull(errorDiscoverTvShows)
-        assertEquals(dummyErrorDiscoverTvShows.value, errorDiscoverTvShows)
+        assertTrue(errorDiscoverTvShows == true)
 
         verifyAll {
             tvShowRepository.discoverTvShows()
