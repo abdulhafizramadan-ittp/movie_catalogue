@@ -1,8 +1,8 @@
 package com.example.moviecatalogue.ui.home
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
 import com.example.moviecatalogue.R
 import com.example.moviecatalogue.databinding.ActivityHomeBinding
 import com.google.android.material.tabs.TabLayoutMediator

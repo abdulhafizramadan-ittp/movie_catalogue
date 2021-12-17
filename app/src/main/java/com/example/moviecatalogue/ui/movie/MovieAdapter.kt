@@ -1,10 +1,10 @@
 package com.example.moviecatalogue.ui.movie
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.moviecatalogue.api.ApiConfig.Companion.POSTER_MD
 import com.example.moviecatalogue.data.domain.Movie
 import com.example.moviecatalogue.databinding.ItemsMovieBinding
 
@@ -12,6 +12,7 @@ class MovieAdapter(private val movieClickListener: OnMovieClickListener) : Recyc
 
     private val listMovies = ArrayList<Movie>()
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setMovies(listMovies: List<Movie>?) {
         if (listMovies != null) {
             this.listMovies.apply {

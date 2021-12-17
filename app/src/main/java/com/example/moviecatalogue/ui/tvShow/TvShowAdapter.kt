@@ -1,10 +1,10 @@
 package com.example.moviecatalogue.ui.tvShow
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.moviecatalogue.api.ApiConfig.Companion.POSTER_MD
 import com.example.moviecatalogue.data.domain.TvShow
 import com.example.moviecatalogue.databinding.ItemsTvShowBinding
 
@@ -12,6 +12,7 @@ class TvShowAdapter(private val tvShowClickListener: OnTvShowClickListener) : Re
 
     private val listTvShows = ArrayList<TvShow>()
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setMovies(listShows: List<TvShow>?) {
         if (listShows != null) {
             this.listTvShows.apply {

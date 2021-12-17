@@ -1,7 +1,7 @@
 package com.example.moviecatalogue.ui.detail
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.example.moviecatalogue.R
 import com.example.moviecatalogue.databinding.ActivityDetailBinding
 import com.example.moviecatalogue.ui.detail.movie.MovieDetailFragment

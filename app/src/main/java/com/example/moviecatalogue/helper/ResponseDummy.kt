@@ -6,7 +6,6 @@ import com.example.moviecatalogue.data.domain.Movie
 import com.example.moviecatalogue.data.domain.MovieDetail
 import com.example.moviecatalogue.data.domain.TvShow
 import com.example.moviecatalogue.data.domain.TvShowDetail
-import com.example.moviecatalogue.data.response.MovieDetailResponse
 
 object ResponseDummy {
 
