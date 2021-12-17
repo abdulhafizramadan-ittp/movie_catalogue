@@ -6,8 +6,8 @@ import com.example.moviecatalogue.helper.ResponseDummy
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
+import io.mockk.verifyAll
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 
@@ -18,6 +18,7 @@ class MovieViewModelTest {
 
     private val dummyDiscoverMovies = ResponseDummy.generateDummyDiscoverMovies()
     private val dummyEmptyDiscoverMovies = ResponseDummy.generateDummyEmptyDiscoverMovies()
+    private val dummyNullDiscoverMovies = ResponseDummy.generateDummyNullDiscoverMovies()
     private val dummyErrorDiscoverMovies = MutableLiveData(true)
 
     @Before
@@ -28,39 +29,56 @@ class MovieViewModelTest {
 
     @Test
     fun discoverMovies() {
+        every { movieRepository.discoverMovies() } answers { }
         every { movieRepository.listMovies } returns ResponseDummy.generateDummyDiscoverMovies()
 
-        val listMovies = movieViewModel.listMovies
-        assertNotNull(listMovies)
-        assertEquals(dummyDiscoverMovies.value, listMovies.value)
+        movieViewModel.discoverMovies()
+        val listMovies = movieViewModel.listMovies.value
 
-        verify {
+        assertNotNull(listMovies)
+        assertEquals(dummyDiscoverMovies.value, listMovies)
+
+        verifyAll{
+            movieRepository.discoverMovies()
             movieRepository.listMovies
         }
     }
 
     @Test
     fun emptyDiscoverMovies() {
+        every { movieRepository.discoverMovies() } answers { }
         every { movieRepository.listMovies } returns dummyEmptyDiscoverMovies
 
-        val listMovies = movieViewModel.listMovies
-        assertNotNull(listMovies)
-        assertEquals(dummyEmptyDiscoverMovies.value, listMovies.value)
+        movieViewModel.discoverMovies()
+        val listMovies = movieViewModel.listMovies.value
 
-        verify {
+        assertNotNull(listMovies)
+        assertTrue(listMovies?.isEmpty() == true)
+        assertEquals(dummyEmptyDiscoverMovies.value, listMovies)
+
+        verifyAll {
+            movieRepository.discoverMovies()
             movieRepository.listMovies
         }
     }
 
     @Test
     fun errorDiscoveringMovies() {
+        every { movieRepository.discoverMovies() } answers { }
+        every { movieRepository.listMovies } returns dummyNullDiscoverMovies
         every { movieRepository.errorDiscoverMovies } returns dummyErrorDiscoverMovies
 
-        val errorDiscoverMovies = movieViewModel.errorDiscoverMovies
+        movieViewModel.discoverMovies()
+        val listMovies = movieViewModel.listMovies.value
+        val errorDiscoverMovies = movieViewModel.errorDiscoverMovies.value
+
+        assertNull(listMovies)
         assertNotNull(errorDiscoverMovies)
-        assertEquals(dummyErrorDiscoverMovies.value, errorDiscoverMovies.value)
+        assertEquals(dummyErrorDiscoverMovies.value, errorDiscoverMovies)
 
         verify {
+            movieRepository.discoverMovies()
+            movieRepository.listMovies
             movieRepository.errorDiscoverMovies
         }
     }

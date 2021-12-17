@@ -19,7 +19,7 @@ class MovieRepository {
     private val _errorDiscoverMovies = MutableLiveData(false)
     val errorDiscoverMovies: LiveData<Boolean> = _errorDiscoverMovies
 
-    fun discoverMovies(): LiveData<List<Movie>> {
+    fun discoverMovies() {
         EspressoIdlingResource.increment()
         ApiConfig.getInstance().getDiscoverMovie(ApiConfig.TMDB_TOKEN)
             .enqueue(object : Callback<MovieResponse?> {
@@ -44,7 +44,6 @@ class MovieRepository {
                     }
                 }
             })
-        return listMovies
     }
 
     fun setErrorDiscoverMovies(state: Boolean) {

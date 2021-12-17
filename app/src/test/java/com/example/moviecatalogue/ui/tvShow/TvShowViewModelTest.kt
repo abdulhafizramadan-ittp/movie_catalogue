@@ -6,6 +6,7 @@ import com.example.moviecatalogue.helper.ResponseDummy
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import io.mockk.verifyAll
 import org.junit.Assert.*
 
 import org.junit.Before
@@ -18,6 +19,7 @@ class TvShowViewModelTest {
 
     private val dummyDiscoverTvShows = ResponseDummy.generateDummyDiscoverTvShows()
     private val dummyEmptyDiscoverTvShows = ResponseDummy.generateDummyEmptyDiscoverTvShows()
+    private val dummyNullDiscoverTvShows = ResponseDummy.generateDummyNullDiscoverTvShows()
     private val dummyErrorDiscoverTvShows = MutableLiveData(true)
 
     @Before
@@ -28,39 +30,56 @@ class TvShowViewModelTest {
 
     @Test
     fun discoverTvShows() {
+        every { tvShowRepository.discoverTvShows() } answers { }
         every { tvShowRepository.listTvShows } returns dummyDiscoverTvShows
 
-        val listTvShows = tvShowViewModel.listTvShows
-        assertNotNull(listTvShows)
-        assertEquals(dummyDiscoverTvShows.value, listTvShows.value)
+        tvShowViewModel.discoverTvShows()
+        val listTvShows = tvShowViewModel.listTvShows.value
 
-        verify {
+        assertNotNull(listTvShows)
+        assertEquals(dummyDiscoverTvShows.value, listTvShows)
+
+        verifyAll {
+            tvShowRepository.discoverTvShows()
             tvShowRepository.listTvShows
         }
     }
 
     @Test
     fun emptyDiscoverTvShows() {
+        every { tvShowRepository.discoverTvShows() } answers { }
         every { tvShowRepository.listTvShows } returns dummyEmptyDiscoverTvShows
 
-        val listTvShows = tvShowViewModel.listTvShows
-        assertNotNull(listTvShows)
-        assertEquals(dummyEmptyDiscoverTvShows.value, listTvShows.value)
+        tvShowViewModel.discoverTvShows()
+        val listTvShows = tvShowViewModel.listTvShows.value
 
-        verify {
+        assertNotNull(listTvShows)
+        assertTrue(listTvShows?.isEmpty() == true)
+        assertEquals(dummyEmptyDiscoverTvShows.value, listTvShows)
+
+        verifyAll {
+            tvShowRepository.discoverTvShows()
             tvShowRepository.listTvShows
         }
     }
 
     @Test
     fun errorDiscoverTvShows() {
+        every { tvShowRepository.discoverTvShows() } answers { }
+        every { tvShowRepository.listTvShows } returns dummyNullDiscoverTvShows
         every { tvShowRepository.errorDiscoverTvShows } returns dummyErrorDiscoverTvShows
 
-        val errorDiscoverTvShows = tvShowViewModel.errorDiscoverTvShows
-        assertNotNull(errorDiscoverTvShows)
-        assertEquals(dummyErrorDiscoverTvShows.value, errorDiscoverTvShows.value)
+        tvShowViewModel.discoverTvShows()
+        val listTvShows = tvShowViewModel.listTvShows.value
+        val errorDiscoverTvShows = tvShowViewModel.errorDiscoverTvShows.value
 
-        verify {
+        assertNull(listTvShows)
+        assertNotNull(errorDiscoverTvShows)
+        assertEquals(dummyErrorDiscoverTvShows.value, errorDiscoverTvShows)
+
+        verifyAll {
+            tvShowRepository.discoverTvShows()
+            tvShowRepository.listTvShows
             tvShowViewModel.errorDiscoverTvShows
         }
     }

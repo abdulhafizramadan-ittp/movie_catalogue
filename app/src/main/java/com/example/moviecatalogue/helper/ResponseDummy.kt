@@ -20,9 +20,11 @@ object ResponseDummy {
         return MutableLiveData(listMovies)
     }
 
-    fun generateDummyEmptyDiscoverMovies(): LiveData<List<Movie>> {
-        return MutableLiveData()
-    }
+    fun generateDummyEmptyDiscoverMovies(): LiveData<List<Movie>> =
+        MutableLiveData(emptyList())
+
+    fun generateDummyNullDiscoverMovies(): LiveData<List<Movie>> =
+        MutableLiveData()
 
     fun generateDummyDiscoverTvShows(): LiveData<List<TvShow>> {
         val listTvShows = arrayListOf<TvShow>()
@@ -34,9 +36,11 @@ object ResponseDummy {
         return MutableLiveData(listTvShows)
     }
 
-    fun generateDummyEmptyDiscoverTvShows(): LiveData<List<TvShow>> {
-        return MutableLiveData()
-    }
+    fun generateDummyEmptyDiscoverTvShows(): LiveData<List<TvShow>> =
+        MutableLiveData(emptyList())
+
+    fun generateDummyNullDiscoverTvShows(): LiveData<List<TvShow>> =
+        MutableLiveData()
 
     fun generateDummyMovieDetail(): LiveData<MovieDetail> =
         MutableLiveData(
