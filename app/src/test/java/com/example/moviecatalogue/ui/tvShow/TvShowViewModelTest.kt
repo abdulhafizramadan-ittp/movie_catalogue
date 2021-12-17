@@ -1,10 +1,8 @@
 package com.example.moviecatalogue.ui.tvShow
 
 import androidx.lifecycle.MutableLiveData
-import com.example.moviecatalogue.data.repository.MovieRepository
 import com.example.moviecatalogue.data.repository.TvShowRepository
 import com.example.moviecatalogue.helper.ResponseDummy
-import com.example.moviecatalogue.ui.movie.MovieViewModel
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -17,8 +15,9 @@ class TvShowViewModelTest {
 
     private lateinit var tvShowRepository: TvShowRepository
     private lateinit var tvShowViewModel: TvShowViewModel
-    private val dummyDiscoverTvShowsResponse = ResponseDummy.generateDummyDiscoverTvShows()
-    private val dummyEmptyDiscoverTvShowsResponse = ResponseDummy.generateDummyEmptyDiscoverTvShows()
+
+    private val dummyDiscoverTvShows = ResponseDummy.generateDummyDiscoverTvShows()
+    private val dummyEmptyDiscoverTvShows = ResponseDummy.generateDummyEmptyDiscoverTvShows()
     private val dummyErrorDiscoverTvShows = MutableLiveData(true)
 
     @Before
@@ -29,11 +28,11 @@ class TvShowViewModelTest {
 
     @Test
     fun discoverTvShows() {
-        every { tvShowRepository.listTvShows } returns dummyDiscoverTvShowsResponse
+        every { tvShowRepository.listTvShows } returns dummyDiscoverTvShows
 
         val listTvShows = tvShowViewModel.listTvShows
         assertNotNull(listTvShows)
-        assertEquals(dummyDiscoverTvShowsResponse.value, listTvShows.value)
+        assertEquals(dummyDiscoverTvShows.value, listTvShows.value)
 
         verify {
             tvShowRepository.listTvShows
@@ -42,11 +41,11 @@ class TvShowViewModelTest {
 
     @Test
     fun emptyDiscoverTvShows() {
-        every { tvShowRepository.listTvShows } returns dummyEmptyDiscoverTvShowsResponse
+        every { tvShowRepository.listTvShows } returns dummyEmptyDiscoverTvShows
 
         val listTvShows = tvShowViewModel.listTvShows
         assertNotNull(listTvShows)
-        assertEquals(dummyEmptyDiscoverTvShowsResponse.value, listTvShows.value)
+        assertEquals(dummyEmptyDiscoverTvShows.value, listTvShows.value)
 
         verify {
             tvShowRepository.listTvShows

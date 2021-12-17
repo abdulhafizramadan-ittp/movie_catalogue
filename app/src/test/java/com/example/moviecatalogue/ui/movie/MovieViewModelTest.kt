@@ -15,8 +15,9 @@ class MovieViewModelTest {
 
     private lateinit var movieRepository: MovieRepository
     private lateinit var movieViewModel: MovieViewModel
-    private val dummyDiscoverMoviesResponse = ResponseDummy.generateDummyDiscoverMovies()
-    private val dummyEmptyDiscoverMoviesResponse = ResponseDummy.generateDummyEmptyDiscoverMovies()
+
+    private val dummyDiscoverMovies = ResponseDummy.generateDummyDiscoverMovies()
+    private val dummyEmptyDiscoverMovies = ResponseDummy.generateDummyEmptyDiscoverMovies()
     private val dummyErrorDiscoverMovies = MutableLiveData(true)
 
     @Before
@@ -31,7 +32,7 @@ class MovieViewModelTest {
 
         val listMovies = movieViewModel.listMovies
         assertNotNull(listMovies)
-        assertEquals(dummyDiscoverMoviesResponse.value, listMovies.value)
+        assertEquals(dummyDiscoverMovies.value, listMovies.value)
 
         verify {
             movieRepository.listMovies
@@ -40,11 +41,11 @@ class MovieViewModelTest {
 
     @Test
     fun emptyDiscoverMovies() {
-        every { movieRepository.listMovies } returns dummyEmptyDiscoverMoviesResponse
+        every { movieRepository.listMovies } returns dummyEmptyDiscoverMovies
 
         val listMovies = movieViewModel.listMovies
         assertNotNull(listMovies)
-        assertEquals(dummyEmptyDiscoverMoviesResponse.value, listMovies.value)
+        assertEquals(dummyEmptyDiscoverMovies.value, listMovies.value)
 
         verify {
             movieRepository.listMovies
