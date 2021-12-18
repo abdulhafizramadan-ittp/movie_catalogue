@@ -8,7 +8,6 @@ class ApiConfig {
     companion object {
         val TMDB_TOKEN = BuildConfig.TMDB_TOKEN
         val POSTER_MD = "http://image.tmdb.org/t/p/w500"
-        val POSTER_OR = "http://image.tmdb.org/t/p/original"
 
         private const val BASE_URL = "https://api.themoviedb.org/3/"
 
