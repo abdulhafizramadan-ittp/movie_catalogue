@@ -63,10 +63,6 @@ class TvShowFragment : Fragment(), OnTvShowClickListener, SwipeRefreshLayout.OnR
 
     private fun setupViewModel() {
         tvShowViewModel.apply {
-            if (listTvShows.value == null) {
-                discoverTvShows()
-            }
-
             listTvShows.observe(viewLifecycleOwner) { listTvShows ->
                 if (listTvShows != null) {
                     binding.apply {
@@ -79,15 +75,18 @@ class TvShowFragment : Fragment(), OnTvShowClickListener, SwipeRefreshLayout.OnR
             }
 
             errorDiscoverTvShows.observe(viewLifecycleOwner) { error ->
-                if (error) {
+                if (error.peekContent()) {
                     showErrorNetwork()
                     binding.swipeToRefresh.isRefreshing = false
-                    activity?.apply {
-                        Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_network), Snackbar.LENGTH_LONG)
-                            .setAction(R.string.try_again) {
-                                refreshNetwork()
-                            }
-                            .show()
+
+                    error.getContentIfNotHandled()?.apply {
+                        activity?.apply {
+                            Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_network), Snackbar.LENGTH_LONG)
+                                .setAction(R.string.try_again) {
+                                    refreshNetwork()
+                                }
+                                .show()
+                        }
                     }
                 }
             }
@@ -126,7 +125,6 @@ class TvShowFragment : Fragment(), OnTvShowClickListener, SwipeRefreshLayout.OnR
 
     override fun onDestroyView() {
         super.onDestroyView()
-        tvShowViewModel.setErrorDiscoverTvShows(false)
         _binding = null
     }
 

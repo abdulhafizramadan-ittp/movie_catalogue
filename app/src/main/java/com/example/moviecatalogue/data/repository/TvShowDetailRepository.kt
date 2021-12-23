@@ -7,6 +7,7 @@ import com.example.moviecatalogue.data.domain.TvShowDetail
 import com.example.moviecatalogue.data.response.TvShowDetailResponse
 import com.example.moviecatalogue.data.response.toDomain
 import com.example.moviecatalogue.helper.EspressoIdlingResource
+import com.example.moviecatalogue.helper.SingleEvent
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -15,8 +16,8 @@ class TvShowDetailRepository {
     private val _tvShowDetail = MutableLiveData<TvShowDetail>()
     val tvShowDetail: LiveData<TvShowDetail> = _tvShowDetail
 
-    private val _tvShowDetailError = MutableLiveData(false)
-    val tvShowDetailError: LiveData<Boolean> = _tvShowDetailError
+    private val _tvShowDetailError = MutableLiveData<SingleEvent<Boolean>>()
+    val tvShowDetailError: LiveData<SingleEvent<Boolean>> = _tvShowDetailError
 
     fun getTvShowDetail(tvShowId: Int) {
         ApiConfig.getInstance().getTvShowDetail(tvShowId, ApiConfig.TMDB_TOKEN).enqueue(object :
@@ -25,25 +26,15 @@ class TvShowDetailRepository {
                 call: Call<TvShowDetailResponse?>,
                 response: Response<TvShowDetailResponse?>
             ) {
-                if (response.body() != null) {
-                    _tvShowDetailError.value = false
-                    _tvShowDetail.value = response.body()?.toDomain()
-                }
-                if (!EspressoIdlingResource.getEspressoIdlingResource().isIdleNow) {
-                    EspressoIdlingResource.decrement()
-                }
+                _tvShowDetailError.value = SingleEvent(false)
+                _tvShowDetail.value = response.body()?.toDomain()
+                EspressoIdlingResource.ifNotIdlingDecrement()
             }
 
             override fun onFailure(call: Call<TvShowDetailResponse?>, t: Throwable) {
-                _tvShowDetailError.value = true
-                if (!EspressoIdlingResource.getEspressoIdlingResource().isIdleNow) {
-                    EspressoIdlingResource.decrement()
-                }
+                _tvShowDetailError.value = SingleEvent(true)
+                EspressoIdlingResource.ifNotIdlingDecrement()
             }
         })
-    }
-
-    fun setTvShowDetailError(state: Boolean) {
-        _tvShowDetailError.value = state
     }
 }

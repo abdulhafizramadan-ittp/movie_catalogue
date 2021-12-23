@@ -7,6 +7,7 @@ import com.example.moviecatalogue.data.domain.TvShow
 import com.example.moviecatalogue.data.response.TvShowResponse
 import com.example.moviecatalogue.data.response.toDomain
 import com.example.moviecatalogue.helper.EspressoIdlingResource
+import com.example.moviecatalogue.helper.SingleEvent
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -15,8 +16,8 @@ class TvShowRepository {
     private val _listTvShows = MutableLiveData<List<TvShow>>()
     val listTvShows: LiveData<List<TvShow>> = _listTvShows
 
-    private val _errorDiscoverTvShows = MutableLiveData(false)
-    val errorDiscoverTvShows: LiveData<Boolean> = _errorDiscoverTvShows
+    private val _errorDiscoverTvShows = MutableLiveData<SingleEvent<Boolean>>()
+    val errorDiscoverTvShows: LiveData<SingleEvent<Boolean>> = _errorDiscoverTvShows
 
     fun discoverTvShows() {
         EspressoIdlingResource.increment()
@@ -27,26 +28,18 @@ class TvShowRepository {
                     response: Response<TvShowResponse?>
                 ) {
                     if (response.body()?.results != null) {
-                        _errorDiscoverTvShows.value = false
+                        _errorDiscoverTvShows.value = SingleEvent(false)
                         _listTvShows.value = response.body()?.results?.map {
                             it.toDomain()
                         }
                     }
-                    if (!EspressoIdlingResource.getEspressoIdlingResource().isIdleNow) {
-                        EspressoIdlingResource.decrement()
-                    }
+                    EspressoIdlingResource.ifNotIdlingDecrement()
                 }
 
                 override fun onFailure(call: Call<TvShowResponse?>, t: Throwable) {
-                    _errorDiscoverTvShows.value = true
-                    if (!EspressoIdlingResource.getEspressoIdlingResource().isIdleNow) {
-                        EspressoIdlingResource.decrement()
-                    }
+                    _errorDiscoverTvShows.value = SingleEvent(true)
+                    EspressoIdlingResource.decrement()
                 }
             })
-    }
-
-    fun setErrorDiscoverTvShows(state: Boolean) {
-        _errorDiscoverTvShows.value = state
     }
 }

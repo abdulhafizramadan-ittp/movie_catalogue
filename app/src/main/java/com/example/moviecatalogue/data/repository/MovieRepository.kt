@@ -7,6 +7,7 @@ import com.example.moviecatalogue.data.domain.Movie
 import com.example.moviecatalogue.data.response.MovieResponse
 import com.example.moviecatalogue.data.response.toDomain
 import com.example.moviecatalogue.helper.EspressoIdlingResource
+import com.example.moviecatalogue.helper.SingleEvent
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -16,8 +17,8 @@ class MovieRepository {
     private val _listMovies = MutableLiveData<List<Movie>>()
     val listMovies: LiveData<List<Movie>> = _listMovies
 
-    private val _errorDiscoverMovies = MutableLiveData(false)
-    val errorDiscoverMovies: LiveData<Boolean> = _errorDiscoverMovies
+    private val _errorDiscoverMovies = MutableLiveData<SingleEvent<Boolean>>()
+    val errorDiscoverMovies: LiveData<SingleEvent<Boolean>> = _errorDiscoverMovies
 
     fun discoverMovies() {
         EspressoIdlingResource.increment()
@@ -27,26 +28,17 @@ class MovieRepository {
                     call: Call<MovieResponse?>,
                     response: Response<MovieResponse?>
                 ) {
-                    _errorDiscoverMovies.value = false
-                    val movies = response.body()?.results?.map {
+                    _errorDiscoverMovies.value = SingleEvent(false)
+                    _listMovies.value = response.body()?.results?.map {
                         it.toDomain()
                     }
-                    _listMovies.postValue(movies)
-                    if (!EspressoIdlingResource.getEspressoIdlingResource().isIdleNow) {
-                        EspressoIdlingResource.decrement()
-                    }
+                    EspressoIdlingResource.ifNotIdlingDecrement()
                 }
 
                 override fun onFailure(call: Call<MovieResponse?>, t: Throwable) {
-                    _errorDiscoverMovies.value = true
-                    if (!EspressoIdlingResource.getEspressoIdlingResource().isIdleNow) {
-                        EspressoIdlingResource.decrement()
-                    }
+                    _errorDiscoverMovies.value = SingleEvent(true)
+                    EspressoIdlingResource.ifNotIdlingDecrement()
                 }
             })
-    }
-
-    fun setErrorDiscoverMovies(state: Boolean) {
-        _errorDiscoverMovies.value = state
     }
 }

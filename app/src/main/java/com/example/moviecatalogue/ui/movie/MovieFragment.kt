@@ -63,10 +63,6 @@ class MovieFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, OnMovieC
 
     private fun setupViewModel() {
         movieViewModel.apply {
-            if (listMovies.value == null) {
-                movieViewModel.discoverMovies()
-            }
-
             listMovies.observe(viewLifecycleOwner) { listMovies ->
                 if (listMovies != null) {
                     binding.apply {
@@ -79,15 +75,18 @@ class MovieFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, OnMovieC
             }
 
             errorDiscoverMovies.observe(viewLifecycleOwner) { error ->
-                if (error) {
+                if (error.peekContent()) {
                     showErrorNetwork()
                     binding.swipeToRefresh.isRefreshing = false
-                    activity?.apply {
-                        Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_network), Snackbar.LENGTH_LONG)
-                            .setAction(R.string.try_again) {
-                                refreshNetwork()
-                            }
-                            .show()
+
+                    error.getContentIfNotHandled()?.apply {
+                        activity?.apply {
+                            Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_network), Snackbar.LENGTH_LONG)
+                                .setAction(R.string.try_again) {
+                                    refreshNetwork()
+                                }
+                                .show()
+                        }
                     }
                 }
             }
@@ -125,7 +124,6 @@ class MovieFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, OnMovieC
 
     override fun onDestroyView() {
         super.onDestroyView()
-        movieViewModel.setErrorDiscoverMovies(false)
         _binding = null
     }
 

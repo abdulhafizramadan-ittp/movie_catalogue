@@ -71,19 +71,22 @@ class TvShowDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun setupViewModel(tvShowId: Int) {
         tvShowDetailViewModel.apply {
-            if (tvShowDetail.value == null) {
+            if (tvShowDetailError.value == null) {
                 getTvShowDetail(tvShowId)
             }
 
             tvShowDetailError.observe(viewLifecycleOwner) { error ->
-                if (error) {
+                if (error.peekContent()) {
                     binding.swipeToRefresh.isRefreshing = false
-                    activity?.apply {
-                        Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_network), Snackbar.LENGTH_LONG)
-                            .setAction(R.string.try_again) {
-                                refreshNetwork()
-                            }
-                            .show()
+
+                    error.getContentIfNotHandled()?.apply {
+                        activity?.apply {
+                            Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_network), Snackbar.LENGTH_LONG)
+                                .setAction(R.string.try_again) {
+                                    refreshNetwork()
+                                }
+                                .show()
+                        }
                     }
                 }
             }
@@ -119,7 +122,6 @@ class TvShowDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        tvShowDetailViewModel.setTvShowDetailError(false)
         _binding = null
     }
 

@@ -71,19 +71,22 @@ class MovieDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun setupViewModel(movieId: Int) {
         movieDetailViewModel.apply {
-            if (movieDetail.value == null) {
+            if (movieDetailError.value == null) {
                 getMovieDetail(movieId)
             }
 
             movieDetailError.observe(viewLifecycleOwner) { error ->
-                if (error) {
+                if (error.peekContent()) {
                     binding.swipeToRefresh.isRefreshing = false
-                    activity?.apply {
-                        Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_network), Snackbar.LENGTH_LONG)
-                            .setAction(R.string.try_again) {
-                                refreshNetwork()
-                            }
-                            .show()
+
+                    error.getContentIfNotHandled()?.apply {
+                        activity?.apply {
+                            Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_network), Snackbar.LENGTH_LONG)
+                                .setAction(R.string.try_again) {
+                                    refreshNetwork()
+                                }
+                                .show()
+                        }
                     }
                 }
             }
@@ -121,7 +124,6 @@ class MovieDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        movieDetailViewModel.setMovieDetailError(false)
         _binding = null
     }
 
