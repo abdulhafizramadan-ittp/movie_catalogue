@@ -14,6 +14,7 @@ import com.example.moviecatalogue.R
 import com.example.moviecatalogue.data.repository.TvShowDetailRepository
 import com.example.moviecatalogue.data.viewModelFactory.TvShowDetailViewModelFactory
 import com.example.moviecatalogue.databinding.FragmentTvShowDetailBinding
+import com.example.moviecatalogue.helper.loadImage
 import com.example.moviecatalogue.ui.detail.DetailActivity
 import com.google.android.material.snackbar.Snackbar
 
@@ -105,9 +106,7 @@ class TvShowDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 tvShowLanguage.text = tvShowDetail.originalLanguage
                 tvShowSynopsis.text = tvShowDetail.overview
 
-                Glide.with(this@TvShowDetailFragment)
-                    .load(tvShowDetail.posterPath)
-                    .into(ivTvShowPoster)
+                ivTvShowPoster.loadImage(tvShowDetail.posterPath)
             }   
         }
     }

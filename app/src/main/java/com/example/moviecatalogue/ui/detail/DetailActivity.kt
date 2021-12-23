@@ -44,6 +44,5 @@ class DetailActivity : AppCompatActivity() {
         const val TYPE_MOVIE = "movie_type"
         const val TYPE_TV_SHOW = "tv_show_type"
 
-        private const val TAG = "DetailActivity"
     }
 }

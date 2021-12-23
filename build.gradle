@@ -27,7 +27,7 @@ ext {
     glideVersion = '4.12.0'
 
     // Lottie
-    lottieVersion = '4.2.1'
+    lottieVersion = '4.2.2'
 
     // TEST
     jUnitVersion = '4.13.2'

@@ -14,6 +14,7 @@ import com.example.moviecatalogue.R
 import com.example.moviecatalogue.data.repository.MovieDetailRepository
 import com.example.moviecatalogue.data.viewModelFactory.MovieDetailViewModelFactory
 import com.example.moviecatalogue.databinding.FragmentMovieDetailBinding
+import com.example.moviecatalogue.helper.loadImage
 import com.example.moviecatalogue.ui.detail.DetailActivity
 import com.google.android.material.snackbar.Snackbar
 
@@ -106,9 +107,7 @@ class MovieDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     tvMovieLanguage.text = movieDetail.originalLanguage
                     tvMovieSynopsis.text = movieDetail.overview
 
-                    Glide.with(this@MovieDetailFragment)
-                        .load(movieDetail.posterPath)
-                        .into(ivMoviePoster)
+                    ivMoviePoster.loadImage(movieDetail.posterPath)
                 }
             }
         }

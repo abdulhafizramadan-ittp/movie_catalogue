@@ -5,10 +5,8 @@ import com.example.moviecatalogue.data.repository.TvShowRepository
 import com.example.moviecatalogue.helper.ResponseDummy
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
 import io.mockk.verifyAll
 import org.junit.Assert.*
-
 import org.junit.Before
 import org.junit.Test
 

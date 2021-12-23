@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.moviecatalogue.data.domain.TvShow
 import com.example.moviecatalogue.databinding.ItemsTvShowBinding
+import com.example.moviecatalogue.helper.loadImage
 
 class TvShowAdapter(private val tvShowClickListener: OnTvShowClickListener) : RecyclerView.Adapter<TvShowAdapter.MovieViewHolder>() {
 
@@ -43,9 +44,7 @@ class TvShowAdapter(private val tvShowClickListener: OnTvShowClickListener) : Re
                 tvTvShowOverview.text = tvShow.overview
                 tvTvShowFooter.text = movieFooter
 
-                Glide.with(itemView.context)
-                    .load(tvShow.posterPath)
-                    .into(ivTvShowPoster)
+                ivTvShowPoster.loadImage(tvShow.posterPath)
 
                 itemView.setOnClickListener { tvShowClickListener.onItemClick(tvShow) }
             }

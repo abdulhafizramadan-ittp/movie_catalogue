@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.moviecatalogue.data.domain.Movie
 import com.example.moviecatalogue.databinding.ItemsMovieBinding
+import com.example.moviecatalogue.helper.loadImage
 
 class MovieAdapter(private val movieClickListener: OnMovieClickListener) : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
@@ -43,9 +44,7 @@ class MovieAdapter(private val movieClickListener: OnMovieClickListener) : Recyc
                 tvMovieOverview.text = movie.overview
                 tvMovieFooter.text = movieFooter
 
-                Glide.with(itemView.context)
-                    .load(movie.posterPath)
-                    .into(ivMoviePoster)
+                ivMoviePoster.loadImage(movie.posterPath)
 
                 itemView.setOnClickListener { movieClickListener.onItemClick(movie) }
             }
