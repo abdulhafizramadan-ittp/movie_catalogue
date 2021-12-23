@@ -13,4 +13,14 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorSurface</item>
         <item name="android:navigationBarColor">?attr/colorSurface</item>
     </style>
+
+    <!-- Responsive Color   -->
+    <color name="tab_text_color">@color/white</color>
+    <color name="tab_selected_color">@color/blue_700</color>
+    <color name="tab_indicator">@color/blue_700</color>
+
+    <color name="text_title">@color/white</color>
+    <color name="text_subtitle">@color/gray_700</color>
+    <color name="text_footer">@color/blue_700</color>
+
 </resources>

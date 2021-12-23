@@ -30,6 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
+        android:textColor="@color/text_title"
         android:textSize="18sp"
         android:textStyle="bold"
         tools:text="The Last Duel" />
@@ -40,6 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:textSize="14sp"
+        android:textColor="@color/text_subtitle"
         tools:text="King Charles VI declares that Knight Jean de Carrouges settle his dispute with his squire, Jacques Le Gris, by challenging him to a duel."
         android:maxLength="130"/>
 
@@ -50,5 +52,6 @@
         android:layout_marginVertical="8dp"
         android:layout_marginHorizontal="16dp"
         android:textSize="14sp"
+        android:textColor="@color/text_footer"
         tools:text="2021-09-30 . 7.2 . en"/>
 </LinearLayout>
