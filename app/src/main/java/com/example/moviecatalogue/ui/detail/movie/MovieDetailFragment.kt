@@ -11,6 +11,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.moviecatalogue.R
 import com.example.moviecatalogue.databinding.FragmentMovieDetailBinding
 import com.example.moviecatalogue.helper.loadImage
+import com.example.moviecatalogue.helper.runtimeToHour
+import com.example.moviecatalogue.helper.runtimeToMinute
 import com.example.moviecatalogue.ui.detail.DetailActivity
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -95,10 +97,16 @@ class MovieDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
                     toolbar.title = movieDetail.title
 
+                    val movieRuntime = getString(
+                        R.string.movie_runtime,
+                        movieDetail.runtime.runtimeToHour(),
+                        movieDetail.runtime.runtimeToMinute()
+                    )
+
                     tvMovieTitle.text = movieDetail.title
                     tvMovieTagline.text = movieDetail.tagline
                     tvMovieStatus.text = movieDetail.status
-                    tvMovieRuntime.text = movieDetail.runtime.toString()
+                    tvMovieRuntime.text = movieRuntime
                     tvMovieRating.text = movieDetail.voteAverage.toString()
                     tvMovieRelease.text = movieDetail.releaseDate
                     tvMovieLanguage.text = movieDetail.originalLanguage

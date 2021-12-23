@@ -16,6 +16,8 @@
     <string name="release">Release</string>
     <string name="season">Season</string>
 
+    <string name="movie_runtime">%dh %dm</string>
+
     <string name="error_network">Kamu sedang offline!</string>
     <string name="try_again">Coba lagi</string>
 </resources>
