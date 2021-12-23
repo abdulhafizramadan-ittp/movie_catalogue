@@ -29,6 +29,9 @@ ext {
     // Lottie
     lottieVersion = '4.2.2'
 
+    // Koin
+    koinVersion = '3.1.4'
+
     // TEST
     jUnitVersion = '4.13.2'
     mockkVersion = '1.12.1'

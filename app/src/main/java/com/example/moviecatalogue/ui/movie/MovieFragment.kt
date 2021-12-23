@@ -8,24 +8,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.moviecatalogue.R
 import com.example.moviecatalogue.data.domain.Movie
-import com.example.moviecatalogue.data.repository.MovieRepository
-import com.example.moviecatalogue.data.viewModelFactory.MovieViewModelFactory
 import com.example.moviecatalogue.databinding.FragmentMovieBinding
 import com.example.moviecatalogue.ui.detail.DetailActivity
 import com.google.android.material.snackbar.Snackbar
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MovieFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, OnMovieClickListener {
 
     private var _binding: FragmentMovieBinding? = null
     private val binding: FragmentMovieBinding get() =  _binding as FragmentMovieBinding
 
-    private lateinit var movieViewModel: MovieViewModel
+    private val movieViewModel: MovieViewModel by viewModel()
     private lateinit var movieAdapter: MovieAdapter
 
     override fun onCreateView(
@@ -39,8 +37,6 @@ class MovieFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, OnMovieC
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val movieViewModelFactory = MovieViewModelFactory(MovieRepository())
-        movieViewModel = ViewModelProvider(this, movieViewModelFactory)[MovieViewModel::class.java]
         movieAdapter = MovieAdapter(this)
 
         binding.swipeToRefresh.setOnRefreshListener(this)

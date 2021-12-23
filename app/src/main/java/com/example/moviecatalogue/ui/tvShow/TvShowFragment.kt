@@ -8,24 +8,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.moviecatalogue.R
 import com.example.moviecatalogue.data.domain.TvShow
-import com.example.moviecatalogue.data.repository.TvShowRepository
-import com.example.moviecatalogue.data.viewModelFactory.TvShowViewModelFactory
 import com.example.moviecatalogue.databinding.FragmentTvShowBinding
 import com.example.moviecatalogue.ui.detail.DetailActivity
 import com.google.android.material.snackbar.Snackbar
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class TvShowFragment : Fragment(), OnTvShowClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private var _binding: FragmentTvShowBinding? = null
     private val binding: FragmentTvShowBinding get() = _binding as FragmentTvShowBinding
 
-    private lateinit var tvShowViewModel: TvShowViewModel
+    private val tvShowViewModel: TvShowViewModel by viewModel()
     private lateinit var tvShowAdapter: TvShowAdapter
 
     override fun onCreateView(
@@ -39,8 +37,6 @@ class TvShowFragment : Fragment(), OnTvShowClickListener, SwipeRefreshLayout.OnR
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val tvShowViewModelFactory = TvShowViewModelFactory(TvShowRepository())
-        tvShowViewModel = ViewModelProvider(this, tvShowViewModelFactory)[TvShowViewModel::class.java]
         tvShowAdapter = TvShowAdapter(this)
 
         binding.swipeToRefresh.setOnRefreshListener(this)

@@ -7,23 +7,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.bumptech.glide.Glide
 import com.example.moviecatalogue.R
-import com.example.moviecatalogue.data.repository.MovieDetailRepository
-import com.example.moviecatalogue.data.viewModelFactory.MovieDetailViewModelFactory
 import com.example.moviecatalogue.databinding.FragmentMovieDetailBinding
 import com.example.moviecatalogue.helper.loadImage
 import com.example.moviecatalogue.ui.detail.DetailActivity
 import com.google.android.material.snackbar.Snackbar
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MovieDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private var _binding: FragmentMovieDetailBinding? = null
     private val binding: FragmentMovieDetailBinding get() = _binding as FragmentMovieDetailBinding
 
-    private lateinit var movieDetailViewModel: MovieDetailViewModel
+    private val movieDetailViewModel: MovieDetailViewModel by viewModel()
     private var movieId: Int? = null
 
     override fun onCreateView(
@@ -36,9 +33,6 @@ class MovieDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val movieDetailViewModelFactory = MovieDetailViewModelFactory(MovieDetailRepository())
-        movieDetailViewModel = ViewModelProvider(requireActivity(), movieDetailViewModelFactory)[MovieDetailViewModel::class.java]
 
         movieId = arguments?.getInt(MOVIE_ID)
 

@@ -7,23 +7,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.bumptech.glide.Glide
 import com.example.moviecatalogue.R
-import com.example.moviecatalogue.data.repository.TvShowDetailRepository
-import com.example.moviecatalogue.data.viewModelFactory.TvShowDetailViewModelFactory
 import com.example.moviecatalogue.databinding.FragmentTvShowDetailBinding
 import com.example.moviecatalogue.helper.loadImage
 import com.example.moviecatalogue.ui.detail.DetailActivity
 import com.google.android.material.snackbar.Snackbar
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class TvShowDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private var _binding: FragmentTvShowDetailBinding? = null
     private val binding: FragmentTvShowDetailBinding get() = _binding as FragmentTvShowDetailBinding
 
-    private lateinit var tvShowDetailViewModel: TvShowDetailViewModel
+    private val tvShowDetailViewModel: TvShowDetailViewModel by viewModel()
     private var tvShowId: Int? = null
 
     override fun onCreateView(
@@ -36,9 +33,6 @@ class TvShowDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val tvShowDetailViewModelFactory = TvShowDetailViewModelFactory(TvShowDetailRepository())
-        tvShowDetailViewModel = ViewModelProvider(requireActivity(), tvShowDetailViewModelFactory)[TvShowDetailViewModel::class.java]
 
         tvShowId = arguments?.getInt(TV_SHOW_ID)
 
