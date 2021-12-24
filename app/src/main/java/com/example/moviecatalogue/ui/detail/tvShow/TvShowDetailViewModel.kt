@@ -6,7 +6,15 @@ import com.example.moviecatalogue.data.domain.TvShowDetail
 import com.example.moviecatalogue.data.repository.TvShowDetailRepository
 import com.example.moviecatalogue.helper.SingleEvent
 
-class TvShowDetailViewModel(private val tvShowDetailRepository: TvShowDetailRepository) : ViewModel() {
+class TvShowDetailViewModel(
+    private val tvShowDetailRepository: TvShowDetailRepository,
+    tvShowId: Int
+) : ViewModel() {
+
+    init {
+        getTvShowDetail(tvShowId)
+    }
+
     val tvShowDetail: LiveData<TvShowDetail>
         get() = tvShowDetailRepository.tvShowDetail
 

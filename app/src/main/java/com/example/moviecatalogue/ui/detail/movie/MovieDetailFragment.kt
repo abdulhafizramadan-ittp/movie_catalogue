@@ -16,14 +16,15 @@ import com.example.moviecatalogue.helper.runtimeToMinute
 import com.example.moviecatalogue.ui.detail.DetailActivity
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class MovieDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private var _binding: FragmentMovieDetailBinding? = null
     private val binding: FragmentMovieDetailBinding get() = _binding as FragmentMovieDetailBinding
 
-    private val movieDetailViewModel: MovieDetailViewModel by viewModel()
     private var movieId: Int? = null
+    private val movieDetailViewModel: MovieDetailViewModel by viewModel(parameters = { parametersOf(movieId) })
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,12 +39,13 @@ class MovieDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         movieId = arguments?.getInt(MOVIE_ID)
 
-        movieId?.let { setupViewModel(it) }
+        movieId?.let {
+            setupViewModel()
+        }
 
         binding.swipeToRefresh.setOnRefreshListener(this)
 
         setupToolbar()
-        setupDetailMovie()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -65,10 +67,33 @@ class MovieDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         }
     }
 
-    private fun setupViewModel(movieId: Int) {
+    private fun setupViewModel() {
         movieDetailViewModel.apply {
-            if (movieDetailError.value == null) {
-                getMovieDetail(movieId)
+            movieDetail.observe(viewLifecycleOwner) { movieDetail ->
+                if (movieDetail != null) {
+                    binding.apply {
+                        swipeToRefresh.isRefreshing = false
+
+                        toolbar.title = movieDetail.title
+
+                        val movieRuntime = getString(
+                            R.string.movie_runtime,
+                            movieDetail.runtime.runtimeToHour(),
+                            movieDetail.runtime.runtimeToMinute()
+                        )
+
+                        tvMovieTitle.text = movieDetail.title
+                        tvMovieTagline.text = movieDetail.tagline
+                        tvMovieStatus.text = movieDetail.status
+                        tvMovieRuntime.text = movieRuntime
+                        tvMovieRating.text = movieDetail.voteAverage.toString()
+                        tvMovieRelease.text = movieDetail.releaseDate
+                        tvMovieLanguage.text = movieDetail.originalLanguage
+                        tvMovieSynopsis.text = movieDetail.overview
+
+                        ivMoviePoster.loadImage(movieDetail.posterPath)
+                    }
+                }
             }
 
             movieDetailError.observe(viewLifecycleOwner) { error ->
@@ -84,35 +109,6 @@ class MovieDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                                 .show()
                         }
                     }
-                }
-            }
-        }
-    }
-
-    private fun setupDetailMovie() {
-        movieDetailViewModel.movieDetail.observe(viewLifecycleOwner) { movieDetail ->
-            if (movieDetail != null) {
-                binding.apply {
-                    swipeToRefresh.isRefreshing = false
-
-                    toolbar.title = movieDetail.title
-
-                    val movieRuntime = getString(
-                        R.string.movie_runtime,
-                        movieDetail.runtime.runtimeToHour(),
-                        movieDetail.runtime.runtimeToMinute()
-                    )
-
-                    tvMovieTitle.text = movieDetail.title
-                    tvMovieTagline.text = movieDetail.tagline
-                    tvMovieStatus.text = movieDetail.status
-                    tvMovieRuntime.text = movieRuntime
-                    tvMovieRating.text = movieDetail.voteAverage.toString()
-                    tvMovieRelease.text = movieDetail.releaseDate
-                    tvMovieLanguage.text = movieDetail.originalLanguage
-                    tvMovieSynopsis.text = movieDetail.overview
-
-                    ivMoviePoster.loadImage(movieDetail.posterPath)
                 }
             }
         }

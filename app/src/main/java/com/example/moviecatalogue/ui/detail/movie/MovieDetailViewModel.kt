@@ -6,7 +6,14 @@ import com.example.moviecatalogue.data.domain.MovieDetail
 import com.example.moviecatalogue.data.repository.MovieDetailRepository
 import com.example.moviecatalogue.helper.SingleEvent
 
-class MovieDetailViewModel(private val movieDetailRepository: MovieDetailRepository) : ViewModel() {
+class MovieDetailViewModel(
+    private val movieDetailRepository: MovieDetailRepository,
+    movieId: Int
+) : ViewModel() {
+
+    init {
+        getMovieDetail(movieId)
+    }
 
     val movieDetail: LiveData<MovieDetail>
         get() = movieDetailRepository.movieDetail
@@ -14,6 +21,7 @@ class MovieDetailViewModel(private val movieDetailRepository: MovieDetailReposit
     val movieDetailError: LiveData<SingleEvent<Boolean>>
         get() = movieDetailRepository.movieDetailError
 
-    fun getMovieDetail(movieId: Int) =
+    fun getMovieDetail(movieId: Int) {
         movieDetailRepository.getMovieDetail(movieId)
+    }
 }

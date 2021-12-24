@@ -14,14 +14,15 @@ import com.example.moviecatalogue.helper.loadImage
 import com.example.moviecatalogue.ui.detail.DetailActivity
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class TvShowDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private var _binding: FragmentTvShowDetailBinding? = null
     private val binding: FragmentTvShowDetailBinding get() = _binding as FragmentTvShowDetailBinding
 
-    private val tvShowDetailViewModel: TvShowDetailViewModel by viewModel()
     private var tvShowId: Int? = null
+    private val tvShowDetailViewModel: TvShowDetailViewModel by viewModel(parameters = { parametersOf(tvShowId) })
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,12 +37,11 @@ class TvShowDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         tvShowId = arguments?.getInt(TV_SHOW_ID)
 
-        tvShowId?.let { setupViewModel(it) }
+        tvShowId?.let { setupViewModel() }
 
         binding.swipeToRefresh.setOnRefreshListener(this)
 
         setupToolbar()
-        setupDetailTvShow()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -63,10 +63,25 @@ class TvShowDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         }
     }
 
-    private fun setupViewModel(tvShowId: Int) {
+    private fun setupViewModel() {
         tvShowDetailViewModel.apply {
-            if (tvShowDetailError.value == null) {
-                getTvShowDetail(tvShowId)
+            tvShowDetail.observe(viewLifecycleOwner) { tvShowDetail ->
+                binding.apply {
+                    binding.swipeToRefresh.isRefreshing = false
+
+                    toolbar.title = tvShowDetail.name
+
+                    tvShowTitle.text = tvShowDetail.name
+                    tvShowTagline.text = tvShowDetail.tagline
+                    tvShowStatus.text = tvShowDetail.status
+                    tvShowSeason.text = tvShowDetail.numberOfSeasons.toString()
+                    tvShowRating.text = tvShowDetail.voteAverage.toString()
+                    tvShowRelease.text = tvShowDetail.firstAirDate
+                    tvShowLanguage.text = tvShowDetail.originalLanguage
+                    tvShowSynopsis.text = tvShowDetail.overview
+
+                    ivTvShowPoster.loadImage(tvShowDetail.posterPath)
+                }
             }
 
             tvShowDetailError.observe(viewLifecycleOwner) { error ->
@@ -84,27 +99,6 @@ class TvShowDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     }
                 }
             }
-        }
-    }
-
-    private fun setupDetailTvShow() {
-        tvShowDetailViewModel.tvShowDetail.observe(viewLifecycleOwner) { tvShowDetail ->
-            binding.apply {
-                binding.swipeToRefresh.isRefreshing = false
-
-                toolbar.title = tvShowDetail.name
-
-                tvShowTitle.text = tvShowDetail.name
-                tvShowTagline.text = tvShowDetail.tagline
-                tvShowStatus.text = tvShowDetail.status
-                tvShowSeason.text = tvShowDetail.numberOfSeasons.toString()
-                tvShowRating.text = tvShowDetail.voteAverage.toString()
-                tvShowRelease.text = tvShowDetail.firstAirDate
-                tvShowLanguage.text = tvShowDetail.originalLanguage
-                tvShowSynopsis.text = tvShowDetail.overview
-
-                ivTvShowPoster.loadImage(tvShowDetail.posterPath)
-            }   
         }
     }
 
