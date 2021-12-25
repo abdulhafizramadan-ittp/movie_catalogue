@@ -23,5 +23,4 @@ class TvShowDetailViewModel(
 
     fun getTvShowDetail(tvShowId: Int) =
         tvShowDetailRepository.getTvShowDetail(tvShowId)
-
 }

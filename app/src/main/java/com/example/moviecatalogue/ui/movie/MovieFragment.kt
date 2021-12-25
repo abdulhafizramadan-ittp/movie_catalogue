@@ -73,7 +73,6 @@ class MovieFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, OnMovieC
             errorDiscoverMovies.observe(viewLifecycleOwner) { error ->
                 if (error.peekContent()) {
                     showErrorNetwork()
-                    binding.swipeToRefresh.isRefreshing = false
 
                     error.getContentIfNotHandled()?.apply {
                         activity?.apply {
@@ -112,6 +111,7 @@ class MovieFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, OnMovieC
 
     private fun showErrorNetwork() {
         binding.apply {
+            swipeToRefresh.isRefreshing = false
             progressCircular.visibility = View.INVISIBLE
             lottieError.visibility =
                 if (movieViewModel.listMovies.value == null) View.VISIBLE else View.INVISIBLE

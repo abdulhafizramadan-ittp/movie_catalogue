@@ -65,9 +65,10 @@ class TvShowDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun setupViewModel() {
         tvShowDetailViewModel.apply {
+
             tvShowDetail.observe(viewLifecycleOwner) { tvShowDetail ->
                 binding.apply {
-                    binding.swipeToRefresh.isRefreshing = false
+                    swipeToRefresh.isRefreshing = false
 
                     toolbar.title = tvShowDetail.name
 
@@ -86,7 +87,7 @@ class TvShowDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
             tvShowDetailError.observe(viewLifecycleOwner) { error ->
                 if (error.peekContent()) {
-                    binding.swipeToRefresh.isRefreshing = false
+                    showErrorNetwork()
 
                     error.getContentIfNotHandled()?.apply {
                         activity?.apply {
@@ -105,6 +106,15 @@ class TvShowDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private fun refreshNetwork() {
         tvShowId?.let {
             tvShowDetailViewModel.getTvShowDetail(it)
+        }
+    }
+
+    private fun showErrorNetwork() {
+        val tvShowDetailNull = tvShowDetailViewModel.tvShowDetail.value == null
+
+        binding.apply {
+            swipeToRefresh.isRefreshing = false
+                if (tvShowDetailNull) View.VISIBLE else View.INVISIBLE
         }
     }
 

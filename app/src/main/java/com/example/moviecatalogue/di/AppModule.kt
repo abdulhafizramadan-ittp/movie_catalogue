@@ -9,13 +9,12 @@ import com.example.moviecatalogue.ui.detail.tvShow.TvShowDetailViewModel
 import com.example.moviecatalogue.ui.movie.MovieViewModel
 import com.example.moviecatalogue.ui.tvShow.TvShowViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
-import org.koin.core.scope.get
 import org.koin.dsl.module
 
 val appModule = module {
     single { MovieRepository() }
-    single { MovieDetailRepository() }
     single { TvShowRepository() }
+    single { MovieDetailRepository() }
     single { TvShowDetailRepository() }
 
     viewModel { MovieViewModel(get()) }
