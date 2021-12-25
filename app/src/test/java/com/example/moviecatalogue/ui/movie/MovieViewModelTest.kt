@@ -3,10 +3,8 @@ package com.example.moviecatalogue.ui.movie
 import androidx.lifecycle.MutableLiveData
 import com.example.moviecatalogue.data.repository.MovieRepository
 import com.example.moviecatalogue.helper.ResponseDummy
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
-import io.mockk.verifyAll
+import com.example.moviecatalogue.helper.SingleEvent
+import io.mockk.*
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
@@ -14,17 +12,17 @@ import org.junit.Test
 class MovieViewModelTest {
 
     private lateinit var movieRepository: MovieRepository
-    private lateinit var movieViewModel: MovieViewModel
+    private lateinit var movieViewModel: FakeMovieViewModel
 
     private val dummyDiscoverMovies = ResponseDummy.generateDummyDiscoverMovies()
     private val dummyEmptyDiscoverMovies = ResponseDummy.generateDummyEmptyDiscoverMovies()
     private val dummyNullDiscoverMovies = ResponseDummy.generateDummyNullDiscoverMovies()
-    private val dummyErrorDiscoverMovies = MutableLiveData(true)
+    private val dummyErrorDiscoverMovies = MutableLiveData(SingleEvent(true))
 
     @Before
     fun setUp() {
         movieRepository = mockk()
-        movieViewModel = MovieViewModel(movieRepository)
+        movieViewModel = FakeMovieViewModel(movieRepository)
     }
 
     @Test
@@ -74,7 +72,7 @@ class MovieViewModelTest {
 
         assertNull(listMovies)
         assertNotNull(errorDiscoverMovies)
-        assertTrue(errorDiscoverMovies == true)
+        assertTrue(errorDiscoverMovies?.peekContent() == true)
 
         verify {
             movieRepository.discoverMovies()

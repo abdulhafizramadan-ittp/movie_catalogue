@@ -6,14 +6,9 @@ import com.example.moviecatalogue.data.domain.MovieDetail
 import com.example.moviecatalogue.data.repository.MovieRepository
 import com.example.moviecatalogue.helper.SingleEvent
 
-class MovieDetailViewModel(
+class FakeMovieDetailViewModel(
     private val movieRepository: MovieRepository,
-    movieId: Int
 ) : ViewModel() {
-
-    init {
-        getMovieDetail(movieId)
-    }
 
     val movieDetail: LiveData<MovieDetail>
         get() = movieRepository.movieDetail

@@ -1,8 +1,9 @@
 package com.example.moviecatalogue.ui.detail.tvShow
 
 import androidx.lifecycle.MutableLiveData
-import com.example.moviecatalogue.data.repository.TvShowDetailRepository
+import com.example.moviecatalogue.data.repository.TvShowRepository
 import com.example.moviecatalogue.helper.ResponseDummy
+import com.example.moviecatalogue.helper.SingleEvent
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verifyAll
@@ -12,25 +13,25 @@ import org.junit.Test
 
 class TvShowDetailViewModelTest {
 
-    private lateinit var tvShowDetailRepository: TvShowDetailRepository
-    private lateinit var tvShowDetailViewModel: TvShowDetailViewModel
+    private lateinit var tvShowRepository: TvShowRepository
+    private lateinit var tvShowDetailViewModel: FakeTvShowDetailViewModel
 
     private val dummyTvShowId = 71914
     private val dummyTvShowDetail = ResponseDummy.generateDummyTvShowDetail()
     private val dummyEmptyTvShowDetail = ResponseDummy.generateDummyEmptyTvShowDetail()
     private val dummyNullTvShowDetail = ResponseDummy.generateDummyNullTvShowDetail()
-    private val dummyTvShowMovieDetail = MutableLiveData(true)
+    private val dummyTvShowMovieDetail = MutableLiveData(SingleEvent(true))
 
     @Before
     fun setUp() {
-        tvShowDetailRepository = mockk()
-        tvShowDetailViewModel = TvShowDetailViewModel(tvShowDetailRepository)
+        tvShowRepository = mockk()
+        tvShowDetailViewModel = FakeTvShowDetailViewModel(tvShowRepository)
     }
 
     @Test
     fun getTvShowDetail() {
-        every { tvShowDetailRepository.getTvShowDetail(dummyTvShowId) } answers { }
-        every { tvShowDetailRepository.tvShowDetail } returns dummyTvShowDetail
+        every { tvShowRepository.getTvShowDetail(dummyTvShowId) } answers { }
+        every { tvShowRepository.tvShowDetail } returns dummyTvShowDetail
 
         tvShowDetailViewModel.getTvShowDetail(dummyTvShowId)
         val tvShowDetail = tvShowDetailViewModel.tvShowDetail.value
@@ -54,15 +55,15 @@ class TvShowDetailViewModelTest {
         }
 
         verifyAll {
-            tvShowDetailRepository.getTvShowDetail(dummyTvShowId)
-            tvShowDetailRepository.tvShowDetail
+            tvShowRepository.getTvShowDetail(dummyTvShowId)
+            tvShowRepository.tvShowDetail
         }
     }
 
     @Test
     fun emptyTvShowDetail() {
-        every { tvShowDetailRepository.getTvShowDetail(dummyTvShowId) } answers { }
-        every { tvShowDetailRepository.tvShowDetail } returns dummyEmptyTvShowDetail
+        every { tvShowRepository.getTvShowDetail(dummyTvShowId) } answers { }
+        every { tvShowRepository.tvShowDetail } returns dummyEmptyTvShowDetail
 
         tvShowDetailViewModel.getTvShowDetail(dummyTvShowId)
         val emptyTvShowDetail = tvShowDetailViewModel.tvShowDetail.value
@@ -86,29 +87,29 @@ class TvShowDetailViewModelTest {
         }
 
         verifyAll {
-            tvShowDetailRepository.getTvShowDetail(dummyTvShowId)
-            tvShowDetailRepository.tvShowDetail
+            tvShowRepository.getTvShowDetail(dummyTvShowId)
+            tvShowRepository.tvShowDetail
         }
     }
 
     @Test
     fun errorTvShowDetail() {
-        every { tvShowDetailRepository.getTvShowDetail(dummyTvShowId) } answers { }
-        every { tvShowDetailRepository.tvShowDetail } returns dummyNullTvShowDetail
-        every { tvShowDetailRepository.tvShowDetailError } returns dummyTvShowMovieDetail
+        every { tvShowRepository.getTvShowDetail(dummyTvShowId) } answers { }
+        every { tvShowRepository.tvShowDetail } returns dummyNullTvShowDetail
+        every { tvShowRepository.tvShowDetailError } returns dummyTvShowMovieDetail
 
         tvShowDetailViewModel.getTvShowDetail(dummyTvShowId)
         val nullTvShowDetail = tvShowDetailViewModel.tvShowDetail.value
-        val errorTvShowDetail = tvShowDetailViewModel.tvShowDetailError.value as Boolean
+        val errorTvShowDetail = tvShowDetailViewModel.tvShowDetailError.value
 
         assertNull(nullTvShowDetail)
         assertNotNull(errorTvShowDetail)
-        assertTrue(errorTvShowDetail)
+        assertTrue(errorTvShowDetail?.peekContent() == true)
 
         verifyAll {
-            tvShowDetailRepository.getTvShowDetail(dummyTvShowId)
-            tvShowDetailRepository.tvShowDetail
-            tvShowDetailRepository.tvShowDetailError
+            tvShowRepository.getTvShowDetail(dummyTvShowId)
+            tvShowRepository.tvShowDetail
+            tvShowRepository.tvShowDetailError
         }
     }
 }

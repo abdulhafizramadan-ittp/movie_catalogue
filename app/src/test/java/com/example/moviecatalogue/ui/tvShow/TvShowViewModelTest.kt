@@ -3,6 +3,7 @@ package com.example.moviecatalogue.ui.tvShow
 import androidx.lifecycle.MutableLiveData
 import com.example.moviecatalogue.data.repository.TvShowRepository
 import com.example.moviecatalogue.helper.ResponseDummy
+import com.example.moviecatalogue.helper.SingleEvent
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verifyAll
@@ -13,17 +14,17 @@ import org.junit.Test
 class TvShowViewModelTest {
 
     private lateinit var tvShowRepository: TvShowRepository
-    private lateinit var tvShowViewModel: TvShowViewModel
+    private lateinit var tvShowViewModel: FakeTvShowViewModel
 
     private val dummyDiscoverTvShows = ResponseDummy.generateDummyDiscoverTvShows()
     private val dummyEmptyDiscoverTvShows = ResponseDummy.generateDummyEmptyDiscoverTvShows()
     private val dummyNullDiscoverTvShows = ResponseDummy.generateDummyNullDiscoverTvShows()
-    private val dummyErrorDiscoverTvShows = MutableLiveData(true)
+    private val dummyErrorDiscoverTvShows = MutableLiveData(SingleEvent(true))
 
     @Before
     fun setUp() {
         tvShowRepository = mockk()
-        tvShowViewModel = TvShowViewModel(tvShowRepository)
+        tvShowViewModel = FakeTvShowViewModel(tvShowRepository)
     }
 
     @Test
@@ -73,7 +74,7 @@ class TvShowViewModelTest {
 
         assertNull(listTvShows)
         assertNotNull(errorDiscoverTvShows)
-        assertTrue(errorDiscoverTvShows == true)
+        assertTrue(errorDiscoverTvShows?.peekContent() == true)
 
         verifyAll {
             tvShowRepository.discoverTvShows()

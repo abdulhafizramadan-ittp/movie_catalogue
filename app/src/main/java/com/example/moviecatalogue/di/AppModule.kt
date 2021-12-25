@@ -1,8 +1,6 @@
 package com.example.moviecatalogue.di
 
-import com.example.moviecatalogue.data.repository.MovieDetailRepository
 import com.example.moviecatalogue.data.repository.MovieRepository
-import com.example.moviecatalogue.data.repository.TvShowDetailRepository
 import com.example.moviecatalogue.data.repository.TvShowRepository
 import com.example.moviecatalogue.ui.detail.movie.MovieDetailViewModel
 import com.example.moviecatalogue.ui.detail.tvShow.TvShowDetailViewModel
@@ -14,8 +12,6 @@ import org.koin.dsl.module
 val appModule = module {
     single { MovieRepository() }
     single { TvShowRepository() }
-    single { MovieDetailRepository() }
-    single { TvShowDetailRepository() }
 
     viewModel { MovieViewModel(get()) }
     viewModel { MovieDetailViewModel(get(), get()) }

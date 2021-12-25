@@ -1,8 +1,9 @@
 package com.example.moviecatalogue.ui.detail.movie
 
 import androidx.lifecycle.MutableLiveData
-import com.example.moviecatalogue.data.repository.MovieDetailRepository
+import com.example.moviecatalogue.data.repository.MovieRepository
 import com.example.moviecatalogue.helper.ResponseDummy
+import com.example.moviecatalogue.helper.SingleEvent
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verifyAll
@@ -13,25 +14,25 @@ import org.junit.Test
 
 class MovieDetailViewModelTest {
 
-    private lateinit var movieDetailRepository: MovieDetailRepository
-    private lateinit var movieDetailViewModel: MovieDetailViewModel
+    private lateinit var movieRepository: MovieRepository
+    private lateinit var movieDetailViewModel: FakeMovieDetailViewModel
 
     private val dummyMovieId = 634649
     private val dummyMovieDetail = ResponseDummy.generateDummyMovieDetail()
     private val dummyEmptyMovieDetail = ResponseDummy.generateDummyEmptyMovieDetail()
     private val dummyNullMovieDetail = ResponseDummy.generateDummyNullMovieDetail()
-    private val dummyErrorMovieDetail = MutableLiveData(true)
+    private val dummyErrorMovieDetail = MutableLiveData(SingleEvent(true))
 
     @Before
     fun setUp() {
-        movieDetailRepository = mockk()
-        movieDetailViewModel = MovieDetailViewModel(movieDetailRepository)
+        movieRepository = mockk()
+        movieDetailViewModel = FakeMovieDetailViewModel(movieRepository)
     }
 
     @Test
     fun getMovieDetail() {
-        every { movieDetailRepository.getMovieDetail(dummyMovieId) } answers { }
-        every { movieDetailRepository.movieDetail } returns dummyMovieDetail
+        every { movieRepository.getMovieDetail(dummyMovieId) } answers { }
+        every { movieRepository.movieDetail } returns dummyMovieDetail
 
         movieDetailViewModel.getMovieDetail(dummyMovieId)
         val movieDetail = movieDetailViewModel.movieDetail.value
@@ -53,15 +54,15 @@ class MovieDetailViewModelTest {
         }
 
         verifyAll {
-            movieDetailRepository.getMovieDetail(dummyMovieId)
-            movieDetailRepository.movieDetail
+            movieRepository.getMovieDetail(dummyMovieId)
+            movieRepository.movieDetail
         }
     }
 
     @Test
     fun emptyMovieDetail() {
-        every { movieDetailRepository.getMovieDetail(dummyMovieId) } answers { }
-        every { movieDetailRepository.movieDetail } returns dummyEmptyMovieDetail
+        every { movieRepository.getMovieDetail(dummyMovieId) } answers { }
+        every { movieRepository.movieDetail } returns dummyEmptyMovieDetail
 
         movieDetailViewModel.getMovieDetail(dummyMovieId)
         val emptyMovieDetail = movieDetailViewModel.movieDetail.value
@@ -83,29 +84,29 @@ class MovieDetailViewModelTest {
         }
 
         verifyAll {
-            movieDetailRepository.getMovieDetail(dummyMovieId)
-            movieDetailRepository.movieDetail
+            movieRepository.getMovieDetail(dummyMovieId)
+            movieRepository.movieDetail
         }
     }
 
     @Test
     fun errorMovieDetail() {
-        every { movieDetailRepository.getMovieDetail(dummyMovieId) } answers { }
-        every { movieDetailRepository.movieDetail } returns dummyNullMovieDetail
-        every { movieDetailRepository.movieDetailError } returns dummyErrorMovieDetail
+        every { movieRepository.getMovieDetail(dummyMovieId) } answers { }
+        every { movieRepository.movieDetail } returns dummyNullMovieDetail
+        every { movieRepository.movieDetailError } returns dummyErrorMovieDetail
 
         movieDetailViewModel.getMovieDetail(dummyMovieId)
         val nullMovieDetail = movieDetailViewModel.movieDetail.value
-        val errorMovieDetail = movieDetailViewModel.movieDetailError.value as Boolean
+        val errorMovieDetail = movieDetailViewModel.movieDetailError.value
 
         assertNull(nullMovieDetail)
         assertNotNull(errorMovieDetail)
-        assertTrue(errorMovieDetail)
+        assertTrue(errorMovieDetail?.peekContent() == true)
 
         verifyAll {
-            movieDetailRepository.getMovieDetail(dummyMovieId)
-            movieDetailRepository.movieDetail
-            movieDetailRepository.movieDetailError
+            movieRepository.getMovieDetail(dummyMovieId)
+            movieRepository.movieDetail
+            movieRepository.movieDetailError
         }
     }
 }
