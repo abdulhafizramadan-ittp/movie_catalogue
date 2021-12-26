@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.moviecatalogue.data.MovieRepository
 import com.example.moviecatalogue.data.domain.MovieDetail
-import com.example.moviecatalogue.helper.viewModel.SingleEvent
 
 class MovieDetailViewModel(
     private val movieRepository: MovieRepository

@@ -8,7 +8,6 @@ import com.example.moviecatalogue.data.domain.TvShow
 import com.example.moviecatalogue.data.domain.TvShowDetail
 import com.example.moviecatalogue.data.remote.RemoteDataSource
 import com.example.moviecatalogue.data.remote.response.*
-import com.example.moviecatalogue.helper.viewModel.SingleEvent
 
 class MovieRepository(private val remoteDataSource: RemoteDataSource) : MovieDataSource {
 

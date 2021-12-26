@@ -1,5 +1,7 @@
 package com.example.moviecatalogue.data.domain
 
+import com.example.moviecatalogue.data.remote.response.MovieItem
+
 data class Movie(
     val overview: String,
     val originalLanguage: String,
@@ -9,3 +11,4 @@ data class Movie(
     val title: String,
     val posterPath: String
 )
+

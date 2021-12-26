@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.moviecatalogue.data.MovieRepository
 import com.example.moviecatalogue.data.domain.TvShow
-import com.example.moviecatalogue.data.repository.TvShowRepository
 
 class TvShowViewModel(private val movieRepository: MovieRepository) : ViewModel() {
 

@@ -63,7 +63,7 @@ dependencies {
 
     // Unit Test
     testImplementation "junit:junit:$jUnitVersion"
-    testImplementation "io.mockk:mockk:$mockkVersion"
+    testImplementation "org.mockito.kotlin:mockito-kotlin:$mockitoKotlinVersion"
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
     testImplementation "org.mockito:mockito-inline:$mockitoVersion"
 

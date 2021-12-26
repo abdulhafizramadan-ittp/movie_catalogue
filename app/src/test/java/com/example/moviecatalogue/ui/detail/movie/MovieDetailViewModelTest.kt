@@ -1,22 +1,18 @@
 package com.example.moviecatalogue.ui.detail.movie
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.example.moviecatalogue.data.MovieRepository
 import com.example.moviecatalogue.data.domain.MovieDetail
 import com.example.moviecatalogue.helper.ResponseDummy
-import com.example.moviecatalogue.helper.viewModel.SingleEvent
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verifyAll
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito.*
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)

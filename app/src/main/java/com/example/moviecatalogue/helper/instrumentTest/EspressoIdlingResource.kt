@@ -8,7 +8,7 @@ object EspressoIdlingResource {
 
     fun increment() = espressoIdlingTestResource.increment()
 
-    fun decrement() = espressoIdlingTestResource.decrement()
+    private fun decrement() = espressoIdlingTestResource.decrement()
 
     fun ifNotIdlingDecrement() {
         if (!espressoIdlingTestResource.isIdleNow) {
