@@ -7,24 +7,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.moviecatalogue.R
 import com.example.moviecatalogue.databinding.FragmentMovieDetailBinding
-import com.example.moviecatalogue.helper.loadImage
-import com.example.moviecatalogue.helper.runtimeToHour
-import com.example.moviecatalogue.helper.runtimeToMinute
+import com.example.moviecatalogue.helper.extensions.loadImage
+import com.example.moviecatalogue.helper.extensions.runtimeToHour
+import com.example.moviecatalogue.helper.extensions.runtimeToMinute
 import com.example.moviecatalogue.ui.detail.DetailActivity
-import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 
-class MovieDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
+class MovieDetailFragment : Fragment() {
 
     private var _binding: FragmentMovieDetailBinding? = null
     private val binding: FragmentMovieDetailBinding get() = _binding as FragmentMovieDetailBinding
 
     private var movieId: Int? = null
-    private val movieDetailViewModel: MovieDetailViewModel by viewModel(parameters = { parametersOf(movieId) })
+    private val movieDetailViewModel: MovieDetailViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,8 +40,6 @@ class MovieDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             setupViewModel()
         }
 
-        binding.swipeToRefresh.setOnRefreshListener(this)
-
         setupToolbar()
     }
 
@@ -53,10 +48,6 @@ class MovieDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             activity?.onBackPressed()
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onRefresh() {
-        movieId?.let { movieDetailViewModel.getMovieDetail(it) }
     }
 
     private fun setupToolbar() {
@@ -68,11 +59,10 @@ class MovieDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun setupViewModel() {
-        movieDetailViewModel.apply {
-            movieDetail.observe(viewLifecycleOwner) { movieDetail ->
+        movieId?.let {
+            movieDetailViewModel.getMovieDetail(it).observe(viewLifecycleOwner) { movieDetail ->
                 if (movieDetail != null) {
                     binding.apply {
-                        swipeToRefresh.isRefreshing = false
 
                         toolbar.title = movieDetail.title
 
@@ -95,28 +85,6 @@ class MovieDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     }
                 }
             }
-
-            movieDetailError.observe(viewLifecycleOwner) { error ->
-                if (error.peekContent()) {
-                    binding.swipeToRefresh.isRefreshing = false
-
-                    error.getContentIfNotHandled()?.apply {
-                        activity?.apply {
-                            Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_network), Snackbar.LENGTH_LONG)
-                                .setAction(R.string.try_again) {
-                                    refreshNetwork()
-                                }
-                                .show()
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private fun refreshNetwork() {
-        movieId?.let {
-            movieDetailViewModel.getMovieDetail(it)
         }
     }
 

@@ -2,8 +2,6 @@ package com.example.moviecatalogue.ui.movie
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,14 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.example.moviecatalogue.R
 import com.example.moviecatalogue.data.domain.Movie
 import com.example.moviecatalogue.databinding.FragmentMovieBinding
 import com.example.moviecatalogue.ui.detail.DetailActivity
-import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MovieFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, OnMovieClickListener {
+class MovieFragment : Fragment(), OnMovieClickListener {
 
     private var _binding: FragmentMovieBinding? = null
     private val binding: FragmentMovieBinding get() =  _binding as FragmentMovieBinding
@@ -39,14 +35,9 @@ class MovieFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, OnMovieC
 
         movieAdapter = MovieAdapter(this)
 
-        binding.swipeToRefresh.setOnRefreshListener(this)
 
         setupViewModel()
         setupRecyclerView()
-    }
-
-    override fun onRefresh() {
-        movieViewModel.discoverMovies()
     }
 
     override fun onItemClick(movie: Movie) {
@@ -58,32 +49,10 @@ class MovieFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, OnMovieC
     }
 
     private fun setupViewModel() {
-        movieViewModel.apply {
-            listMovies.observe(viewLifecycleOwner) { listMovies ->
-                if (listMovies != null) {
-                    binding.apply {
-                        swipeToRefresh.isRefreshing = false
-                        progressCircular.visibility = View.INVISIBLE
-                        lottieError.visibility = View.INVISIBLE
-                    }
-                    movieAdapter.setMovies(listMovies)
-                }
-            }
-
-            errorDiscoverMovies.observe(viewLifecycleOwner) { error ->
-                if (error.peekContent()) {
-                    showErrorNetwork()
-
-                    error.getContentIfNotHandled()?.apply {
-                        activity?.apply {
-                            Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_network), Snackbar.LENGTH_LONG)
-                                .setAction(R.string.try_again) {
-                                    refreshNetwork()
-                                }
-                                .show()
-                        }
-                    }
-                }
+        movieViewModel.discoverMovies().observe(viewLifecycleOwner) { listMovies ->
+            if (listMovies != null) {
+                binding.progressCircular.visibility = View.INVISIBLE
+                movieAdapter.setMovies(listMovies)
             }
         }
     }
@@ -96,25 +65,6 @@ class MovieFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, OnMovieC
             setHasFixedSize(true)
             adapter = movieAdapter
             addItemDecoration(dividerItemDecoration)
-        }
-    }
-
-    private fun refreshNetwork() {
-        binding.apply {
-            lottieError.visibility = View.INVISIBLE
-            progressCircular.visibility = View.VISIBLE
-        }
-        Handler(Looper.getMainLooper()).postDelayed({
-            movieViewModel.discoverMovies()
-        }, 500)
-    }
-
-    private fun showErrorNetwork() {
-        binding.apply {
-            swipeToRefresh.isRefreshing = false
-            progressCircular.visibility = View.INVISIBLE
-            lottieError.visibility =
-                if (movieViewModel.listMovies.value == null) View.VISIBLE else View.INVISIBLE
         }
     }
 

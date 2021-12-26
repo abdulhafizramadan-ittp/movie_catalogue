@@ -1,9 +1,9 @@
 package com.example.moviecatalogue.ui.detail.movie
 
 import androidx.lifecycle.MutableLiveData
-import com.example.moviecatalogue.data.repository.MovieRepository
+import com.example.moviecatalogue.data.MovieRepository
 import com.example.moviecatalogue.helper.ResponseDummy
-import com.example.moviecatalogue.helper.SingleEvent
+import com.example.moviecatalogue.helper.viewModel.SingleEvent
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verifyAll

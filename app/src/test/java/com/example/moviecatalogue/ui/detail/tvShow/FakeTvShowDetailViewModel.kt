@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.moviecatalogue.data.domain.TvShowDetail
 import com.example.moviecatalogue.data.repository.TvShowRepository
-import com.example.moviecatalogue.helper.SingleEvent
+import com.example.moviecatalogue.helper.viewModel.SingleEvent
 
 class FakeTvShowDetailViewModel(
     private val tvShowRepository: TvShowRepository,

@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moviecatalogue.data.domain.TvShow
 import com.example.moviecatalogue.databinding.ItemsTvShowBinding
-import com.example.moviecatalogue.helper.loadImage
+import com.example.moviecatalogue.helper.extensions.loadImage
 
 class TvShowAdapter(private val tvShowClickListener: OnTvShowClickListener) : RecyclerView.Adapter<TvShowAdapter.MovieViewHolder>() {
 

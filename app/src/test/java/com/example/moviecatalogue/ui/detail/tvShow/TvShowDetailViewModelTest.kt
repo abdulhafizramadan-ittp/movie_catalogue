@@ -3,7 +3,7 @@ package com.example.moviecatalogue.ui.detail.tvShow
 import androidx.lifecycle.MutableLiveData
 import com.example.moviecatalogue.data.repository.TvShowRepository
 import com.example.moviecatalogue.helper.ResponseDummy
-import com.example.moviecatalogue.helper.SingleEvent
+import com.example.moviecatalogue.helper.viewModel.SingleEvent
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verifyAll

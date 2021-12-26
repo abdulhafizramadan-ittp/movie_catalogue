@@ -10,7 +10,7 @@ import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.example.moviecatalogue.R
-import com.example.moviecatalogue.helper.EspressoIdlingResource
+import com.example.moviecatalogue.helper.instrumentTest.EspressoIdlingResource
 import com.example.moviecatalogue.helper.ResponseDummy
 import org.junit.After
 import org.junit.Before

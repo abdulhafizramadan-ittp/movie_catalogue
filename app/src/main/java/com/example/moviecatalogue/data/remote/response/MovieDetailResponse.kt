@@ -1,4 +1,4 @@
-package com.example.moviecatalogue.data.response
+package com.example.moviecatalogue.data.remote.response
 
 import com.example.moviecatalogue.api.ApiConfig
 import com.example.moviecatalogue.data.domain.MovieDetail

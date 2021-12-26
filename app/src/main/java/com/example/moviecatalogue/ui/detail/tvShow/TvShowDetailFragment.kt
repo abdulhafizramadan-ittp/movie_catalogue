@@ -8,21 +8,19 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.example.moviecatalogue.R
 import com.example.moviecatalogue.databinding.FragmentTvShowDetailBinding
-import com.example.moviecatalogue.helper.loadImage
+import com.example.moviecatalogue.helper.extensions.loadImage
 import com.example.moviecatalogue.ui.detail.DetailActivity
-import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-class TvShowDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
+class TvShowDetailFragment : Fragment() {
 
     private var _binding: FragmentTvShowDetailBinding? = null
     private val binding: FragmentTvShowDetailBinding get() = _binding as FragmentTvShowDetailBinding
 
     private var tvShowId: Int? = null
-    private val tvShowDetailViewModel: TvShowDetailViewModel by viewModel(parameters = { parametersOf(tvShowId) })
+    private val tvShowDetailViewModel: TvShowDetailViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,8 +37,6 @@ class TvShowDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         tvShowId?.let { setupViewModel() }
 
-        binding.swipeToRefresh.setOnRefreshListener(this)
-
         setupToolbar()
     }
 
@@ -49,10 +45,6 @@ class TvShowDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             activity?.onBackPressed()
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onRefresh() {
-        tvShowId?.let { tvShowDetailViewModel.getTvShowDetail(it) }
     }
 
     private fun setupToolbar() {
@@ -64,11 +56,9 @@ class TvShowDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun setupViewModel() {
-        tvShowDetailViewModel.apply {
-
-            tvShowDetail.observe(viewLifecycleOwner) { tvShowDetail ->
+        tvShowId?.let {
+            tvShowDetailViewModel.getTvShowDetail(it).observe(viewLifecycleOwner) { tvShowDetail ->
                 binding.apply {
-                    swipeToRefresh.isRefreshing = false
 
                     toolbar.title = tvShowDetail.name
 
@@ -84,37 +74,6 @@ class TvShowDetailFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     ivTvShowPoster.loadImage(tvShowDetail.posterPath)
                 }
             }
-
-            tvShowDetailError.observe(viewLifecycleOwner) { error ->
-                if (error.peekContent()) {
-                    showErrorNetwork()
-
-                    error.getContentIfNotHandled()?.apply {
-                        activity?.apply {
-                            Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_network), Snackbar.LENGTH_LONG)
-                                .setAction(R.string.try_again) {
-                                    refreshNetwork()
-                                }
-                                .show()
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private fun refreshNetwork() {
-        tvShowId?.let {
-            tvShowDetailViewModel.getTvShowDetail(it)
-        }
-    }
-
-    private fun showErrorNetwork() {
-        val tvShowDetailNull = tvShowDetailViewModel.tvShowDetail.value == null
-
-        binding.apply {
-            swipeToRefresh.isRefreshing = false
-                if (tvShowDetailNull) View.VISIBLE else View.INVISIBLE
         }
     }
 

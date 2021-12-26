@@ -1,4 +1,4 @@
-package com.example.moviecatalogue.helper
+package com.example.moviecatalogue.helper.extensions
 
 fun Int.runtimeToHour(): Int =
     this / 60

@@ -1,9 +1,9 @@
 package com.example.moviecatalogue.api
 
-import com.example.moviecatalogue.data.response.MovieDetailResponse
-import com.example.moviecatalogue.data.response.MovieResponse
-import com.example.moviecatalogue.data.response.TvShowDetailResponse
-import com.example.moviecatalogue.data.response.TvShowResponse
+import com.example.moviecatalogue.data.remote.response.MovieDetailResponse
+import com.example.moviecatalogue.data.remote.response.MovieResponse
+import com.example.moviecatalogue.data.remote.response.TvShowDetailResponse
+import com.example.moviecatalogue.data.remote.response.TvShowResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path

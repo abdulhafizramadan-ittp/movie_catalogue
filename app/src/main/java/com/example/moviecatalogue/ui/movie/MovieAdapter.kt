@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moviecatalogue.data.domain.Movie
 import com.example.moviecatalogue.databinding.ItemsMovieBinding
-import com.example.moviecatalogue.helper.loadImage
+import com.example.moviecatalogue.helper.extensions.loadImage
 
 class MovieAdapter(private val movieClickListener: OnMovieClickListener) : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 

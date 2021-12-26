@@ -1,4 +1,4 @@
-package com.example.moviecatalogue.helper
+package com.example.moviecatalogue.helper.instrumentTest
 
 import androidx.test.espresso.idling.CountingIdlingResource
 

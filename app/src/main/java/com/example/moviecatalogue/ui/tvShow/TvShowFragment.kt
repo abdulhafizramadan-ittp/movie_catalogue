@@ -18,7 +18,7 @@ import com.example.moviecatalogue.ui.detail.DetailActivity
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class TvShowFragment : Fragment(), OnTvShowClickListener, SwipeRefreshLayout.OnRefreshListener {
+class TvShowFragment : Fragment(), OnTvShowClickListener {
 
     private var _binding: FragmentTvShowBinding? = null
     private val binding: FragmentTvShowBinding get() = _binding as FragmentTvShowBinding
@@ -39,14 +39,8 @@ class TvShowFragment : Fragment(), OnTvShowClickListener, SwipeRefreshLayout.OnR
 
         tvShowAdapter = TvShowAdapter(this)
 
-        binding.swipeToRefresh.setOnRefreshListener(this)
-
         setupViewModel()
         setupRecyclerView()
-    }
-
-    override fun onRefresh() {
-        tvShowViewModel.discoverTvShows()
     }
 
     override fun onItemClick(tvShow: TvShow) {
@@ -58,33 +52,10 @@ class TvShowFragment : Fragment(), OnTvShowClickListener, SwipeRefreshLayout.OnR
     }
 
     private fun setupViewModel() {
-        tvShowViewModel.apply {
-            listTvShows.observe(viewLifecycleOwner) { listTvShows ->
-                if (listTvShows != null) {
-                    binding.apply {
-                        swipeToRefresh.isRefreshing = false
-                        progressCircular.visibility = View.INVISIBLE
-                        lottieError.visibility = View.INVISIBLE
-                    }
-                    tvShowAdapter.setMovies(listTvShows)
-                }
-            }
-
-            errorDiscoverTvShows.observe(viewLifecycleOwner) { error ->
-                if (error.peekContent()) {
-                    showErrorNetwork()
-                    binding.swipeToRefresh.isRefreshing = false
-
-                    error.getContentIfNotHandled()?.apply {
-                        activity?.apply {
-                            Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_network), Snackbar.LENGTH_LONG)
-                                .setAction(R.string.try_again) {
-                                    refreshNetwork()
-                                }
-                                .show()
-                        }
-                    }
-                }
+        tvShowViewModel.discoverTvShows().observe(viewLifecycleOwner) { listTvShows ->
+            if (listTvShows != null) {
+                binding.progressCircular.visibility = View.INVISIBLE
+                tvShowAdapter.setMovies(listTvShows)
             }
         }
     }
@@ -99,25 +70,6 @@ class TvShowFragment : Fragment(), OnTvShowClickListener, SwipeRefreshLayout.OnR
             addItemDecoration(dividerItemDecoration)
         }
     }
-
-    private fun refreshNetwork() {
-        binding.apply {
-            lottieError.visibility = View.INVISIBLE
-            progressCircular.visibility = View.VISIBLE
-        }
-        Handler(Looper.getMainLooper()).postDelayed({
-            tvShowViewModel.discoverTvShows()
-        }, 500)
-    }
-
-    private fun showErrorNetwork() {
-        binding.apply {
-            progressCircular.visibility = View.INVISIBLE
-            lottieError.visibility =
-                if (tvShowViewModel.listTvShows.value == null) View.VISIBLE else View.INVISIBLE
-        }
-    }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

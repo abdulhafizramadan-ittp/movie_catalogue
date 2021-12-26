@@ -1,4 +1,4 @@
-package com.example.moviecatalogue.helper
+package com.example.moviecatalogue.helper.viewModel
 
 class SingleEvent<out T>(private val content: T) {
 
