@@ -1,7 +1,5 @@
 package com.example.moviecatalogue.data.domain
 
-import com.example.moviecatalogue.data.remote.response.TvShowDetailResponse
-
 data class TvShowDetail(
     val firstAirDate: String,
     val overview: String,
