@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.moviecatalogue.data.domain.Movie
 import com.example.moviecatalogue.databinding.FragmentMovieBinding
 import com.example.moviecatalogue.ui.detail.DetailActivity
@@ -34,7 +33,6 @@ class MovieFragment : Fragment(), OnMovieClickListener {
         super.onViewCreated(view, savedInstanceState)
 
         movieAdapter = MovieAdapter(this)
-
 
         setupViewModel()
         setupRecyclerView()

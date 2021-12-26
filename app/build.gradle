@@ -64,6 +64,8 @@ dependencies {
     // Unit Test
     testImplementation "junit:junit:$jUnitVersion"
     testImplementation "io.mockk:mockk:$mockkVersion"
+    testImplementation "org.mockito:mockito-core:$mockitoVersion"
+    testImplementation "org.mockito:mockito-inline:$mockitoVersion"
 
     // Instrument Test
     androidTestImplementation "androidx.test.ext:junit:$extJUnitVersion"

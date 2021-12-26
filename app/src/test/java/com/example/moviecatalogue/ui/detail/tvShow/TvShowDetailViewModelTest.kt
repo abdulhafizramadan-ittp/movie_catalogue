@@ -1,40 +1,50 @@
 package com.example.moviecatalogue.ui.detail.tvShow
 
-import androidx.lifecycle.MutableLiveData
-import com.example.moviecatalogue.data.repository.TvShowRepository
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.Observer
+import com.example.moviecatalogue.data.MovieRepository
+import com.example.moviecatalogue.data.domain.TvShowDetail
 import com.example.moviecatalogue.helper.ResponseDummy
-import com.example.moviecatalogue.helper.viewModel.SingleEvent
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verifyAll
 import org.junit.Assert.*
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.Mock
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.verify
+import org.mockito.junit.MockitoJUnitRunner
 
+@RunWith(MockitoJUnitRunner::class)
 class TvShowDetailViewModelTest {
 
-    private lateinit var tvShowRepository: TvShowRepository
-    private lateinit var tvShowDetailViewModel: FakeTvShowDetailViewModel
+    @Mock
+    private lateinit var movieRepository: MovieRepository
+    private lateinit var tvShowDetailViewModel: TvShowDetailViewModel
 
     private val dummyTvShowId = 71914
     private val dummyTvShowDetail = ResponseDummy.generateDummyTvShowDetail()
     private val dummyEmptyTvShowDetail = ResponseDummy.generateDummyEmptyTvShowDetail()
     private val dummyNullTvShowDetail = ResponseDummy.generateDummyNullTvShowDetail()
-    private val dummyTvShowMovieDetail = MutableLiveData(SingleEvent(true))
+
+    @Mock
+    private lateinit var tvShowDetailObserver: Observer<TvShowDetail>
+
+    @get:Rule
+    var instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Before
     fun setUp() {
-        tvShowRepository = mockk()
-        tvShowDetailViewModel = FakeTvShowDetailViewModel(tvShowRepository)
+        tvShowDetailViewModel = TvShowDetailViewModel(movieRepository)
     }
 
     @Test
     fun getTvShowDetail() {
-        every { tvShowRepository.getTvShowDetail(dummyTvShowId) } answers { }
-        every { tvShowRepository.tvShowDetail } returns dummyTvShowDetail
+        `when`(movieRepository.getTvShowDetail(dummyTvShowId)).thenReturn(dummyTvShowDetail)
 
-        tvShowDetailViewModel.getTvShowDetail(dummyTvShowId)
-        val tvShowDetail = tvShowDetailViewModel.tvShowDetail.value
+        val tvShowDetail = tvShowDetailViewModel.getTvShowDetail(dummyTvShowId).value
+
+        verify(movieRepository).getTvShowDetail(dummyTvShowId)
 
         assertNotNull(tvShowDetail)
         assertEquals(dummyTvShowDetail.value, tvShowDetail)
@@ -54,19 +64,17 @@ class TvShowDetailViewModelTest {
             assertTrue(status.isNotEmpty())
         }
 
-        verifyAll {
-            tvShowRepository.getTvShowDetail(dummyTvShowId)
-            tvShowRepository.tvShowDetail
-        }
+        tvShowDetailViewModel.getTvShowDetail(dummyTvShowId).observeForever(tvShowDetailObserver)
+        verify(tvShowDetailObserver).onChanged(dummyTvShowDetail.value)
     }
 
     @Test
     fun emptyTvShowDetail() {
-        every { tvShowRepository.getTvShowDetail(dummyTvShowId) } answers { }
-        every { tvShowRepository.tvShowDetail } returns dummyEmptyTvShowDetail
+        `when`(movieRepository.getTvShowDetail(dummyTvShowId)).thenReturn(dummyEmptyTvShowDetail)
 
-        tvShowDetailViewModel.getTvShowDetail(dummyTvShowId)
-        val emptyTvShowDetail = tvShowDetailViewModel.tvShowDetail.value
+        val emptyTvShowDetail = tvShowDetailViewModel.getTvShowDetail(dummyTvShowId).value
+
+        verify(movieRepository).getTvShowDetail(dummyTvShowId)
 
         assertNotNull(emptyTvShowDetail)
         assertEquals(dummyEmptyTvShowDetail.value, emptyTvShowDetail)
@@ -86,30 +94,19 @@ class TvShowDetailViewModelTest {
             assertTrue(status.isEmpty())
         }
 
-        verifyAll {
-            tvShowRepository.getTvShowDetail(dummyTvShowId)
-            tvShowRepository.tvShowDetail
-        }
+        tvShowDetailViewModel.getTvShowDetail(dummyTvShowId).observeForever(tvShowDetailObserver)
+        verify(tvShowDetailObserver).onChanged(dummyEmptyTvShowDetail.value)
     }
 
     @Test
     fun errorTvShowDetail() {
-        every { tvShowRepository.getTvShowDetail(dummyTvShowId) } answers { }
-        every { tvShowRepository.tvShowDetail } returns dummyNullTvShowDetail
-        every { tvShowRepository.tvShowDetailError } returns dummyTvShowMovieDetail
+        `when`(movieRepository.getTvShowDetail(dummyTvShowId)).thenReturn(dummyNullTvShowDetail)
 
-        tvShowDetailViewModel.getTvShowDetail(dummyTvShowId)
-        val nullTvShowDetail = tvShowDetailViewModel.tvShowDetail.value
-        val errorTvShowDetail = tvShowDetailViewModel.tvShowDetailError.value
+        val nullTvShowDetail = tvShowDetailViewModel.getTvShowDetail(dummyTvShowId).value
+
+        verify(movieRepository).getTvShowDetail(dummyTvShowId)
 
         assertNull(nullTvShowDetail)
-        assertNotNull(errorTvShowDetail)
-        assertTrue(errorTvShowDetail?.peekContent() == true)
-
-        verifyAll {
-            tvShowRepository.getTvShowDetail(dummyTvShowId)
-            tvShowRepository.tvShowDetail
-            tvShowRepository.tvShowDetailError
-        }
+        assertEquals(dummyNullTvShowDetail.value, nullTvShowDetail)
     }
 }

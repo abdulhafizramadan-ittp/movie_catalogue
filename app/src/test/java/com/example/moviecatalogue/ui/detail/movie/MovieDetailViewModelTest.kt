@@ -1,7 +1,10 @@
 package com.example.moviecatalogue.ui.detail.movie
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.example.moviecatalogue.data.MovieRepository
+import com.example.moviecatalogue.data.domain.MovieDetail
 import com.example.moviecatalogue.helper.ResponseDummy
 import com.example.moviecatalogue.helper.viewModel.SingleEvent
 import io.mockk.every
@@ -9,37 +12,47 @@ import io.mockk.mockk
 import io.mockk.verifyAll
 import org.junit.Assert.*
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.Mock
+import org.mockito.Mockito.*
+import org.mockito.junit.MockitoJUnitRunner
 
-
+@RunWith(MockitoJUnitRunner::class)
 class MovieDetailViewModelTest {
 
+    @Mock
     private lateinit var movieRepository: MovieRepository
-    private lateinit var movieDetailViewModel: FakeMovieDetailViewModel
+    private lateinit var movieDetailViewModel: MovieDetailViewModel
 
     private val dummyMovieId = 634649
     private val dummyMovieDetail = ResponseDummy.generateDummyMovieDetail()
     private val dummyEmptyMovieDetail = ResponseDummy.generateDummyEmptyMovieDetail()
     private val dummyNullMovieDetail = ResponseDummy.generateDummyNullMovieDetail()
-    private val dummyErrorMovieDetail = MutableLiveData(SingleEvent(true))
+
+    @Mock
+    private lateinit var movieDetailObserver: Observer<MovieDetail>
+
+    @get:Rule
+    var instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Before
     fun setUp() {
-        movieRepository = mockk()
-        movieDetailViewModel = FakeMovieDetailViewModel(movieRepository)
+        movieDetailViewModel = MovieDetailViewModel(movieRepository)
     }
 
     @Test
     fun getMovieDetail() {
-        every { movieRepository.getMovieDetail(dummyMovieId) } answers { }
-        every { movieRepository.movieDetail } returns dummyMovieDetail
+        `when`(movieRepository.getMovieDetail(dummyMovieId)).thenReturn(dummyMovieDetail)
 
-        movieDetailViewModel.getMovieDetail(dummyMovieId)
-        val movieDetail = movieDetailViewModel.movieDetail.value
+        val movieDetail = movieDetailViewModel.getMovieDetail(dummyMovieId).value
+
+        verify(movieRepository).getMovieDetail(dummyMovieId)
 
         assertNotNull(movieDetail)
         assertEquals(dummyMovieDetail.value, movieDetail)
-        
+
         movieDetail?.apply {
             assertTrue(overview.isNotEmpty())
             assertTrue(originalLanguage.isNotEmpty())
@@ -53,19 +66,17 @@ class MovieDetailViewModelTest {
             assertTrue(status.isNotEmpty())
         }
 
-        verifyAll {
-            movieRepository.getMovieDetail(dummyMovieId)
-            movieRepository.movieDetail
-        }
+        movieDetailViewModel.getMovieDetail(dummyMovieId).observeForever(movieDetailObserver)
+        verify(movieDetailObserver).onChanged(dummyMovieDetail.value)
     }
 
     @Test
     fun emptyMovieDetail() {
-        every { movieRepository.getMovieDetail(dummyMovieId) } answers { }
-        every { movieRepository.movieDetail } returns dummyEmptyMovieDetail
+        `when`(movieRepository.getMovieDetail(dummyMovieId)).thenReturn(dummyEmptyMovieDetail)
 
-        movieDetailViewModel.getMovieDetail(dummyMovieId)
-        val emptyMovieDetail = movieDetailViewModel.movieDetail.value
+        val emptyMovieDetail = movieDetailViewModel.getMovieDetail(dummyMovieId).value
+
+        verify(movieRepository).getMovieDetail(dummyMovieId)
 
         assertNotNull(emptyMovieDetail)
         assertEquals(dummyEmptyMovieDetail.value, emptyMovieDetail)
@@ -83,30 +94,19 @@ class MovieDetailViewModelTest {
             assertTrue(status.isEmpty())
         }
 
-        verifyAll {
-            movieRepository.getMovieDetail(dummyMovieId)
-            movieRepository.movieDetail
-        }
+        movieDetailViewModel.getMovieDetail(dummyMovieId).observeForever(movieDetailObserver)
+        verify(movieDetailObserver).onChanged(dummyEmptyMovieDetail.value)
     }
 
     @Test
     fun errorMovieDetail() {
-        every { movieRepository.getMovieDetail(dummyMovieId) } answers { }
-        every { movieRepository.movieDetail } returns dummyNullMovieDetail
-        every { movieRepository.movieDetailError } returns dummyErrorMovieDetail
+        `when`(movieRepository.getMovieDetail(dummyMovieId)).thenReturn(dummyNullMovieDetail)
 
-        movieDetailViewModel.getMovieDetail(dummyMovieId)
-        val nullMovieDetail = movieDetailViewModel.movieDetail.value
-        val errorMovieDetail = movieDetailViewModel.movieDetailError.value
+        val emptyMovieDetail = movieDetailViewModel.getMovieDetail(dummyMovieId).value
 
-        assertNull(nullMovieDetail)
-        assertNotNull(errorMovieDetail)
-        assertTrue(errorMovieDetail?.peekContent() == true)
+        verify(movieRepository).getMovieDetail(dummyMovieId)
 
-        verifyAll {
-            movieRepository.getMovieDetail(dummyMovieId)
-            movieRepository.movieDetail
-            movieRepository.movieDetailError
-        }
+        assertNull(emptyMovieDetail)
+        assertEquals(dummyNullMovieDetail.value, emptyMovieDetail)
     }
 }
