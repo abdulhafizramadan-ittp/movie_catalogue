@@ -1,11 +1,12 @@
-package com.example.moviecatalogue.ui.home
+package com.example.moviecatalogue.ui
 
 import android.os.Bundle
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
+import androidx.navigation.ui.setupWithNavController
 import com.example.moviecatalogue.R
 import com.example.moviecatalogue.databinding.ActivityHomeBinding
-import com.google.android.material.tabs.TabLayoutMediator
 
 class HomeActivity : AppCompatActivity() {
 
@@ -16,12 +17,17 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val sectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager, lifecycle)
-        binding.viewPager.adapter = sectionsPagerAdapter
+        val bottomNavigation = binding.bottomNavigation
+        val navController = findNavController(R.id.fragmentContainerView)
 
-        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-            tab.text = getString(TAB_TITLES[position])
-        }.attach()
+        bottomNavigation.setupWithNavController(navController)
+
+//        val sectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager, lifecycle)
+//        binding.viewPager.adapter = sectionsPagerAdapter
+//
+//        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
+//            tab.text = getString(TAB_TITLES[position])
+//        }.attach()
 
     }
 

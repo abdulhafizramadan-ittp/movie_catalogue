@@ -7,7 +7,7 @@ import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.example.moviecatalogue.R
-import com.example.moviecatalogue.ui.home.HomeActivity
+import com.example.moviecatalogue.ui.HomeActivity
 
 @SuppressLint("CustomSplashScreen")
 class SplashScreenActivity : AppCompatActivity() {

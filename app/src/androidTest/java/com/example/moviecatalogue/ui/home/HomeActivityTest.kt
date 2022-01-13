@@ -12,6 +12,7 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.example.moviecatalogue.R
 import com.example.moviecatalogue.helper.instrumentTest.EspressoIdlingResource
 import com.example.moviecatalogue.helper.ResponseDummy
+import com.example.moviecatalogue.ui.HomeActivity
 import org.junit.After
 import org.junit.Before
 import org.junit.Test

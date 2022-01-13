@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.moviecatalogue.ui.home.HomeActivity.Companion.TAB_TITLES
+import com.example.moviecatalogue.ui.HomeActivity.Companion.TAB_TITLES
 import com.example.moviecatalogue.ui.movie.MovieFragment
 import com.example.moviecatalogue.ui.tvShow.TvShowFragment
 

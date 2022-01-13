@@ -12,11 +12,6 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorSurface</item>
         <item name="android:navigationBarColor">?attr/colorSurface</item>
-        <item name="android:navigationBarDividerColor" tools:targetApi="o_mr1">@color/gray_900</item>
-    </style>
-
-    <style name="Theme.MovieCatalogue.SplashScreen">
-        <item name="android:navigationBarDividerColor" tools:targetApi="o_mr1">?attr/colorSurface</item>
     </style>
 
     <!-- Responsive Color   -->
