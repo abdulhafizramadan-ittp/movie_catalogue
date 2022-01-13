@@ -58,6 +58,8 @@ dependencies {
     // Koin
     implementation "io.insert-koin:koin-core:$koinVersion"
     implementation "io.insert-koin:koin-android:$koinVersion"
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
 
     testImplementation "androidx.arch.core:core-testing:$androidCoreTestVersion"
 
