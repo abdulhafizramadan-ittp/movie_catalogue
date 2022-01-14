@@ -1,6 +1,7 @@
 package com.example.moviecatalogue.data.remote.response
 
 import com.example.moviecatalogue.api.ApiConfig
+import com.example.moviecatalogue.data.domain.Genre
 import com.example.moviecatalogue.data.domain.MovieDetail
 import com.google.gson.annotations.SerializedName
 
@@ -14,6 +15,9 @@ data class MovieDetailResponse(
 
 	@field:SerializedName("release_date")
 	val releaseDate: String? = null,
+
+	@field:SerializedName("genres")
+	val genres: List<GenreResponse>? = null,
 
 	@field:SerializedName("vote_average")
 	val voteAverage: Double? = null,
@@ -42,6 +46,7 @@ fun MovieDetailResponse.toDomain(): MovieDetail =
 		overview = overview ?: "-",
 		originalLanguage = originalLanguage ?: "-",
 		releaseDate = releaseDate ?: "-",
+		genres = genres?.toDomain() ?: emptyList(),
 		voteAverage = voteAverage ?: 0.0,
 		runtime = runtime ?: 0,
 		id = id ?: 0,

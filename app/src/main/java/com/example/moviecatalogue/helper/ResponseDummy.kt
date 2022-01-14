@@ -77,7 +77,7 @@ object ResponseDummy {
 
     fun generateDummyEmptyMovieDetail(): LiveData<MovieDetail> =
         MutableLiveData(
-            MovieDetail("", "", "", 0.0, 0, 0, "", "", "", "")
+            MovieDetail("", "", "", emptyList(), 0.0, 0, 0, "", "", "", "")
         )
 
     fun generateDummyNullMovieDetail(): LiveData<MovieDetail> =

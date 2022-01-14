@@ -25,6 +25,6 @@
     <color name="tab_indicator">@color/blue_700</color>
 
     <color name="text_title">@color/black</color>
-    <color name="text_subtitle">@color/gray_700</color>
+    <color name="text_subtitle">@color/gray_500</color>
     <color name="text_footer">@color/blue_700</color>
 </resources>

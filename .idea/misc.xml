@@ -21,9 +21,14 @@
         <entry key="..\:/Users/Abdul Hafiz Ramadan/AndroidStudioProjects/DiCoding/JetpackPro/MovieCatalogue/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.228515625" />
         <entry key="..\:/Users/Abdul Hafiz Ramadan/AndroidStudioProjects/XML/movie_catalogue/app/src/main/res/drawable/bg_search.xml" value="0.2890625" />
         <entry key="..\:/Users/Abdul Hafiz Ramadan/AndroidStudioProjects/XML/movie_catalogue/app/src/main/res/drawable/ic_search.xml" value="0.2890625" />
+        <entry key="..\:/Users/Abdul Hafiz Ramadan/AndroidStudioProjects/XML/movie_catalogue/app/src/main/res/drawable/overlay_photo.xml" value="0.216796875" />
         <entry key="..\:/Users/Abdul Hafiz Ramadan/AndroidStudioProjects/XML/movie_catalogue/app/src/main/res/layout/activity_home.xml" value="0.16" />
+        <entry key="..\:/Users/Abdul Hafiz Ramadan/AndroidStudioProjects/XML/movie_catalogue/app/src/main/res/layout/content_movie_detail.xml" value="0.2046875" />
         <entry key="..\:/Users/Abdul Hafiz Ramadan/AndroidStudioProjects/XML/movie_catalogue/app/src/main/res/layout/fragment_favorite.xml" value="0.2578125" />
         <entry key="..\:/Users/Abdul Hafiz Ramadan/AndroidStudioProjects/XML/movie_catalogue/app/src/main/res/layout/fragment_movie.xml" value="0.2046875" />
+        <entry key="..\:/Users/Abdul Hafiz Ramadan/AndroidStudioProjects/XML/movie_catalogue/app/src/main/res/layout/fragment_movie_detail.xml" value="0.2046875" />
+        <entry key="..\:/Users/Abdul Hafiz Ramadan/AndroidStudioProjects/XML/movie_catalogue/app/src/main/res/layout/item_cast.xml" value="0.2046875" />
+        <entry key="..\:/Users/Abdul Hafiz Ramadan/AndroidStudioProjects/XML/movie_catalogue/app/src/main/res/layout/item_genre.xml" value="0.536" />
         <entry key="..\:/Users/Abdul Hafiz Ramadan/AndroidStudioProjects/XML/movie_catalogue/app/src/main/res/layout/item_grid.xml" value="0.27291666666666664" />
         <entry key="..\:/Users/Abdul Hafiz Ramadan/AndroidStudioProjects/XML/movie_catalogue/app/src/main/res/layout/item_small.xml" value="0.27291666666666664" />
         <entry key="..\:/Users/Abdul Hafiz Ramadan/AndroidStudioProjects/XML/movie_catalogue/app/src/main/res/menu/menu_bottom_nav.xml" value="0.27291666666666664" />

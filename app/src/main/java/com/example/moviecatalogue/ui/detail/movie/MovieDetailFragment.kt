@@ -12,6 +12,7 @@ import com.example.moviecatalogue.databinding.FragmentMovieDetailBinding
 import com.example.moviecatalogue.helper.extensions.loadImage
 import com.example.moviecatalogue.helper.extensions.runtimeToHour
 import com.example.moviecatalogue.helper.extensions.runtimeToMinute
+import com.example.moviecatalogue.helper.recyclerView.ItemGenreAdapter
 import com.example.moviecatalogue.ui.detail.DetailActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -22,6 +23,8 @@ class MovieDetailFragment : Fragment() {
 
     private var movieId: Int? = null
     private val movieDetailViewModel: MovieDetailViewModel by viewModel()
+
+    private lateinit var genreAdapter: ItemGenreAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,11 +39,14 @@ class MovieDetailFragment : Fragment() {
 
         movieId = arguments?.getInt(MOVIE_ID)
 
+        genreAdapter = ItemGenreAdapter()
+
         movieId?.let {
             setupViewModel()
         }
 
         setupToolbar()
+        setupRecycler()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -73,19 +79,22 @@ class MovieDetailFragment : Fragment() {
                         )
 
                         tvMovieTitle.text = movieDetail.title
-                        tvMovieTagline.text = movieDetail.tagline
+                        tvMovieSubtitle.text = movieDetail.tagline
                         tvMovieStatus.text = movieDetail.status
                         tvMovieRuntime.text = movieRuntime
                         tvMovieRating.text = movieDetail.voteAverage.toString()
-                        tvMovieRelease.text = movieDetail.releaseDate
-                        tvMovieLanguage.text = movieDetail.originalLanguage
                         tvMovieSynopsis.text = movieDetail.overview
 
                         ivMoviePoster.loadImage(movieDetail.posterPath)
                     }
+                    genreAdapter.setGenres(movieDetail.genres)
                 }
             }
         }
+    }
+
+    private fun setupRecycler() {
+        binding.rvGenre.adapter = genreAdapter
     }
 
     override fun onDestroyView() {

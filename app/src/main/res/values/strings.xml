@@ -28,4 +28,8 @@
     <string name="what_s_popular">What\'s Popular</string>
     <string name="trending">Trending</string>
     <string name="free_to_watch">Free To Watch</string>
+    <string name="cast">Top Billed Cast</string>
+    <string name="photo_cast">Photo Cast</string>
+    <string name="genre">Genre</string>
+    <string name="movie_recommendation">Movie Recommendation</string>
 </resources>
