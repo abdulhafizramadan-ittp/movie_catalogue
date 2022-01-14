@@ -6,10 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.moviecatalogue.data.domain.Movie
 import com.example.moviecatalogue.databinding.FragmentMovieBinding
+import com.example.moviecatalogue.helper.recyclerView.ItemGridAdapter
+import com.example.moviecatalogue.helper.recyclerView.ItemSmallAdapter
 import com.example.moviecatalogue.ui.detail.DetailActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -19,7 +20,10 @@ class MovieFragment : Fragment(), OnMovieClickListener {
     private val binding: FragmentMovieBinding get() =  _binding as FragmentMovieBinding
 
     private val movieViewModel: MovieViewModel by viewModel()
-    private lateinit var movieAdapter: MovieAdapter
+
+    private lateinit var moviePopularAdapter: ItemSmallAdapter
+    private lateinit var movieTrendAdapter: ItemSmallAdapter
+    private lateinit var movieFreeAdapter: ItemGridAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,7 +36,9 @@ class MovieFragment : Fragment(), OnMovieClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        movieAdapter = MovieAdapter(this)
+        moviePopularAdapter = ItemSmallAdapter(this)
+        movieTrendAdapter = ItemSmallAdapter(this)
+        movieFreeAdapter = ItemGridAdapter(this)
 
         setupViewModel()
         setupRecyclerView()
@@ -49,31 +55,32 @@ class MovieFragment : Fragment(), OnMovieClickListener {
     private fun setupViewModel() {
         movieViewModel.discoverMovies().observe(viewLifecycleOwner) { listMovies ->
             if (listMovies != null) {
-                binding.progressCircular.visibility = View.INVISIBLE
-                movieAdapter.setMovies(listMovies)
+                moviePopularAdapter.setMovies(listMovies)
+                movieTrendAdapter.setMovies(listMovies)
+                movieFreeAdapter.setMovies(listMovies)
             }
         }
     }
 
     private fun setupRecyclerView() {
-        val dividerItemDecoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
-
-        binding.rvMovie.apply {
-            layoutManager = LinearLayoutManager(context)
-            setHasFixedSize(true)
-            adapter = movieAdapter
-            addItemDecoration(dividerItemDecoration)
+        binding.apply {
+            rvPopular.apply {
+                setHasFixedSize(true)
+                adapter = moviePopularAdapter
+            }
+            rvTrend.apply {
+                setHasFixedSize(true)
+                adapter = movieTrendAdapter
+            }
+            rvFreeToWatch.apply {
+                setHasFixedSize(true)
+                adapter = movieFreeAdapter
+            }
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance() =
-            MovieFragment()
     }
 }

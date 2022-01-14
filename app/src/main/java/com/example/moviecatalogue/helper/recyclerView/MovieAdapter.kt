@@ -1,4 +1,4 @@
-package com.example.moviecatalogue.ui.movie
+package com.example.moviecatalogue.helper.recyclerView
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.moviecatalogue.data.domain.Movie
 import com.example.moviecatalogue.databinding.ItemsMovieBinding
 import com.example.moviecatalogue.helper.extensions.loadImage
+import com.example.moviecatalogue.ui.movie.OnMovieClickListener
 
 class MovieAdapter(private val movieClickListener: OnMovieClickListener) : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
@@ -44,9 +45,8 @@ class MovieAdapter(private val movieClickListener: OnMovieClickListener) : Recyc
                 tvMovieFooter.text = movieFooter
 
                 ivMoviePoster.loadImage(movie.posterPath)
-
-                itemView.setOnClickListener { movieClickListener.onItemClick(movie) }
             }
+            itemView.setOnClickListener { movieClickListener.onItemClick(movie) }
         }
     }
 }

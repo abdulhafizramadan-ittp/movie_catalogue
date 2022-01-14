@@ -15,8 +15,7 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|enterAlways">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -39,21 +38,26 @@
                     android:focusable="false"
                     android:inputType="none"
                     android:enabled="false"
+                    android:gravity="left|center_vertical"
+                    android:text="@string/dummy_search"
+                    android:textStyle="normal"
+                    android:textSize="14sp"
+                    android:textColor="@color/gray_900"
                     android:background="@drawable/bg_search"
                     android:drawableStart="@drawable/ic_search"
                     android:importantForAutofill="no"
                     android:alpha="0.8"
-                    tools:ignore="LabelFor,RtlSymmetry" />
+                    tools:ignore="LabelFor,RtlHardcoded,RtlSymmetry" />
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
     <fragment
         android:id="@+id/fragmentContainerView"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:defaultNavHost="true"
         app:navGraph="@navigation/app_navigation"
         tools:ignore="FragmentTagUsage" />
@@ -63,5 +67,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        app:labelVisibilityMode="unlabeled"
         app:menu="@menu/menu_bottom_nav"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
