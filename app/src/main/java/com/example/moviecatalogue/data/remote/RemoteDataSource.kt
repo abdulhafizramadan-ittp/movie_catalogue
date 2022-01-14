@@ -1,7 +1,7 @@
 package com.example.moviecatalogue.data.remote
 
-import com.example.moviecatalogue.api.ApiConfig
-import com.example.moviecatalogue.api.ApiService
+import com.example.moviecatalogue.data.remote.api.ApiConfig
+import com.example.moviecatalogue.data.remote.api.ApiService
 import com.example.moviecatalogue.data.remote.response.*
 import com.example.moviecatalogue.helper.instrumentTest.EspressoIdlingResource
 import retrofit2.Call

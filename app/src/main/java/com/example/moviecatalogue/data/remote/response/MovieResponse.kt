@@ -1,6 +1,6 @@
 package com.example.moviecatalogue.data.remote.response
 
-import com.example.moviecatalogue.api.ApiConfig
+import com.example.moviecatalogue.data.remote.api.ApiConfig
 import com.example.moviecatalogue.data.domain.Movie
 import com.google.gson.annotations.SerializedName
 

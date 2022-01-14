@@ -2,8 +2,8 @@ package com.example.moviecatalogue.di
 
 import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
-import com.example.moviecatalogue.api.ApiConfig
-import com.example.moviecatalogue.api.ApiService
+import com.example.moviecatalogue.data.remote.api.ApiConfig
+import com.example.moviecatalogue.data.remote.api.ApiService
 import com.example.moviecatalogue.data.MovieRepository
 import com.example.moviecatalogue.data.remote.RemoteDataSource
 import com.example.moviecatalogue.ui.detail.movie.MovieDetailViewModel
@@ -12,7 +12,6 @@ import com.example.moviecatalogue.ui.movie.MovieViewModel
 import com.example.moviecatalogue.ui.tvShow.TvShowViewModel
 import okhttp3.OkHttpClient
 import org.koin.androidx.viewmodel.dsl.viewModel
-import org.koin.core.scope.get
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

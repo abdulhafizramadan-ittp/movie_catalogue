@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,9 +7,13 @@
     tools:context=".ui.HomeActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        style="@style/Widget.MaterialComponents.BottomAppBar.PrimarySurface"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.BottomAppBar.PrimarySurface"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:background="?attr/colorSurface">
 
         <androidx.appcompat.widget.Toolbar
@@ -20,33 +24,33 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginEnd="16dp">
+                android:layout_marginEnd="16dp"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@drawable/logo"
                     android:layout_marginEnd="8dp"
-                    android:contentDescription="@string/logo_description" />
+                    android:contentDescription="@string/logo_description"
+                    android:src="@drawable/logo" />
 
                 <EditText
                     android:id="@+id/edt_search"
                     android:layout_width="match_parent"
                     android:layout_height="32dp"
-                    android:padding="8dp"
-                    android:focusable="false"
-                    android:inputType="none"
-                    android:enabled="false"
-                    android:gravity="left|center_vertical"
-                    android:text="@string/dummy_search"
-                    android:textStyle="normal"
-                    android:textSize="14sp"
-                    android:textColor="@color/gray_900"
+                    android:alpha="0.8"
                     android:background="@drawable/bg_search"
                     android:drawableStart="@drawable/ic_search"
+                    android:enabled="false"
+                    android:focusable="false"
+                    android:gravity="left|center_vertical"
                     android:importantForAutofill="no"
-                    android:alpha="0.8"
+                    android:inputType="none"
+                    android:padding="8dp"
+                    android:text="@string/dummy_search"
+                    android:textColor="@color/gray_900"
+                    android:textSize="14sp"
+                    android:textStyle="normal"
                     tools:ignore="LabelFor,RtlHardcoded,RtlSymmetry" />
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
@@ -56,10 +60,14 @@
         android:id="@+id/fragmentContainerView"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:defaultNavHost="true"
         app:navGraph="@navigation/app_navigation"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         tools:ignore="FragmentTagUsage" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -68,5 +76,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         app:labelVisibilityMode="unlabeled"
-        app:menu="@menu/menu_bottom_nav"/>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/menu_bottom_nav" />
+</androidx.constraintlayout.widget.ConstraintLayout>

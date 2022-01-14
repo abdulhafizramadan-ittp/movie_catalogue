@@ -1,4 +1,4 @@
-package com.example.moviecatalogue.api
+package com.example.moviecatalogue.data.remote.api
 
 import com.example.moviecatalogue.BuildConfig
 
