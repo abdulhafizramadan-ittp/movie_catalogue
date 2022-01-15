@@ -6,5 +6,5 @@ import com.afollestad.recyclical.ViewHolder
 import com.example.moviecatalogue.R
 
 class ItemGenreViewHolder(itemView: View) : ViewHolder(itemView) {
-    val tvItemGenreName: TextView = itemView.findViewById(R.id.tv_item_genre_name)
+    val tvItemGenreName: TextView = itemView.findViewById(R.id.chip_genre_name)
 }

@@ -7,9 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import com.afollestad.recyclical.datasource.dataSourceTypedOf
+import com.afollestad.recyclical.setup
+import com.afollestad.recyclical.withItem
+import com.example.moviecatalogue.R
+import com.example.moviecatalogue.data.domain.Genre
 import com.example.moviecatalogue.databinding.FragmentTvShowDetailBinding
 import com.example.moviecatalogue.helper.extensions.loadImage
 import com.example.moviecatalogue.ui.detail.DetailActivity
+import com.example.moviecatalogue.viewHolder.ItemGenreViewHolder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class TvShowDetailFragment : Fragment() {
@@ -56,24 +62,37 @@ class TvShowDetailFragment : Fragment() {
     private fun setupViewModel() {
         tvShowId?.let {
             tvShowDetailViewModel.getTvShowDetail(it).observe(viewLifecycleOwner) { tvShowDetail ->
-                binding.apply {
+                if (tvShowDetail != null) {
+                    binding.apply {
+                        toolbar.title = tvShowDetail.name
+                        tvShowTitle.text = tvShowDetail.name
+                        tvShowSubtitle.text = tvShowDetail.tagline
+                        tvShowStatus.text = tvShowDetail.status
+                        tvShowSeason.text = tvShowDetail.numberOfSeasons.toString()
+                        tvShowRating.text = tvShowDetail.voteAverage.toString()
+                        tvShowSynopsis.text = tvShowDetail.overview
 
-                    toolbar.title = tvShowDetail.name
+                        ivTvShowPoster.loadImage(tvShowDetail.posterPath)
 
-                    tvShowTitle.text = tvShowDetail.name
-                    tvShowTagline.text = tvShowDetail.tagline
-                    tvShowStatus.text = tvShowDetail.status
-                    tvShowSeason.text = tvShowDetail.numberOfSeasons.toString()
-                    tvShowRating.text = tvShowDetail.voteAverage.toString()
-                    tvShowRelease.text = tvShowDetail.firstAirDate
-                    tvShowLanguage.text = tvShowDetail.originalLanguage
-                    tvShowSynopsis.text = tvShowDetail.overview
-
-                    ivTvShowPoster.loadImage(tvShowDetail.posterPath)
+                        setupGenreRecycler(tvShowDetail.genres)
+                    }
                 }
             }
         }
     }
+
+    private fun setupGenreRecycler(listGenre: List<Genre>) {
+        val dataSource = dataSourceTypedOf(listGenre)
+        binding.rvGenre.setup {
+            withDataSource(dataSource)
+            withItem<Genre, ItemGenreViewHolder>(R.layout.item_genre) {
+                onBind(::ItemGenreViewHolder) { _, item ->
+                    tvItemGenreName.text = item.name
+                }
+            }
+        }
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -55,13 +55,13 @@ class TvShowFragment : Fragment() {
                     tvItemGrid.text = item.name
                     ivItemGrid.loadImage(item.posterPath)
 
-                    onClick {
-                        val intent = Intent(requireContext(), DetailActivity::class.java).apply {
-                            putExtra(DetailActivity.DETAIL_TYPE, DetailActivity.TYPE_TV_SHOW)
-                            putExtra(DetailActivity.ID, item.id)
-                        }
-                        startActivity(intent)
+                }
+                onClick {
+                    val intent = Intent(requireContext(), DetailActivity::class.java).apply {
+                        putExtra(DetailActivity.DETAIL_TYPE, DetailActivity.TYPE_TV_SHOW)
+                        putExtra(DetailActivity.ID, item.id)
                     }
+                    startActivity(intent)
                 }
             }
         }

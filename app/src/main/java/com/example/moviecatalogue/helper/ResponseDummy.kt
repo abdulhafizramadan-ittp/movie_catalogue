@@ -108,7 +108,7 @@ object ResponseDummy {
 
     fun generateDummyEmptyTvShowDetail(): LiveData<TvShowDetail> =
         MutableLiveData(
-            TvShowDetail("", "", "", "", "", 0.0, "", "", 0, 0, "", "")
+            TvShowDetail("", "", "", emptyList(), "", "", 0.0, "", "", 0, 0, "", "")
         )
 
     fun generateDummyNullTvShowDetail(): LiveData<TvShowDetail> =

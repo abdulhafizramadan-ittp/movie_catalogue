@@ -4,6 +4,7 @@ data class TvShowDetail(
     val firstAirDate: String,
     val overview: String,
     val originalLanguage: String,
+    val genres: List<Genre>,
     val type: String,
     val posterPath: String,
     val voteAverage: Double,

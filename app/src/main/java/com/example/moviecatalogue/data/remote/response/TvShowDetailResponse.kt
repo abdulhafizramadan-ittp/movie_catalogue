@@ -1,5 +1,6 @@
 package com.example.moviecatalogue.data.remote.response
 
+import com.example.moviecatalogue.data.domain.Genre
 import com.example.moviecatalogue.data.domain.TvShowDetail
 import com.example.moviecatalogue.data.remote.api.ApiConfig
 import com.google.gson.annotations.SerializedName
@@ -14,6 +15,9 @@ data class TvShowDetailResponse(
 
 	@field:SerializedName("original_language")
 	val originalLanguage: String? = null,
+
+	@field:SerializedName("genres")
+	val genres: List<Genre>? = null,
 
 	@field:SerializedName("type")
 	val type: String? = null,
@@ -54,6 +58,7 @@ fun TvShowDetailResponse.toDomain(): TvShowDetail =
 		firstAirDate = firstAirDate ?: "-",
 		overview = overview ?: "-",
 		originalLanguage = originalLanguage ?: "-",
+		genres = genres ?: emptyList(),
 		type = type ?: "-",
 		posterPath = ApiConfig.POSTER_MD + posterPath,
 		voteAverage = voteAverage ?: 0.0,

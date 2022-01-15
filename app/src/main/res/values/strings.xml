@@ -32,4 +32,6 @@
     <string name="photo_cast">Photo Cast</string>
     <string name="genre">Genre</string>
     <string name="movie_recommendation">Movie Recommendation</string>
+    <string name="tv_show_recommendation">Recommendation</string>
+    <string name="tv_show_poster">Tv Show Poster</string>
 </resources>

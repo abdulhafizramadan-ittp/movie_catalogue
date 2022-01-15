@@ -19,6 +19,7 @@
         <entry key="..\:/Users/Abdul Hafiz Ramadan/AndroidStudioProjects/DiCoding/JetpackPro/MovieCatalogue/app/src/main/res/layout/items_movie.xml" value="0.2879999900124293" />
         <entry key="..\:/Users/Abdul Hafiz Ramadan/AndroidStudioProjects/DiCoding/JetpackPro/MovieCatalogue/app/src/main/res/layout/items_tv_show.xml" value="0.284375" />
         <entry key="..\:/Users/Abdul Hafiz Ramadan/AndroidStudioProjects/DiCoding/JetpackPro/MovieCatalogue/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.228515625" />
+        <entry key="..\:/Users/Abdul Hafiz Ramadan/AndroidStudioProjects/XML/movie_catalogue/app/src/main/res/drawable/bg_genre.xml" value="1.6464285714285714" />
         <entry key="..\:/Users/Abdul Hafiz Ramadan/AndroidStudioProjects/XML/movie_catalogue/app/src/main/res/drawable/bg_search.xml" value="0.2890625" />
         <entry key="..\:/Users/Abdul Hafiz Ramadan/AndroidStudioProjects/XML/movie_catalogue/app/src/main/res/drawable/ic_search.xml" value="0.2890625" />
         <entry key="..\:/Users/Abdul Hafiz Ramadan/AndroidStudioProjects/XML/movie_catalogue/app/src/main/res/drawable/overlay_photo.xml" value="0.216796875" />
@@ -28,6 +29,7 @@
         <entry key="..\:/Users/Abdul Hafiz Ramadan/AndroidStudioProjects/XML/movie_catalogue/app/src/main/res/layout/fragment_movie.xml" value="0.2046875" />
         <entry key="..\:/Users/Abdul Hafiz Ramadan/AndroidStudioProjects/XML/movie_catalogue/app/src/main/res/layout/fragment_movie_detail.xml" value="0.2046875" />
         <entry key="..\:/Users/Abdul Hafiz Ramadan/AndroidStudioProjects/XML/movie_catalogue/app/src/main/res/layout/fragment_tv_show.xml" value="0.10859375" />
+        <entry key="..\:/Users/Abdul Hafiz Ramadan/AndroidStudioProjects/XML/movie_catalogue/app/src/main/res/layout/fragment_tv_show_detail.xml" value="0.2046875" />
         <entry key="..\:/Users/Abdul Hafiz Ramadan/AndroidStudioProjects/XML/movie_catalogue/app/src/main/res/layout/item.xml" value="0.10859375" />
         <entry key="..\:/Users/Abdul Hafiz Ramadan/AndroidStudioProjects/XML/movie_catalogue/app/src/main/res/layout/item_cast.xml" value="0.2046875" />
         <entry key="..\:/Users/Abdul Hafiz Ramadan/AndroidStudioProjects/XML/movie_catalogue/app/src/main/res/layout/item_genre.xml" value="0.536" />

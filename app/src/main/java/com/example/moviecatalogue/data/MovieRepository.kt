@@ -16,8 +16,10 @@ class MovieRepository(private val remoteDataSource: RemoteDataSource) : MovieDat
 
         remoteDataSource.discoverMovies(object : RemoteDataSource.LoadMovieCallback {
             override fun onAllMoviesReceived(movieItemResponses: List<MovieItem>?) {
-                val moviesDomain = movieItemResponses?.map { it.toDomain() }
-                listMovies.postValue(moviesDomain)
+                if (movieItemResponses != null) {
+                    val moviesDomain = movieItemResponses.map { it.toDomain() }
+                    listMovies.postValue(moviesDomain)
+                }
             }
         })
 
@@ -41,8 +43,10 @@ class MovieRepository(private val remoteDataSource: RemoteDataSource) : MovieDat
 
         remoteDataSource.discoverTvShows(object : RemoteDataSource.LoadTvShowCallback {
             override fun onAllTvShowReceived(tvShowItemResponse: List<TvShowItem>?) {
-                val tvShowsDomain = tvShowItemResponse?.map { it.toDomain() }
-                listTvShows.postValue(tvShowsDomain)
+                if (tvShowItemResponse != null) {
+                    val tvShowsDomain = tvShowItemResponse.map { it.toDomain() }
+                    listTvShows.postValue(tvShowsDomain)
+                }
             }
         })
 
