@@ -6,24 +6,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
+import com.afollestad.recyclical.datasource.dataSourceTypedOf
+import com.afollestad.recyclical.setup
+import com.afollestad.recyclical.withItem
+import com.example.moviecatalogue.R
 import com.example.moviecatalogue.data.domain.Movie
 import com.example.moviecatalogue.databinding.FragmentMovieBinding
-import com.example.moviecatalogue.helper.recyclerView.ItemGridAdapter
-import com.example.moviecatalogue.helper.recyclerView.ItemSmallAdapter
+import com.example.moviecatalogue.helper.extensions.loadImage
 import com.example.moviecatalogue.ui.detail.DetailActivity
+import com.example.moviecatalogue.viewHolder.ItemGridViewHolder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MovieFragment : Fragment(), OnMovieClickListener {
+class MovieFragment : Fragment() {
 
     private var _binding: FragmentMovieBinding? = null
     private val binding: FragmentMovieBinding get() =  _binding as FragmentMovieBinding
 
     private val movieViewModel: MovieViewModel by viewModel()
-
-    private lateinit var moviePopularAdapter: ItemSmallAdapter
-    private lateinit var movieTrendAdapter: ItemSmallAdapter
-    private lateinit var movieFreeAdapter: ItemGridAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,45 +35,33 @@ class MovieFragment : Fragment(), OnMovieClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        moviePopularAdapter = ItemSmallAdapter(this)
-        movieTrendAdapter = ItemSmallAdapter(this)
-        movieFreeAdapter = ItemGridAdapter(this)
-
         setupViewModel()
-        setupRecyclerView()
-    }
-
-    override fun onItemClick(movie: Movie) {
-        val intent = Intent(requireContext(), DetailActivity::class.java).apply {
-            putExtra(DetailActivity.DETAIL_TYPE, DetailActivity.TYPE_MOVIE)
-            putExtra(DetailActivity.ID, movie.id)
-        }
-        startActivity(intent)
     }
 
     private fun setupViewModel() {
         movieViewModel.discoverMovies().observe(viewLifecycleOwner) { listMovies ->
             if (listMovies != null) {
-                moviePopularAdapter.setMovies(listMovies)
-                movieTrendAdapter.setMovies(listMovies)
-                movieFreeAdapter.setMovies(listMovies)
+                setupRecyclerView(listMovies)
             }
         }
     }
 
-    private fun setupRecyclerView() {
-        binding.apply {
-            rvPopular.apply {
-                setHasFixedSize(true)
-                adapter = moviePopularAdapter
-            }
-            rvTrend.apply {
-                setHasFixedSize(true)
-                adapter = movieTrendAdapter
-            }
-            rvFreeToWatch.apply {
-                setHasFixedSize(true)
-                adapter = movieFreeAdapter
+    private fun setupRecyclerView(listMovies: List<Movie>) {
+        val dataSource = dataSourceTypedOf(listMovies)
+        binding.rvMovie.setup {
+            withDataSource(dataSource)
+            withItem<Movie, ItemGridViewHolder>(R.layout.item_grid) {
+                onBind(::ItemGridViewHolder) { _, item ->
+                    tvItemGrid.text = item.title
+                    ivItemGrid.loadImage(item.posterPath)
+                }
+                onClick {
+                    val intent = Intent(requireContext(), DetailActivity::class.java).apply {
+                        putExtra(DetailActivity.DETAIL_TYPE, DetailActivity.TYPE_MOVIE)
+                        putExtra(DetailActivity.ID, item.id)
+                    }
+                    startActivity(intent)
+                }
             }
         }
     }

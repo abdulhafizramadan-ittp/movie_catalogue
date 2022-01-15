@@ -1,7 +1,7 @@
 package com.example.moviecatalogue.data.remote.response
 
-import com.example.moviecatalogue.data.remote.api.ApiConfig
 import com.example.moviecatalogue.data.domain.MovieDetail
+import com.example.moviecatalogue.data.remote.api.ApiConfig
 import com.google.gson.annotations.SerializedName
 
 data class MovieDetailResponse(

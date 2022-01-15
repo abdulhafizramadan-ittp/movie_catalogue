@@ -7,13 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import com.afollestad.recyclical.datasource.dataSourceTypedOf
+import com.afollestad.recyclical.setup
+import com.afollestad.recyclical.withItem
 import com.example.moviecatalogue.R
+import com.example.moviecatalogue.data.domain.Genre
 import com.example.moviecatalogue.databinding.FragmentMovieDetailBinding
 import com.example.moviecatalogue.helper.extensions.loadImage
 import com.example.moviecatalogue.helper.extensions.runtimeToHour
 import com.example.moviecatalogue.helper.extensions.runtimeToMinute
-import com.example.moviecatalogue.helper.recyclerView.ItemGenreAdapter
 import com.example.moviecatalogue.ui.detail.DetailActivity
+import com.example.moviecatalogue.viewHolder.ItemGenreViewHolder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MovieDetailFragment : Fragment() {
@@ -23,8 +27,6 @@ class MovieDetailFragment : Fragment() {
 
     private var movieId: Int? = null
     private val movieDetailViewModel: MovieDetailViewModel by viewModel()
-
-    private lateinit var genreAdapter: ItemGenreAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,14 +41,11 @@ class MovieDetailFragment : Fragment() {
 
         movieId = arguments?.getInt(MOVIE_ID)
 
-        genreAdapter = ItemGenreAdapter()
-
         movieId?.let {
             setupViewModel()
         }
 
         setupToolbar()
-        setupRecycler()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -69,15 +68,13 @@ class MovieDetailFragment : Fragment() {
             movieDetailViewModel.getMovieDetail(it).observe(viewLifecycleOwner) { movieDetail ->
                 if (movieDetail != null) {
                     binding.apply {
-
-                        toolbar.title = movieDetail.title
-
                         val movieRuntime = getString(
                             R.string.movie_runtime,
                             movieDetail.runtime.runtimeToHour(),
                             movieDetail.runtime.runtimeToMinute()
                         )
 
+                        toolbar.title = movieDetail.title
                         tvMovieTitle.text = movieDetail.title
                         tvMovieSubtitle.text = movieDetail.tagline
                         tvMovieStatus.text = movieDetail.status
@@ -86,15 +83,24 @@ class MovieDetailFragment : Fragment() {
                         tvMovieSynopsis.text = movieDetail.overview
 
                         ivMoviePoster.loadImage(movieDetail.posterPath)
+
+                        setupGenreRecycler(movieDetail.genres)
                     }
-                    genreAdapter.setGenres(movieDetail.genres)
                 }
             }
         }
     }
 
-    private fun setupRecycler() {
-        binding.rvGenre.adapter = genreAdapter
+    private fun setupGenreRecycler(listGenre: List<Genre>) {
+        val dataSource = dataSourceTypedOf(listGenre)
+        binding.rvGenre.setup {
+            withDataSource(dataSource)
+            withItem<Genre, ItemGenreViewHolder>(R.layout.item_genre) {
+                onBind(::ItemGenreViewHolder) { _, item ->
+                    tvItemGenreName.text = item.name
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {

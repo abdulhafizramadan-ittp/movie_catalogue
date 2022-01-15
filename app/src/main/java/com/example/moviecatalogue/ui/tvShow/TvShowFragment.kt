@@ -6,20 +6,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
+import com.afollestad.recyclical.datasource.dataSourceTypedOf
+import com.afollestad.recyclical.setup
+import com.afollestad.recyclical.withItem
+import com.example.moviecatalogue.R
 import com.example.moviecatalogue.data.domain.TvShow
 import com.example.moviecatalogue.databinding.FragmentTvShowBinding
+import com.example.moviecatalogue.helper.extensions.loadImage
 import com.example.moviecatalogue.ui.detail.DetailActivity
+import com.example.moviecatalogue.viewHolder.ItemGridViewHolder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class TvShowFragment : Fragment(), OnTvShowClickListener {
+class TvShowFragment : Fragment() {
 
     private var _binding: FragmentTvShowBinding? = null
     private val binding: FragmentTvShowBinding get() = _binding as FragmentTvShowBinding
 
     private val tvShowViewModel: TvShowViewModel by viewModel()
-    private lateinit var tvShowAdapter: TvShowAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,48 +35,40 @@ class TvShowFragment : Fragment(), OnTvShowClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        tvShowAdapter = TvShowAdapter(this)
-
         setupViewModel()
-        setupRecyclerView()
-    }
-
-    override fun onItemClick(tvShow: TvShow) {
-        val intent = Intent(requireContext(), DetailActivity::class.java).apply {
-            putExtra(DetailActivity.DETAIL_TYPE, DetailActivity.TYPE_TV_SHOW)
-            putExtra(DetailActivity.ID, tvShow.id)
-        }
-        startActivity(intent)
     }
 
     private fun setupViewModel() {
         tvShowViewModel.discoverTvShows().observe(viewLifecycleOwner) { listTvShows ->
             if (listTvShows != null) {
-                binding.progressCircular.visibility = View.INVISIBLE
-                tvShowAdapter.setMovies(listTvShows)
+                setupRecyclerView(listTvShows)
             }
         }
     }
 
-    private fun setupRecyclerView() {
-        val dividerItemDecoration = DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
+    private fun setupRecyclerView(listTvShows: List<TvShow>) {
+        val dataSource = dataSourceTypedOf(listTvShows)
+        binding.rvTvShow.setup {
+            withDataSource(dataSource)
+            withItem<TvShow, ItemGridViewHolder>(R.layout.item_grid) {
+                onBind(::ItemGridViewHolder) { _, item ->
+                    tvItemGrid.text = item.name
+                    ivItemGrid.loadImage(item.posterPath)
 
-        binding.rvTvShow.apply {
-            layoutManager = LinearLayoutManager(context)
-            setHasFixedSize(true)
-            adapter = tvShowAdapter
-            addItemDecoration(dividerItemDecoration)
+                    onClick {
+                        val intent = Intent(requireContext(), DetailActivity::class.java).apply {
+                            putExtra(DetailActivity.DETAIL_TYPE, DetailActivity.TYPE_TV_SHOW)
+                            putExtra(DetailActivity.ID, item.id)
+                        }
+                        startActivity(intent)
+                    }
+                }
+            }
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance() =
-            TvShowFragment()
     }
 }

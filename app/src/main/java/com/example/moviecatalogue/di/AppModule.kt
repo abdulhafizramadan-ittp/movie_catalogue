@@ -2,10 +2,10 @@ package com.example.moviecatalogue.di
 
 import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
-import com.example.moviecatalogue.data.remote.api.ApiConfig
-import com.example.moviecatalogue.data.remote.api.ApiService
 import com.example.moviecatalogue.data.MovieRepository
 import com.example.moviecatalogue.data.remote.RemoteDataSource
+import com.example.moviecatalogue.data.remote.api.ApiConfig
+import com.example.moviecatalogue.data.remote.api.ApiService
 import com.example.moviecatalogue.ui.detail.movie.MovieDetailViewModel
 import com.example.moviecatalogue.ui.detail.tvShow.TvShowDetailViewModel
 import com.example.moviecatalogue.ui.movie.MovieViewModel
