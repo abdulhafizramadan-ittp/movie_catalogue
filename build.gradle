@@ -23,6 +23,9 @@ ext {
     // Retrofit
     retrofitVersion = '2.9.0'
 
+    // Recylical
+    recylicalVersion = '1.1.1'
+
     // Glide
     glideVersion = '4.12.0'
 
