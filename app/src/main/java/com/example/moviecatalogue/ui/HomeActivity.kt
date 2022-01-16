@@ -29,25 +29,9 @@ class HomeActivity : AppCompatActivity() {
         val navController = findNavController(R.id.fragmentContainerView)
 
         bottomNavigation.setupWithNavController(navController)
-
-//        val sectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager, lifecycle)
-//        binding.viewPager.adapter = sectionsPagerAdapter
-//
-//        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-//            tab.text = getString(TAB_TITLES[position])
-//        }.attach()
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         return super.onCreateOptionsMenu(menu)
-    }
-
-    companion object {
-        @StringRes
-        val TAB_TITLES = intArrayOf(
-            R.string.movie,
-            R.string.tv_show
-        )
     }
 }

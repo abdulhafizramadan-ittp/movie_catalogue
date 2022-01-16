@@ -16,12 +16,11 @@
         android:theme="@style/Theme.MovieCatalogue"
         tools:targetApi="m">
         <activity
-            android:name=".ui.detail.DetailActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.splashScreen.SplashScreenActivity"
             android:theme="@style/Theme.MovieCatalogue.SplashScreen"
-            android:exported="true">
+            android:screenOrientation="portrait"
+            android:exported="true"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,7 +29,9 @@
         </activity>
         <activity
             android:name=".ui.HomeActivity"
-            android:exported="false" />
+            android:screenOrientation="portrait"
+            android:exported="false"
+            tools:ignore="LockedOrientationActivity" />
     </application>
 
 </manifest>

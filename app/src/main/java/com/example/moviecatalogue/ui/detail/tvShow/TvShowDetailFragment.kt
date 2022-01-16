@@ -2,7 +2,6 @@ package com.example.moviecatalogue.ui.detail.tvShow
 
 import android.os.Bundle
 import android.view.*
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.afollestad.recyclical.datasource.dataSourceTypedOf
@@ -16,6 +15,8 @@ import com.example.moviecatalogue.databinding.FragmentTvShowDetailBinding
 import com.example.moviecatalogue.helper.extensions.loadImage
 import com.example.moviecatalogue.ui.HomeActivity
 import com.example.moviecatalogue.viewHolder.ItemGenreViewHolder
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class TvShowDetailFragment : Fragment() {
@@ -31,6 +32,9 @@ class TvShowDetailFragment : Fragment() {
 
     private var isFavorite = false
     private lateinit var menu: Menu
+
+    private lateinit var parentAppBarLayout: AppBarLayout
+    private lateinit var parentBottomNavigationView: BottomNavigationView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,9 +70,12 @@ class TvShowDetailFragment : Fragment() {
     }
 
     private fun setupToolbar() {
-        homeActivity.apply {
-            appBarLayout.visibility = View.GONE
-            bottomNavigation.visibility = View.GONE
+        (activity as HomeActivity).apply {
+            parentAppBarLayout = findViewById(R.id.appBarLayout)
+            parentBottomNavigationView = findViewById(R.id.bottom_navigation)
+
+            parentAppBarLayout.visibility = View.GONE
+            parentBottomNavigationView.visibility = View.GONE
 
             setSupportActionBar(binding.toolbar)
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -134,8 +141,8 @@ class TvShowDetailFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         homeActivity.apply {
-            appBarLayout.visibility = View.VISIBLE
-            bottomNavigation.visibility = View.VISIBLE
+            parentAppBarLayout.visibility = View.VISIBLE
+            parentBottomNavigationView.visibility = View.VISIBLE
         }
         _binding = null
     }
