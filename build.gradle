@@ -10,6 +10,8 @@ buildscript {
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
+        def navVersion = '2.3.5'
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navVersion"
     }
 }
 
@@ -19,6 +21,9 @@ ext {
     appCompatVersion = '1.4.0'
     materialVersion = '1.4.0'
     constraintLayoutVersion = '2.1.2'
+
+    // Navigation
+    navVersion = '2.3.5'
 
     // Retrofit
     retrofitVersion = '2.9.0'
