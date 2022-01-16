@@ -26,7 +26,6 @@ class MovieDetailFragment : Fragment() {
     private val binding: FragmentMovieDetailBinding get() = _binding as FragmentMovieDetailBinding
 
     private val movieDetailViewModel: MovieDetailViewModel by viewModel()
-
     private val args: MovieDetailFragmentArgs by navArgs()
 
     private lateinit var homeActivity: HomeActivity
@@ -90,19 +89,6 @@ class MovieDetailFragment : Fragment() {
         }
     }
 
-    private fun isMovieInFavorite() {
-        movieDetailViewModel.getMovieById(movie.id).observe(viewLifecycleOwner) { movie ->
-            val menuItem = menu.findItem(R.id.action_favorite)
-            if (movie != null) {
-                isFavorite = true
-                menuItem.setIcon(R.drawable.ic_favorite)
-            } else {
-                isFavorite = false
-                menuItem.setIcon(R.drawable.ic_nav_favorite)
-            }
-        }
-    }
-
     private fun setupViewModel() {
         movieDetailViewModel.getMovieDetail(movie.id).observe(viewLifecycleOwner) { movieDetail ->
             if (movieDetail != null) {
@@ -137,6 +123,19 @@ class MovieDetailFragment : Fragment() {
                 onBind(::ItemGenreViewHolder) { _, item ->
                     tvItemGenreName.text = item.name
                 }
+            }
+        }
+    }
+
+    private fun isMovieInFavorite() {
+        movieDetailViewModel.getMovieById(movie.id).observe(viewLifecycleOwner) { movie ->
+            val menuItem = menu.findItem(R.id.action_favorite)
+            if (movie != null) {
+                isFavorite = true
+                menuItem.setIcon(R.drawable.ic_favorite)
+            } else {
+                isFavorite = false
+                menuItem.setIcon(R.drawable.ic_nav_favorite)
             }
         }
     }

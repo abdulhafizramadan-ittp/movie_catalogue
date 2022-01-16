@@ -81,7 +81,7 @@ class MovieRepository(
     override fun getMovieById(id: Int): LiveData<MovieEntity> =
         localDataSource.getMovieById(id)
 
-    override fun getTvShowById(id: Int): TvShowEntity? =
+    override fun getTvShowById(id: Int): LiveData<TvShowEntity> =
         localDataSource.getTvShowById(id)
 
     override fun insertFavoriteMovie(movieEntity: MovieEntity) =

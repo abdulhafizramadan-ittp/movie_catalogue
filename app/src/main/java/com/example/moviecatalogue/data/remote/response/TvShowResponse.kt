@@ -21,23 +21,11 @@ data class TvShowResponse(
 
 data class TvShowItem(
 
-    @field:SerializedName("first_air_date")
-    val firstAirDate: String? = null,
-
-    @field:SerializedName("overview")
-    val overview: String? = null,
-
-    @field:SerializedName("original_language")
-    val originalLanguage: String? = null,
+    @field:SerializedName("id")
+    val id: Int? = null,
 
     @field:SerializedName("original_name")
     val name: String? = null,
-
-    @field:SerializedName("vote_average")
-    val voteAverage: Double? = null,
-
-    @field:SerializedName("id")
-    val id: Int? = null,
 
     @field:SerializedName("poster_path")
     val posterPath: String? = null
@@ -45,11 +33,7 @@ data class TvShowItem(
 
 fun TvShowItem.toDomain(): TvShow =
     TvShow(
-        firstAirDate = firstAirDate ?: "-",
-        overview = overview ?: "-",
-        originalLanguage = originalLanguage ?: "-",
-        name = name ?: "-",
-        voteAverage = voteAverage ?: 0.0,
         id = id ?: 0,
+        name = name ?: "-",
         posterPath = ApiConfig.POSTER_MD + posterPath
     )

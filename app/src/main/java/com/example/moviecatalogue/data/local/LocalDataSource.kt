@@ -35,8 +35,11 @@ class LocalDataSource(
         return movie
     }
 
-    fun getTvShowById(id: Int): TvShowEntity? =
-        movieDao.getTvShowById(id)
+    fun getTvShowById(id: Int): LiveData<TvShowEntity> {
+        val tvShow = MutableLiveData<TvShowEntity>()
+        executorService.execute { tvShow.postValue(movieDao.getTvShowById(id)) }
+        return tvShow
+    }
 
     fun insertFavoriteMovie(movieEntity: MovieEntity) =
         executorService.execute { movieDao.insertFavoriteMovie(movieEntity) }
@@ -48,5 +51,5 @@ class LocalDataSource(
         executorService.execute { movieDao.deleteFavoriteMovie(movieEntity) }
 
     fun deleteFavoriteTvShow(tvShowEntity: TvShowEntity) =
-        executorService.execute { movieDao.insertFavoriteTvShow(tvShowEntity) }
+        executorService.execute { movieDao.deleteFavoriteTvShow(tvShowEntity) }
 }

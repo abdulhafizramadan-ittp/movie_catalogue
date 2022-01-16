@@ -37,7 +37,7 @@ object ResponseDummy {
         val listTvShows = arrayListOf<TvShowItem>()
         for (movie in 1..20) {
             listTvShows.add(
-                TvShowItem("", "","","", 0.0, 0, "")
+                TvShowItem(0, "", "")
             )
         }
         return listTvShows

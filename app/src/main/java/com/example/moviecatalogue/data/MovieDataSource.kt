@@ -24,7 +24,7 @@ interface MovieDataSource {
 
     fun getMovieById(id: Int): LiveData<MovieEntity>
 
-    fun getTvShowById(id: Int): TvShowEntity?
+    fun getTvShowById(id: Int): LiveData<TvShowEntity>
 
     fun insertFavoriteMovie(movieEntity: MovieEntity)
 

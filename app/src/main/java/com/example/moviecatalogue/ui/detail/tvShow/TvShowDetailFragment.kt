@@ -1,10 +1,7 @@
 package com.example.moviecatalogue.ui.detail.tvShow
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
@@ -14,6 +11,7 @@ import com.afollestad.recyclical.withItem
 import com.example.moviecatalogue.R
 import com.example.moviecatalogue.data.domain.Genre
 import com.example.moviecatalogue.data.domain.TvShow
+import com.example.moviecatalogue.data.domain.toEntity
 import com.example.moviecatalogue.databinding.FragmentTvShowDetailBinding
 import com.example.moviecatalogue.helper.extensions.loadImage
 import com.example.moviecatalogue.ui.HomeActivity
@@ -25,12 +23,14 @@ class TvShowDetailFragment : Fragment() {
     private var _binding: FragmentTvShowDetailBinding? = null
     private val binding: FragmentTvShowDetailBinding get() = _binding as FragmentTvShowDetailBinding
 
+    private val tvShowDetailViewModel: TvShowDetailViewModel by viewModel()
     private val args: TvShowDetailFragmentArgs by navArgs()
 
     private lateinit var homeActivity: HomeActivity
     private lateinit var tvShow: TvShow
 
-    private val tvShowDetailViewModel: TvShowDetailViewModel by viewModel()
+    private var isFavorite = false
+    private lateinit var menu: Menu
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,9 +50,16 @@ class TvShowDetailFragment : Fragment() {
         setupViewModel()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_detail, menu)
+        this.menu = menu
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            activity?.onBackPressed()
+        when (item.itemId) {
+            R.id.action_favorite -> toggleToFavorite()
+            android.R.id.home -> activity?.onBackPressed()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -65,6 +72,16 @@ class TvShowDetailFragment : Fragment() {
             setSupportActionBar(binding.toolbar)
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
             setHasOptionsMenu(true)
+        }
+    }
+
+    private fun toggleToFavorite() {
+        if (isFavorite) {
+            tvShowDetailViewModel.deleteFavoriteTvShow(tvShow.toEntity())
+            isTvShowFavorite()
+        } else {
+            tvShowDetailViewModel.insertFavoriteTvShow(tvShow.toEntity())
+            isTvShowFavorite()
         }
     }
 
@@ -100,6 +117,18 @@ class TvShowDetailFragment : Fragment() {
         }
     }
 
+    private fun isTvShowFavorite() {
+        tvShowDetailViewModel.getTvShowById(tvShow.id).observe(viewLifecycleOwner) { tvShow ->
+            val menuItem = menu.findItem(R.id.action_favorite)
+            if (tvShow != null) {
+                isFavorite = true
+                menuItem.setIcon(R.drawable.ic_favorite)
+            } else {
+                isFavorite = false
+                menuItem.setIcon(R.drawable.ic_nav_favorite)
+            }
+        }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
