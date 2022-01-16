@@ -2,7 +2,6 @@ package com.example.moviecatalogue.ui.detail.movie
 
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.afollestad.recyclical.datasource.dataSourceTypedOf
@@ -10,6 +9,7 @@ import com.afollestad.recyclical.setup
 import com.afollestad.recyclical.withItem
 import com.example.moviecatalogue.R
 import com.example.moviecatalogue.data.domain.Genre
+import com.example.moviecatalogue.data.local.entity.MovieEntity
 import com.example.moviecatalogue.databinding.FragmentMovieDetailBinding
 import com.example.moviecatalogue.helper.extensions.loadImage
 import com.example.moviecatalogue.helper.extensions.runtimeToHour
@@ -25,6 +25,10 @@ class MovieDetailFragment : Fragment() {
 
     private var movieId: Int? = null
     private val movieDetailViewModel: MovieDetailViewModel by viewModel()
+
+    private lateinit var movieEntity: MovieEntity
+    private var isFavorite = false
+    private lateinit var menu: Menu
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,9 +50,16 @@ class MovieDetailFragment : Fragment() {
         setupToolbar()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_detail, menu)
+        this.menu = menu
+        isMovieInFavorite()
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_favorite -> Toast.makeText(requireContext(), "Mantaps", Toast.LENGTH_SHORT).show()
+            R.id.action_favorite -> toggleToFavorite()
             android.R.id.home -> activity?.onBackPressed()
         }
         return super.onOptionsItemSelected(item)
@@ -62,11 +73,30 @@ class MovieDetailFragment : Fragment() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_detail, menu)
-        super.onCreateOptionsMenu(menu, inflater)
+    private fun toggleToFavorite() {
+        if (isFavorite) {
+            movieDetailViewModel.deleteFavoriteMovie(movieEntity)
+            isMovieInFavorite()
+        } else {
+            movieDetailViewModel.insertFavoriteMovie(movieEntity)
+            isMovieInFavorite()
+        }
     }
 
+    private fun isMovieInFavorite() {
+        movieId?.let {
+            movieDetailViewModel.getMovieById(it).observe(viewLifecycleOwner) { movie ->
+                val menuItem = menu.findItem(R.id.action_favorite)
+                if (movie != null) {
+                    isFavorite = true
+                    menuItem.setIcon(R.drawable.ic_favorite)
+                } else {
+                    isFavorite = false
+                    menuItem.setIcon(R.drawable.ic_nav_favorite)
+                }
+            }
+        }
+    }
 
     private fun setupViewModel() {
         movieId?.let {
@@ -90,6 +120,8 @@ class MovieDetailFragment : Fragment() {
                         ivMoviePoster.loadImage(movieDetail.posterPath)
 
                         setupGenreRecycler(movieDetail.genres)
+
+                        movieEntity = MovieEntity(movieId as Int, movieDetail.title, movieDetail.posterPath)
                     }
                 }
             }

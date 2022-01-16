@@ -2,5 +2,5 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_selected="true"
         android:drawable="@drawable/ic_nav_favorite" />
-    <item android:drawable="@drawable/ic_un_favorite" />
+    <item android:drawable="@drawable/ic_favorite" />
 </selector>

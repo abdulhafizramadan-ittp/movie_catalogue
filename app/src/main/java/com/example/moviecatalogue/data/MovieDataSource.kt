@@ -22,7 +22,7 @@ interface MovieDataSource {
 
     fun getAllFavoriteTvShows(): LiveData<PagedList<TvShowEntity>>
 
-    fun getMovieById(id: Int): MovieEntity?
+    fun getMovieById(id: Int): LiveData<MovieEntity>
 
     fun getTvShowById(id: Int): TvShowEntity?
 

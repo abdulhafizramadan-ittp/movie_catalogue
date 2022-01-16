@@ -13,7 +13,7 @@ class MovieDetailViewModel(
     fun getMovieDetail(movieId: Int): LiveData<MovieDetail> =
         movieRepository.getMovieDetail(movieId)
 
-    fun getMovieById(id: Int): MovieEntity? =
+    fun getMovieById(id: Int): LiveData<MovieEntity> =
         movieRepository.getMovieById(id)
 
     fun insertFavoriteMovie(movieEntity: MovieEntity) =

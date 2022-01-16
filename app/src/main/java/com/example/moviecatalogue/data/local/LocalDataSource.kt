@@ -1,6 +1,7 @@
 package com.example.moviecatalogue.data.local
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.example.moviecatalogue.data.domain.Movie
@@ -26,8 +27,13 @@ class LocalDataSource(
             10
         ).build()
 
-    fun getMovieById(id: Int): MovieEntity? =
-        movieDao.getMovieById(id)
+    fun getMovieById(id: Int): LiveData<MovieEntity> {
+        val movie = MutableLiveData<MovieEntity>()
+        executorService.execute {
+            movie.postValue(movieDao.getMovieById(id))
+        }
+        return movie
+    }
 
     fun getTvShowById(id: Int): TvShowEntity? =
         movieDao.getTvShowById(id)
