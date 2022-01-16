@@ -1,10 +1,8 @@
 package com.example.moviecatalogue.ui.detail.movie
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.afollestad.recyclical.datasource.dataSourceTypedOf
@@ -49,8 +47,9 @@ class MovieDetailFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            activity?.onBackPressed()
+        when (item.itemId) {
+            R.id.action_favorite -> Toast.makeText(requireContext(), "Mantaps", Toast.LENGTH_SHORT).show()
+            android.R.id.home -> activity?.onBackPressed()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -62,6 +61,12 @@ class MovieDetailFragment : Fragment() {
             setHasOptionsMenu(true)
         }
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_detail, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
 
     private fun setupViewModel() {
         movieId?.let {

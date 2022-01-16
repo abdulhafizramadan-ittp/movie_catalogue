@@ -14,7 +14,7 @@ object ResponseDummy {
         val listMovies = arrayListOf<MovieItem>()
         for (movie in 1..20) {
             listMovies.add(
-                MovieItem("","","",0.0,0, "","")
+                MovieItem(0, "", "")
             )
         }
         return listMovies
@@ -108,7 +108,21 @@ object ResponseDummy {
 
     fun generateDummyEmptyTvShowDetail(): LiveData<TvShowDetail> =
         MutableLiveData(
-            TvShowDetail("", "", "", emptyList(), "", "", 0.0, "", "", 0, 0, "", "")
+            TvShowDetail(
+                "",
+                "",
+                "",
+                emptyList(),
+                "",
+                "",
+                0.0,
+                "",
+                "",
+                0,
+                0,
+                "",
+                ""
+            )
         )
 
     fun generateDummyNullTvShowDetail(): LiveData<TvShowDetail> =

@@ -21,18 +21,6 @@ data class MovieResponse(
 
 data class MovieItem(
 
-    @field:SerializedName("overview")
-    val overview: String? = null,
-
-    @field:SerializedName("original_language")
-    val originalLanguage: String? = null,
-
-    @field:SerializedName("release_date")
-    val releaseDate: String? = null,
-
-    @field:SerializedName("vote_average")
-    val voteAverage: Double? = null,
-
     @field:SerializedName("id")
     val id: Int? = null,
 
@@ -45,10 +33,6 @@ data class MovieItem(
 
 fun MovieItem.toDomain(): Movie =
     Movie(
-        overview = overview ?: "-",
-        originalLanguage = originalLanguage ?: "-",
-        releaseDate = releaseDate ?: "-",
-        voteAverage = voteAverage ?: 0.0,
         id = id ?: 0,
         title = title ?: "-",
         posterPath = ApiConfig.POSTER_MD + posterPath

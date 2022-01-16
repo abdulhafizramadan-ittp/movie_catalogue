@@ -13,6 +13,8 @@ class FavoriteFragment : Fragment() {
     private val binding: FragmentFavoriteBinding
         get() = _binding as FragmentFavoriteBinding
 
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

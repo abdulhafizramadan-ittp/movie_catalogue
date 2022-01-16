@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -63,6 +64,13 @@ dependencies {
     implementation "io.insert-koin:koin-android:$koinVersion"
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
+
+    // Room
+    implementation "androidx.room:room-runtime:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
+
+    // Paging
+    implementation "androidx.paging:paging-runtime:$pagingVersion"
 
     testImplementation "androidx.arch.core:core-testing:$androidCoreTestVersion"
 
