@@ -11,11 +11,11 @@ import com.example.moviecatalogue.data.remote.api.ApiConfig
 import com.example.moviecatalogue.data.remote.api.ApiService
 import com.example.moviecatalogue.ui.detail.movie.MovieDetailViewModel
 import com.example.moviecatalogue.ui.detail.tvShow.TvShowDetailViewModel
+import com.example.moviecatalogue.ui.favorite.FavoriteViewModel
 import com.example.moviecatalogue.ui.movie.MovieViewModel
 import com.example.moviecatalogue.ui.tvShow.TvShowViewModel
 import okhttp3.OkHttpClient
 import org.koin.androidx.viewmodel.dsl.viewModel
-import org.koin.core.scope.get
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -56,4 +56,5 @@ val appModule = module {
     viewModel { MovieDetailViewModel(get()) }
     viewModel { TvShowViewModel(get()) }
     viewModel { TvShowDetailViewModel(get()) }
+    viewModel { FavoriteViewModel(get()) }
 }

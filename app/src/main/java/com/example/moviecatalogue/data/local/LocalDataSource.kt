@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
-import com.example.moviecatalogue.data.domain.Movie
 import com.example.moviecatalogue.data.local.database.MovieDao
 import com.example.moviecatalogue.data.local.entity.MovieEntity
 import com.example.moviecatalogue.data.local.entity.TvShowEntity

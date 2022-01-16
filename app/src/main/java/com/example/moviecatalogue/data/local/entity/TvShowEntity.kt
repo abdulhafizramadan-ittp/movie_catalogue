@@ -14,6 +14,9 @@ data class TvShowEntity(
     val posterPath: String
 )
 
+fun List<TvShowEntity>.toDomain(): List<TvShow> =
+    map { it.toDomain() }
+
 fun TvShowEntity.toDomain(): TvShow =
     TvShow(
         id = id,
