@@ -148,14 +148,4 @@ class MovieDetailFragment : Fragment() {
         }
         _binding = null
     }
-
-    companion object {
-        private const val MOVIE_ID = "movie_id"
-
-        @JvmStatic
-        fun newInstance(movieId: Int) =
-            MovieDetailFragment().apply {
-                arguments = bundleOf(MOVIE_ID to movieId)
-            }
-    }
 }

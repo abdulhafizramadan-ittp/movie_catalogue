@@ -37,7 +37,9 @@ class LocalDataSource(
 
     fun getTvShowById(id: Int): LiveData<TvShowEntity> {
         val tvShow = MutableLiveData<TvShowEntity>()
-        executorService.execute { tvShow.postValue(movieDao.getTvShowById(id)) }
+        executorService.execute {
+            tvShow.postValue(movieDao.getTvShowById(id))
+        }
         return tvShow
     }
 

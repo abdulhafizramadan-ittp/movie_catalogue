@@ -7,8 +7,8 @@ import com.example.moviecatalogue.data.domain.Movie
 
 @Entity
 data class MovieEntity(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    @PrimaryKey
+    val id: Int,
     val title: String,
     @ColumnInfo(name = "poster_path")
     val posterPath: String

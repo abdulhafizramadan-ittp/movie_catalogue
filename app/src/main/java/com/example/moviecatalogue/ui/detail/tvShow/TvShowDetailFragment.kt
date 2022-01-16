@@ -53,6 +53,7 @@ class TvShowDetailFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_detail, menu)
         this.menu = menu
+        isTvShowFavorite()
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -137,15 +138,5 @@ class TvShowDetailFragment : Fragment() {
             bottomNavigation.visibility = View.VISIBLE
         }
         _binding = null
-    }
-
-    companion object {
-        private const val TV_SHOW_ID = "tv_show_id"
-
-        @JvmStatic
-        fun newInstance(tvShowId: Int) =
-            TvShowDetailFragment().apply {
-                arguments = bundleOf(TV_SHOW_ID to tvShowId)
-            }
     }
 }
