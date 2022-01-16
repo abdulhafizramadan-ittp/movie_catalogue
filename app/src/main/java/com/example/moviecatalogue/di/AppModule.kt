@@ -44,8 +44,8 @@ val appModule = module {
     }
     single {
         Room.databaseBuilder(get(), MovieDatabase::class.java, "movie_catalogue_db")
-        .build()
-        .movieDao()
+            .build()
+            .movieDao()
     }
     single { Executors.newSingleThreadExecutor() }
     single { LocalDataSource(get(), get()) }

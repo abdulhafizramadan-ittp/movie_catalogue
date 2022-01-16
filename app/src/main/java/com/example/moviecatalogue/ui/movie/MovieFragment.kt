@@ -1,11 +1,11 @@
 package com.example.moviecatalogue.ui.movie
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.afollestad.recyclical.datasource.dataSourceTypedOf
 import com.afollestad.recyclical.setup
 import com.afollestad.recyclical.withItem
@@ -13,7 +13,6 @@ import com.example.moviecatalogue.R
 import com.example.moviecatalogue.data.domain.Movie
 import com.example.moviecatalogue.databinding.FragmentMovieBinding
 import com.example.moviecatalogue.helper.extensions.loadImage
-import com.example.moviecatalogue.ui.detail.DetailActivity
 import com.example.moviecatalogue.viewHolder.ItemGridViewHolder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -56,11 +55,10 @@ class MovieFragment : Fragment() {
                     ivItemGrid.loadImage(item.posterPath)
                 }
                 onClick {
-                    val intent = Intent(requireContext(), DetailActivity::class.java).apply {
-                        putExtra(DetailActivity.DETAIL_TYPE, DetailActivity.TYPE_MOVIE)
-                        putExtra(DetailActivity.ID, item.id)
-                    }
-                    startActivity(intent)
+                    val toDetailMovie = MovieFragmentDirections
+                        .actionNavigationMovieToMovieDetailFragment(item)
+                    findNavController()
+                        .navigate(toDetailMovie)
                 }
             }
         }

@@ -39,10 +39,18 @@
         android:id="@+id/movieDetailFragment"
         android:name="com.example.moviecatalogue.ui.detail.movie.MovieDetailFragment"
         android:label="fragment_movie_detail"
-        tools:layout="@layout/fragment_movie_detail" />
+        tools:layout="@layout/fragment_movie_detail" >
+        <argument
+            android:name="movie"
+            app:argType="com.example.moviecatalogue.data.domain.Movie" />
+    </fragment>
     <fragment
         android:id="@+id/tvShowDetailFragment"
         android:name="com.example.moviecatalogue.ui.detail.tvShow.TvShowDetailFragment"
         android:label="fragment_tv_show_detail"
-        tools:layout="@layout/fragment_tv_show_detail" />
+        tools:layout="@layout/fragment_tv_show_detail" >
+        <argument
+            android:name="tv_show"
+            app:argType="com.example.moviecatalogue.data.domain.TvShow" />
+    </fragment>
 </navigation>

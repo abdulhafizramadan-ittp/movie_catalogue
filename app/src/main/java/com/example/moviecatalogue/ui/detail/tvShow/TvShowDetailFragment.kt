@@ -7,14 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.navArgs
 import com.afollestad.recyclical.datasource.dataSourceTypedOf
 import com.afollestad.recyclical.setup
 import com.afollestad.recyclical.withItem
 import com.example.moviecatalogue.R
 import com.example.moviecatalogue.data.domain.Genre
+import com.example.moviecatalogue.data.domain.TvShow
 import com.example.moviecatalogue.databinding.FragmentTvShowDetailBinding
 import com.example.moviecatalogue.helper.extensions.loadImage
-import com.example.moviecatalogue.ui.detail.DetailActivity
+import com.example.moviecatalogue.ui.HomeActivity
 import com.example.moviecatalogue.viewHolder.ItemGenreViewHolder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -23,7 +25,11 @@ class TvShowDetailFragment : Fragment() {
     private var _binding: FragmentTvShowDetailBinding? = null
     private val binding: FragmentTvShowDetailBinding get() = _binding as FragmentTvShowDetailBinding
 
-    private var tvShowId: Int? = null
+    private val args: TvShowDetailFragmentArgs by navArgs()
+
+    private lateinit var homeActivity: HomeActivity
+    private lateinit var tvShow: TvShow
+
     private val tvShowDetailViewModel: TvShowDetailViewModel by viewModel()
 
     override fun onCreateView(
@@ -37,11 +43,11 @@ class TvShowDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        tvShowId = arguments?.getInt(TV_SHOW_ID)
-
-        tvShowId?.let { setupViewModel() }
+        homeActivity = (activity as HomeActivity)
+        tvShow = args.tvShow
 
         setupToolbar()
+        setupViewModel()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -52,7 +58,10 @@ class TvShowDetailFragment : Fragment() {
     }
 
     private fun setupToolbar() {
-        (activity as DetailActivity).apply {
+        homeActivity.apply {
+            appBarLayout.visibility = View.GONE
+            bottomNavigation.visibility = View.GONE
+
             setSupportActionBar(binding.toolbar)
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
             setHasOptionsMenu(true)
@@ -60,22 +69,20 @@ class TvShowDetailFragment : Fragment() {
     }
 
     private fun setupViewModel() {
-        tvShowId?.let {
-            tvShowDetailViewModel.getTvShowDetail(it).observe(viewLifecycleOwner) { tvShowDetail ->
-                if (tvShowDetail != null) {
-                    binding.apply {
-                        toolbar.title = tvShowDetail.name
-                        tvShowTitle.text = tvShowDetail.name
-                        tvShowSubtitle.text = tvShowDetail.tagline
-                        tvShowStatus.text = tvShowDetail.status
-                        tvShowSeason.text = tvShowDetail.numberOfSeasons.toString()
-                        tvShowRating.text = tvShowDetail.voteAverage.toString()
-                        tvShowSynopsis.text = tvShowDetail.overview
+        tvShowDetailViewModel.getTvShowDetail(tvShow.id).observe(viewLifecycleOwner) { tvShowDetail ->
+            if (tvShowDetail != null) {
+                binding.apply {
+                    toolbar.title = tvShowDetail.name
+                    tvShowTitle.text = tvShowDetail.name
+                    tvShowSubtitle.text = tvShowDetail.tagline
+                    tvShowStatus.text = tvShowDetail.status
+                    tvShowSeason.text = tvShowDetail.numberOfSeasons.toString()
+                    tvShowRating.text = tvShowDetail.voteAverage.toString()
+                    tvShowSynopsis.text = tvShowDetail.overview
 
-                        ivTvShowPoster.loadImage(tvShowDetail.posterPath)
+                    ivTvShowPoster.loadImage(tvShowDetail.posterPath)
 
-                        setupGenreRecycler(tvShowDetail.genres)
-                    }
+                    setupGenreRecycler(tvShowDetail.genres)
                 }
             }
         }
@@ -96,6 +103,10 @@ class TvShowDetailFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        homeActivity.apply {
+            appBarLayout.visibility = View.VISIBLE
+            bottomNavigation.visibility = View.VISIBLE
+        }
         _binding = null
     }
 
