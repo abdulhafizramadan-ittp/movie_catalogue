@@ -56,7 +56,7 @@ class MovieFragment : Fragment() {
                 }
                 onClick {
                     val toDetailMovie = MovieFragmentDirections
-                        .actionNavigationMovieToMovieDetailFragment(item)
+                        .actionNavigationMovieToDetailActivity(item, null)
                     findNavController()
                         .navigate(toDetailMovie)
                 }

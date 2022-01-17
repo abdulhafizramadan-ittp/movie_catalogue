@@ -3,7 +3,6 @@ package com.example.moviecatalogue.ui.detail.movie
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.navArgs
 import com.afollestad.recyclical.datasource.dataSourceTypedOf
 import com.afollestad.recyclical.setup
 import com.afollestad.recyclical.withItem
@@ -15,7 +14,7 @@ import com.example.moviecatalogue.databinding.FragmentMovieDetailBinding
 import com.example.moviecatalogue.helper.extensions.loadImage
 import com.example.moviecatalogue.helper.extensions.runtimeToHour
 import com.example.moviecatalogue.helper.extensions.runtimeToMinute
-import com.example.moviecatalogue.ui.HomeActivity
+import com.example.moviecatalogue.ui.detail.DetailActivity
 import com.example.moviecatalogue.viewHolder.ItemGenreViewHolder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -25,13 +24,11 @@ class MovieDetailFragment : Fragment() {
     private val binding: FragmentMovieDetailBinding get() = _binding as FragmentMovieDetailBinding
 
     private val movieDetailViewModel: MovieDetailViewModel by viewModel()
-    private val args: MovieDetailFragmentArgs by navArgs()
 
-    private lateinit var homeActivity: HomeActivity
-    private lateinit var movie: Movie
+    private lateinit var menu: Menu
 
     private var isFavorite = false
-    private lateinit var menu: Menu
+    private var movie: Movie? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,12 +41,13 @@ class MovieDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        homeActivity = (activity as HomeActivity)
-        movie = args.movie
+        movie = arguments?.getParcelable(MOVIE_EXTRA)
 
         setupToolbar()
 
-        setupViewModel()
+        movie?.let {
+            setupViewModel()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -68,10 +66,8 @@ class MovieDetailFragment : Fragment() {
     }
 
     private fun setupToolbar() {
-        homeActivity.apply {
-            appBarLayout.visibility = View.GONE
-            bottomNavigation.visibility = View.GONE
-
+        (activity as DetailActivity).apply {
+            supportActionBar?.hide()
             setSupportActionBar(binding.toolbar)
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
             setHasOptionsMenu(true)
@@ -80,35 +76,37 @@ class MovieDetailFragment : Fragment() {
 
     private fun toggleToFavorite() {
         if (isFavorite) {
-            movieDetailViewModel.deleteFavoriteMovie(movie.toEntity())
+            movie?.let { movieDetailViewModel.deleteFavoriteMovie(it.toEntity()) }
             isMovieInFavorite()
         } else {
-            movieDetailViewModel.insertFavoriteMovie(movie.toEntity())
+            movie?.let { movieDetailViewModel.insertFavoriteMovie(it.toEntity()) }
             isMovieInFavorite()
         }
     }
 
     private fun setupViewModel() {
-        movieDetailViewModel.getMovieDetail(movie.id).observe(viewLifecycleOwner) { movieDetail ->
-            if (movieDetail != null) {
-                binding.apply {
-                    val movieRuntime = getString(
-                        R.string.movie_runtime,
-                        movieDetail.runtime.runtimeToHour(),
-                        movieDetail.runtime.runtimeToMinute()
-                    )
+        movie?.let {
+            movieDetailViewModel.getMovieDetail(it.id).observe(viewLifecycleOwner) { movieDetail ->
+                if (movieDetail != null) {
+                    binding.apply {
+                        val movieRuntime = getString(
+                            R.string.movie_runtime,
+                            movieDetail.runtime.runtimeToHour(),
+                            movieDetail.runtime.runtimeToMinute()
+                        )
 
-                    toolbar.title = movieDetail.title
-                    tvMovieTitle.text = movieDetail.title
-                    tvMovieSubtitle.text = movieDetail.tagline
-                    tvMovieStatus.text = movieDetail.status
-                    tvMovieRuntime.text = movieRuntime
-                    tvMovieRating.text = movieDetail.voteAverage.toString()
-                    tvMovieSynopsis.text = movieDetail.overview
+                        toolbar.title = movieDetail.title
+                        tvMovieTitle.text = movieDetail.title
+                        tvMovieSubtitle.text = movieDetail.tagline
+                        tvMovieStatus.text = movieDetail.status
+                        tvMovieRuntime.text = movieRuntime
+                        tvMovieRating.text = movieDetail.voteAverage.toString()
+                        tvMovieSynopsis.text = movieDetail.overview
 
-                    ivMoviePoster.loadImage(movieDetail.posterPath)
+                        ivMoviePoster.loadImage(movieDetail.posterPath)
 
-                    setupGenreRecycler(movieDetail.genres)
+                        setupGenreRecycler(movieDetail.genres)
+                    }
                 }
             }
         }
@@ -127,24 +125,26 @@ class MovieDetailFragment : Fragment() {
     }
 
     private fun isMovieInFavorite() {
-        movieDetailViewModel.getMovieById(movie.id).observe(viewLifecycleOwner) { movie ->
-            val menuItem = menu.findItem(R.id.action_favorite)
-            if (movie != null) {
-                isFavorite = true
-                menuItem.setIcon(R.drawable.ic_favorite)
-            } else {
-                isFavorite = false
-                menuItem.setIcon(R.drawable.ic_nav_favorite)
+        movie?.let {
+            movieDetailViewModel.getMovieById(it.id).observe(viewLifecycleOwner) { movie ->
+                val menuItem = menu.findItem(R.id.action_favorite)
+                if (movie != null) {
+                    isFavorite = true
+                    menuItem.setIcon(R.drawable.ic_favorite)
+                } else {
+                    isFavorite = false
+                    menuItem.setIcon(R.drawable.ic_nav_favorite)
+                }
             }
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        homeActivity.apply {
-            appBarLayout.visibility = View.VISIBLE
-            bottomNavigation.visibility = View.VISIBLE
-        }
         _binding = null
+    }
+
+    companion object {
+        const val MOVIE_EXTRA = "movie_extra"
     }
 }

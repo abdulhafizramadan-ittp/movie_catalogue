@@ -11,8 +11,8 @@
         android:label="fragment_movie"
         tools:layout="@layout/fragment_movie" >
         <action
-            android:id="@+id/action_navigation_movie_to_movieDetailFragment"
-            app:destination="@id/movieDetailFragment" />
+            android:id="@+id/action_navigation_movie_to_detailActivity"
+            app:destination="@id/detailActivity" />
     </fragment>
     <fragment
         android:id="@+id/navigation_tv_show"
@@ -20,8 +20,8 @@
         android:label="fragment_tv_show"
         tools:layout="@layout/fragment_tv_show" >
         <action
-            android:id="@+id/action_navigation_tv_show_to_tvShowDetailFragment"
-            app:destination="@id/tvShowDetailFragment" />
+            android:id="@+id/action_navigation_tv_show_to_detailActivity"
+            app:destination="@id/detailActivity" />
     </fragment>
     <fragment
         android:id="@+id/navigation_favorite"
@@ -29,28 +29,21 @@
         android:label="fragment_favorite"
         tools:layout="@layout/fragment_favorite" >
         <action
-            android:id="@+id/action_navigation_favorite_to_movieDetailFragment"
-            app:destination="@id/movieDetailFragment" />
-        <action
-            android:id="@+id/action_navigation_favorite_to_tvShowDetailFragment"
-            app:destination="@id/tvShowDetailFragment" />
+            android:id="@+id/action_navigation_favorite_to_detailActivity"
+            app:destination="@id/detailActivity" />
     </fragment>
-    <fragment
-        android:id="@+id/movieDetailFragment"
-        android:name="com.example.moviecatalogue.ui.detail.movie.MovieDetailFragment"
-        android:label="fragment_movie_detail"
-        tools:layout="@layout/fragment_movie_detail" >
+    <activity
+        android:id="@+id/detailActivity"
+        android:name="com.example.moviecatalogue.ui.detail.DetailActivity"
+        android:label="activity_detail"
+        tools:layout="@layout/activity_detail" >
         <argument
             android:name="movie"
-            app:argType="com.example.moviecatalogue.data.domain.Movie" />
-    </fragment>
-    <fragment
-        android:id="@+id/tvShowDetailFragment"
-        android:name="com.example.moviecatalogue.ui.detail.tvShow.TvShowDetailFragment"
-        android:label="fragment_tv_show_detail"
-        tools:layout="@layout/fragment_tv_show_detail" >
+            app:argType="com.example.moviecatalogue.data.domain.Movie"
+            app:nullable="true" />
         <argument
-            android:name="tv_show"
-            app:argType="com.example.moviecatalogue.data.domain.TvShow" />
-    </fragment>
+            android:name="tvShow"
+            app:argType="com.example.moviecatalogue.data.domain.TvShow"
+            app:nullable="true" />
+    </activity>
 </navigation>

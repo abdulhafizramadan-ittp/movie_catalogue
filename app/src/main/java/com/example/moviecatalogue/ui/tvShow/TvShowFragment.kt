@@ -57,7 +57,7 @@ class TvShowFragment : Fragment() {
                 }
                 onClick {
                     val toTvShowDetail = TvShowFragmentDirections
-                        .actionNavigationTvShowToTvShowDetailFragment(item)
+                        .actionNavigationTvShowToDetailActivity(null, item)
                     findNavController()
                         .navigate(toTvShowDetail)
                 }

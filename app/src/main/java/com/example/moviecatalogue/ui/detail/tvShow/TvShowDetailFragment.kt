@@ -3,7 +3,6 @@ package com.example.moviecatalogue.ui.detail.tvShow
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.navArgs
 import com.afollestad.recyclical.datasource.dataSourceTypedOf
 import com.afollestad.recyclical.setup
 import com.afollestad.recyclical.withItem
@@ -13,10 +12,8 @@ import com.example.moviecatalogue.data.domain.TvShow
 import com.example.moviecatalogue.data.domain.toEntity
 import com.example.moviecatalogue.databinding.FragmentTvShowDetailBinding
 import com.example.moviecatalogue.helper.extensions.loadImage
-import com.example.moviecatalogue.ui.HomeActivity
+import com.example.moviecatalogue.ui.detail.DetailActivity
 import com.example.moviecatalogue.viewHolder.ItemGenreViewHolder
-import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class TvShowDetailFragment : Fragment() {
@@ -25,16 +22,11 @@ class TvShowDetailFragment : Fragment() {
     private val binding: FragmentTvShowDetailBinding get() = _binding as FragmentTvShowDetailBinding
 
     private val tvShowDetailViewModel: TvShowDetailViewModel by viewModel()
-    private val args: TvShowDetailFragmentArgs by navArgs()
 
-    private lateinit var homeActivity: HomeActivity
-    private lateinit var tvShow: TvShow
-
-    private var isFavorite = false
     private lateinit var menu: Menu
 
-    private lateinit var parentAppBarLayout: AppBarLayout
-    private lateinit var parentBottomNavigationView: BottomNavigationView
+    private var isFavorite = false
+    private var tvShow: TvShow? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,11 +39,13 @@ class TvShowDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        homeActivity = (activity as HomeActivity)
-        tvShow = args.tvShow
+        tvShow = arguments?.getParcelable(TV_SHOW_EXTRA)
 
         setupToolbar()
-        setupViewModel()
+
+        tvShow?.let {
+            setupViewModel()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -70,13 +64,8 @@ class TvShowDetailFragment : Fragment() {
     }
 
     private fun setupToolbar() {
-        (activity as HomeActivity).apply {
-            parentAppBarLayout = findViewById(R.id.appBarLayout)
-            parentBottomNavigationView = findViewById(R.id.bottom_navigation)
-
-            parentAppBarLayout.visibility = View.GONE
-            parentBottomNavigationView.visibility = View.GONE
-
+        (activity as DetailActivity).apply {
+            supportActionBar?.hide()
             setSupportActionBar(binding.toolbar)
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
             setHasOptionsMenu(true)
@@ -85,29 +74,31 @@ class TvShowDetailFragment : Fragment() {
 
     private fun toggleToFavorite() {
         if (isFavorite) {
-            tvShowDetailViewModel.deleteFavoriteTvShow(tvShow.toEntity())
+            tvShow?.let { tvShowDetailViewModel.deleteFavoriteTvShow(it.toEntity()) }
             isTvShowFavorite()
         } else {
-            tvShowDetailViewModel.insertFavoriteTvShow(tvShow.toEntity())
+            tvShow?.let { tvShowDetailViewModel.insertFavoriteTvShow(it.toEntity()) }
             isTvShowFavorite()
         }
     }
 
     private fun setupViewModel() {
-        tvShowDetailViewModel.getTvShowDetail(tvShow.id).observe(viewLifecycleOwner) { tvShowDetail ->
-            if (tvShowDetail != null) {
-                binding.apply {
-                    toolbar.title = tvShowDetail.name
-                    tvShowTitle.text = tvShowDetail.name
-                    tvShowSubtitle.text = tvShowDetail.tagline
-                    tvShowStatus.text = tvShowDetail.status
-                    tvShowSeason.text = tvShowDetail.numberOfSeasons.toString()
-                    tvShowRating.text = tvShowDetail.voteAverage.toString()
-                    tvShowSynopsis.text = tvShowDetail.overview
+        tvShow?.let {
+            tvShowDetailViewModel.getTvShowDetail(it.id).observe(viewLifecycleOwner) { tvShowDetail ->
+                if (tvShowDetail != null) {
+                    binding.apply {
+                        toolbar.title = tvShowDetail.name
+                        tvShowTitle.text = tvShowDetail.name
+                        tvShowSubtitle.text = tvShowDetail.tagline
+                        tvShowStatus.text = tvShowDetail.status
+                        tvShowSeason.text = tvShowDetail.numberOfSeasons.toString()
+                        tvShowRating.text = tvShowDetail.voteAverage.toString()
+                        tvShowSynopsis.text = tvShowDetail.overview
 
-                    ivTvShowPoster.loadImage(tvShowDetail.posterPath)
+                        ivTvShowPoster.loadImage(tvShowDetail.posterPath)
 
-                    setupGenreRecycler(tvShowDetail.genres)
+                        setupGenreRecycler(tvShowDetail.genres)
+                    }
                 }
             }
         }
@@ -126,24 +117,26 @@ class TvShowDetailFragment : Fragment() {
     }
 
     private fun isTvShowFavorite() {
-        tvShowDetailViewModel.getTvShowById(tvShow.id).observe(viewLifecycleOwner) { tvShow ->
-            val menuItem = menu.findItem(R.id.action_favorite)
-            if (tvShow != null) {
-                isFavorite = true
-                menuItem.setIcon(R.drawable.ic_favorite)
-            } else {
-                isFavorite = false
-                menuItem.setIcon(R.drawable.ic_nav_favorite)
+        tvShow?.let {
+            tvShowDetailViewModel.getTvShowById(it.id).observe(viewLifecycleOwner) { tvShow ->
+                val menuItem = menu.findItem(R.id.action_favorite)
+                if (tvShow != null) {
+                    isFavorite = true
+                    menuItem.setIcon(R.drawable.ic_favorite)
+                } else {
+                    isFavorite = false
+                    menuItem.setIcon(R.drawable.ic_nav_favorite)
+                }
             }
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        homeActivity.apply {
-            parentAppBarLayout.visibility = View.VISIBLE
-            parentBottomNavigationView.visibility = View.VISIBLE
-        }
         _binding = null
+    }
+
+    companion object {
+        const val TV_SHOW_EXTRA = "tv_show_extra"
     }
 }

@@ -60,7 +60,7 @@ class FavoriteListFragment : Fragment() {
                                 }
                                 onClick {
                                     val toMovieDetail = FavoriteFragmentDirections
-                                        .actionNavigationFavoriteToMovieDetailFragment(item)
+                                        .actionNavigationFavoriteToDetailActivity(item, null)
                                     findNavController()
                                         .navigate(toMovieDetail)
                                 }
@@ -89,7 +89,7 @@ class FavoriteListFragment : Fragment() {
                                 }
                                 onClick {
                                     val toTvShowDetail = FavoriteFragmentDirections
-                                        .actionNavigationFavoriteToTvShowDetailFragment(item)
+                                        .actionNavigationFavoriteToDetailActivity(null, item)
                                     findNavController()
                                         .navigate(toTvShowDetail)
                                 }
