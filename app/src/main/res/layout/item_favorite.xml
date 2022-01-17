@@ -13,12 +13,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="16dp"
+        app:cardElevation="0dp"
         tools:ignore="UseCompoundDrawables">
 
         <ImageView
             android:id="@+id/iv_favorite"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="200dp"
             android:background="@color/gray_500"
             android:scaleType="centerCrop"
             android:contentDescription="@string/photo_favorite" />
