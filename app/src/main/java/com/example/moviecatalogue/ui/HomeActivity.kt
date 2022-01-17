@@ -14,16 +14,12 @@ class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding
 
-    lateinit var appBarLayout: AppBarLayout
-    lateinit var bottomNavigation: BottomNavigationView
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        appBarLayout = binding.appBarLayout
-        bottomNavigation = binding.bottomNavigation
+        val bottomNavigation = binding.bottomNavigation
 
         val navController = findNavController(R.id.fragmentContainerView)
 

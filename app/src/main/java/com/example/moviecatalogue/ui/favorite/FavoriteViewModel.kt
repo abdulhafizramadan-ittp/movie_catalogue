@@ -13,10 +13,4 @@ class FavoriteViewModel(private val movieRepository: MovieRepository) : ViewMode
 
     fun getAllFavoriteTvShows(): LiveData<PagedList<TvShowEntity>> =
         movieRepository.getAllFavoriteTvShows()
-
-    fun deleteFavoriteMovie(movieEntity: MovieEntity) =
-        movieRepository.deleteFavoriteMovie(movieEntity)
-
-    fun deleteFavoriteTvShow(tvShowEntity: TvShowEntity) =
-        movieRepository.deleteFavoriteTvShow(tvShowEntity)
 }

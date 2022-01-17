@@ -1,8 +1,7 @@
 package com.example.moviecatalogue.ui.detail
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.core.os.bundleOf
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.navArgs
 import com.example.moviecatalogue.R
 import com.example.moviecatalogue.data.domain.Movie
