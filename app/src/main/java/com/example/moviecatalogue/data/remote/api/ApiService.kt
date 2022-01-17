@@ -32,16 +32,4 @@ interface ApiService {
         @Path("tv_show_id") tvShowId: Int,
         @Query("api_key") apiKey: String
     ) : Call<TvShowDetailResponse>
-
-    @GET("movie/{movie_id}/credits")
-    fun getMovieCast(
-        @Path("movie_id") movieId: Int,
-        @Query("api_key") apiKey: String
-    ) : Call<MovieDetailResponse>
-
-    @GET("movie/{movie_id}/recommendations")
-    fun getMovieRecommendation(
-        @Path("movie_id") movieId: Int,
-        @Query("api_key") apiKey: String
-    ) : Call<MovieResponse>
 }
