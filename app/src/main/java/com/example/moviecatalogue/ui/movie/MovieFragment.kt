@@ -14,6 +14,7 @@ import com.example.moviecatalogue.data.domain.Movie
 import com.example.moviecatalogue.databinding.FragmentMovieBinding
 import com.example.moviecatalogue.helper.extensions.loadImage
 import com.example.moviecatalogue.viewHolder.ItemGridViewHolder
+import com.example.moviecatalogue.viewHolder.ItemShimmerViewHolder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MovieFragment : Fragment() {
@@ -34,13 +35,31 @@ class MovieFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupShimmer()
+
         setupViewModel()
     }
 
     private fun setupViewModel() {
         movieViewModel.discoverMovies().observe(viewLifecycleOwner) { listMovies ->
             if (listMovies != null) {
+                binding.shimmerContainer.apply {
+                    hideShimmer()
+                    visibility = View.GONE
+                }
                 setupRecyclerView(listMovies)
+            }
+        }
+    }
+
+    private fun setupShimmer() {
+        binding.shimmerContainer.startShimmer()
+        val listShimmer = (1..20).toList()
+        val dataSource = dataSourceTypedOf(listShimmer)
+        binding.rvShimmer.setup {
+            withDataSource(dataSource)
+            withItem<Int, ItemShimmerViewHolder>(R.layout.shimmer_item_grid) {
+                onBind(::ItemShimmerViewHolder) { _, _ -> }
             }
         }
     }

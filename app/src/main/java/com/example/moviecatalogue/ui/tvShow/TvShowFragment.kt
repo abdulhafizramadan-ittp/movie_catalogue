@@ -14,6 +14,7 @@ import com.example.moviecatalogue.data.domain.TvShow
 import com.example.moviecatalogue.databinding.FragmentTvShowBinding
 import com.example.moviecatalogue.helper.extensions.loadImage
 import com.example.moviecatalogue.viewHolder.ItemGridViewHolder
+import com.example.moviecatalogue.viewHolder.ItemShimmerViewHolder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class TvShowFragment : Fragment() {
@@ -34,16 +35,35 @@ class TvShowFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupShimmer()
+
         setupViewModel()
     }
 
     private fun setupViewModel() {
         tvShowViewModel.discoverTvShows().observe(viewLifecycleOwner) { listTvShows ->
             if (listTvShows != null) {
+                binding.shimmerContainer.apply {
+                    hideShimmer()
+                    visibility = View.GONE
+                }
                 setupRecyclerView(listTvShows)
             }
         }
     }
+
+    private fun setupShimmer() {
+        binding.shimmerContainer.startShimmer()
+        val listShimmer = (1..20).toList()
+        val dataSource = dataSourceTypedOf(listShimmer)
+        binding.rvShimmer.setup {
+            withDataSource(dataSource)
+            withItem<Int, ItemShimmerViewHolder>(R.layout.shimmer_item_grid) {
+                onBind(::ItemShimmerViewHolder) { _, _ -> }
+            }
+        }
+    }
+
 
     private fun setupRecyclerView(listTvShows: List<TvShow>) {
         val dataSource = dataSourceTypedOf(listTvShows)

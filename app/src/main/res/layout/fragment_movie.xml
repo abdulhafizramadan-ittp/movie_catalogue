@@ -1,14 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rv_movie"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingEnd="8dp"
-    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-    android:nestedScrollingEnabled="false"
-    app:spanCount="3"
-    tools:listitem="@layout/item_grid"
-    tools:ignore="RtlSymmetry"
-    tools:context=".ui.movie.MovieFragment" />
+    android:orientation="vertical"
+    tools:context=".ui.movie.MovieFragment">
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_shimmer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingEnd="8dp"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="3"
+            tools:listitem="@layout/shimmer_item_grid"
+            tools:ignore="RtlSymmetry" />
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_movie"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingEnd="8dp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="3"
+        tools:listitem="@layout/item_grid"
+        tools:ignore="RtlSymmetry" />
+</LinearLayout>

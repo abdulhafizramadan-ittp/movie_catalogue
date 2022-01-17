@@ -74,6 +74,9 @@ dependencies {
     // Paging
     implementation "androidx.paging:paging-runtime:$pagingVersion"
 
+    // Shimmer
+    implementation "com.facebook.shimmer:shimmer:$shimmerVersion"
+
     testImplementation "androidx.arch.core:core-testing:$androidCoreTestVersion"
 
     // Unit Test

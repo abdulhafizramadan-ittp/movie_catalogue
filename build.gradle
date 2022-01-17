@@ -46,6 +46,9 @@ ext {
     // Paging
     pagingVersion = '2.1.2'
 
+    // Shimmer
+    shimmerVersion = '0.5.0'
+
     // TEST
     androidCoreTestVersion = '2.1.0'
     jUnitVersion = '4.13.2'
