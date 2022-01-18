@@ -1,6 +1,11 @@
 package com.example.moviecatalogue.data
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.paging.DataSource
+import androidx.paging.LivePagedListBuilder
+import com.example.moviecatalogue.data.local.LocalDataSource
+import com.example.moviecatalogue.data.local.entity.MovieEntity
+import com.example.moviecatalogue.data.local.entity.TvShowEntity
 import com.example.moviecatalogue.data.remote.RemoteDataSource
 import com.example.moviecatalogue.helper.ResponseDummy
 import com.example.moviecatalogue.helper.unitTest.LiveDataTestUtil
@@ -11,11 +16,9 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
+import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnitRunner
-import org.mockito.kotlin.any
-import org.mockito.kotlin.doAnswer
-import org.mockito.kotlin.eq
-import org.mockito.kotlin.verify
+import org.mockito.kotlin.*
 
 @RunWith(MockitoJUnitRunner::class)
 class MovieRepositoryTest {
@@ -25,6 +28,9 @@ class MovieRepositoryTest {
 
     @Mock
     private lateinit var remoteDataSource: RemoteDataSource
+    @Mock
+    private lateinit var localDataSource: LocalDataSource
+
     private lateinit var movieRepository: MovieRepository
 
     private val dummyDiscoverMovies = ResponseDummy.dummyDiscoverMoviesResponse()
@@ -34,9 +40,12 @@ class MovieRepositoryTest {
     private val dummyTvShowDetail = ResponseDummy.dummyTvShowDetailResponses()
     private val dummyTvShowId = dummyTvShowDetail.id as Int
 
+    private val dummyTvShowEntity = TvShowEntity(0, "", "")
+    private val dummyMovieEntity = MovieEntity(0, "", "")
+
     @Before
     fun setUp() {
-        movieRepository = MovieRepository(remoteDataSource)
+        movieRepository = MovieRepository(remoteDataSource, localDataSource)
     }
 
     @Test
@@ -88,8 +97,92 @@ class MovieRepositoryTest {
             null
         }.`when`(remoteDataSource).getTvShowDetail(any(), eq(dummyTvShowId))
 
-        val movieDetail = LiveDataTestUtil.getValue(movieRepository.getTvShowDetail(dummyTvShowId))
+        val movieDetail = LiveDataTestUtil
+            .getValue(movieRepository.getTvShowDetail(dummyTvShowId))
+
         verify(remoteDataSource).getTvShowDetail(any(), eq(dummyTvShowId))
         assertNotNull(movieDetail)
+    }
+
+    @Test
+    fun getAllFavoriteMovies() {
+        val dataSource: DataSource.Factory<Int, MovieEntity> = mock() as DataSource.Factory<Int, MovieEntity>
+        val dummyListMovies = LivePagedListBuilder(dataSource, 20).build()
+
+        `when`(localDataSource.getAllFavoriteMovies())
+            .thenReturn(dummyListMovies)
+
+        val listMovies = movieRepository.getAllFavoriteMovies()
+
+        verify(localDataSource)
+            .getAllFavoriteMovies()
+
+        assertNotNull(listMovies)
+    }
+
+    @Test
+    fun getAllFavoriteTvShows() {
+        val dataSource: DataSource.Factory<Int, TvShowEntity> = mock() as DataSource.Factory<Int, TvShowEntity>
+        val dummyListTvShows = LivePagedListBuilder(dataSource, 20).build()
+
+        `when`(localDataSource.getAllFavoriteTvShows())
+            .thenReturn(dummyListTvShows)
+
+        val listTvShows = movieRepository.getAllFavoriteTvShows()
+
+        verify(localDataSource)
+            .getAllFavoriteTvShows()
+
+        assertNotNull(listTvShows)
+    }
+
+    @Test
+    fun insertFavoriteMovie() {
+        doNothing()
+            .`when`(localDataSource)
+            .insertFavoriteMovie(dummyMovieEntity)
+
+        movieRepository.insertFavoriteMovie(dummyMovieEntity)
+
+        verify(localDataSource).insertFavoriteMovie(dummyMovieEntity)
+    }
+
+    @Test
+    fun insertFavoriteTvShow() {
+        doNothing()
+            .`when`(localDataSource)
+            .insertFavoriteTvShow(dummyTvShowEntity)
+
+        movieRepository
+            .insertFavoriteTvShow(dummyTvShowEntity)
+
+        verify(localDataSource)
+            .insertFavoriteTvShow(dummyTvShowEntity)
+    }
+
+    @Test
+    fun deleteFavoriteMovie() {
+        doNothing()
+            .`when`(localDataSource)
+            .deleteFavoriteMovie(dummyMovieEntity)
+
+        movieRepository
+            .deleteFavoriteMovie(dummyMovieEntity)
+
+        verify(localDataSource)
+            .deleteFavoriteMovie(dummyMovieEntity)
+    }
+
+    @Test
+    fun deleteFavoriteTvShow() {
+        doNothing()
+            .`when`(localDataSource)
+            .deleteFavoriteTvShow(dummyTvShowEntity)
+
+        movieRepository
+            .deleteFavoriteTvShow(dummyTvShowEntity)
+
+        verify(localDataSource)
+            .deleteFavoriteTvShow(dummyTvShowEntity)
     }
 }
